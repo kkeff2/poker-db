@@ -1,17 +1,14 @@
-import React from "react";
 import "./App.css";
 
-export function App() {
-  const ws = new WebSocket("ws://localhost:8080");
+type Props = {
+  ws: WebSocket;
+};
 
-  ws.onopen = (event) => {
-    ws.send(JSON.stringify({ hej: "hej" }));
-  };
-
+export function App({ ws }: Props) {
   ws.onmessage = (event) => {
     console.log("in the web", event);
-    const json = JSON.parse(event.data);
-    console.log(json);
+    // const json = JSON.parse(event.data);
+    // console.log(json);
   };
 
   return (
