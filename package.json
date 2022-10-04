@@ -11,5 +11,9 @@
     "frontend"
   ],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "volta": {
+    "node": "16.17.1",
+    "npm": "8.15.0"
+  }
 }
