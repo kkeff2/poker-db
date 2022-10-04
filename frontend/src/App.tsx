@@ -2,6 +2,18 @@ import React from "react";
 import "./App.css";
 
 export function App() {
+  const ws = new WebSocket("ws://localhost:8080");
+
+  ws.onopen = (event) => {
+    ws.send(JSON.stringify({ hej: "hej" }));
+  };
+
+  ws.onmessage = (event) => {
+    console.log("in the web", event);
+    const json = JSON.parse(event.data);
+    console.log(json);
+  };
+
   return (
     <div className="App">
       <header className="App-header">
