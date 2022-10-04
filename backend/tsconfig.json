@@ -1,0 +1,13 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "strict": true,
+    "incremental": true,
+    "target": "ES2019",
+    "module": "commonjs",
+    "sourceMap": true,
+    "noEmit": true,
+    "resolveJsonModule": true
+  },
+  "include": ["src"]
+}
