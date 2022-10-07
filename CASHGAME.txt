@@ -1,0 +1,197 @@
+PokerStars hand nr 239059636432:  Holdem No limit ($0.01/$0.02 USD) - 2022-10-06 9:38:46 CET [2022-10-06 3:38:46 ET]
+Bord 'Hercules' 9-max Plats #8 har knappen
+Plats 2: den_kkeffe ($1.60 i marker) 
+Plats 4: Trish4901 ($1.63 i marker) 
+Plats 6: rikiluu ($2 i marker) 
+Plats 7: maas_money ($1.97 i marker) 
+Plats 8: raivo82 ($2.25 i marker) 
+Plats 9: graspop06 ($1.96 i marker) 
+graspop06: lägger small blind $0.01
+den_kkeffe: lägger big blind $0.02
+*** HÅLKORT ***
+Utdelat till den_kkeffe [7s 9s]
+Trish4901: call $0.02
+rikiluu: call $0.02
+maas_money: raise $0.06 till $0.08
+raivo82: fold 
+graspop06: fold 
+den_kkeffe: call $0.06
+Trish4901: call $0.06
+rikiluu: call $0.06
+*** FLOPP *** [5c Ac Ts]
+den_kkeffe: check 
+graspop06 lämnar bordet
+Trish4901: bet $0.16
+rikiluu: fold 
+maas_money: fold 
+den_kkeffe: call $0.16
+*** TURN *** [5c Ac Ts] [Qs]
+den_kkeffe: check 
+Trish4901: bet $0.31
+den_kkeffe: call $0.31
+*** RIVER *** [5c Ac Ts Qs] [Td]
+den_kkeffe: check 
+Trish4901: check 
+*** VISNING ***
+den_kkeffe: visar [7s 9s] (par i tior)
+Trish4901: visar [Ah 3c] (två par, ess och tior)
+Trish4901 vann $1.23 från potten
+*** SAMMANFATTNING ***
+Total pott $1.27 | Avgift $0.04 
+Bord [5c Ac Ts Qs Td]
+Plats 2: den_kkeffe (big blind) visade [7s 9s] och förlorade med par i tior
+Plats 4: Trish4901 visade [Ah 3c] och vann ($1.23) med två par, ess och tior
+Plats 6: rikiluu foldade på Flopp
+Plats 7: maas_money foldade på Flopp
+Plats 8: raivo82 (knappen) foldade innan Flopp (satsade inte)
+Plats 9: graspop06 (small blind) foldade innan Flopp
+
+
+
+PokerStars hand nr 239059644773:  Holdem No limit ($0.01/$0.02 USD) - 2022-10-06 9:39:53 CET [2022-10-06 3:39:53 ET]
+Bord 'Hercules' 9-max Plats #2 har knappen
+Plats 2: den_kkeffe ($1.05 i marker) 
+Plats 4: Trish4901 ($2.31 i marker) 
+Plats 6: rikiluu ($1.92 i marker) 
+Plats 7: maas_money ($1.89 i marker) 
+Plats 8: raivo82 ($2.25 i marker) 
+Trish4901: lägger small blind $0.01
+rikiluu: lägger big blind $0.02
+*** HÅLKORT ***
+Utdelat till den_kkeffe [3c As]
+maas_money: fold 
+raivo82: raise $0.04 till $0.06
+den_kkeffe: fold 
+Trish4901: fold 
+rikiluu: fold 
+Ej synad satsning ($0.04) returnerad till raivo82
+raivo82 vann $0.05 från potten
+*** SAMMANFATTNING ***
+Total pott $0.05 | Avgift $0 
+Plats 2: den_kkeffe (knappen) foldade innan Flopp (satsade inte)
+Plats 4: Trish4901 (small blind) foldade innan Flopp
+Plats 6: rikiluu (big blind) foldade innan Flopp
+Plats 7: maas_money foldade innan Flopp (satsade inte)
+Plats 8: raivo82 vann ($0.05)
+
+
+
+PokerStars hand nr 239059646541:  Holdem No limit ($0.01/$0.02 USD) - 2022-10-06 9:40:07 CET [2022-10-06 3:40:07 ET]
+Bord 'Hercules' 9-max Plats #4 har knappen
+Plats 2: den_kkeffe ($1.05 i marker) 
+Plats 4: Trish4901 ($2.30 i marker) 
+Plats 6: rikiluu ($1.90 i marker) 
+Plats 7: maas_money ($1.89 i marker) 
+Plats 8: raivo82 ($2.28 i marker) 
+rikiluu: lägger small blind $0.01
+maas_money: lägger big blind $0.02
+*** HÅLKORT ***
+Utdelat till den_kkeffe [3c 4h]
+raivo82: fold 
+den_kkeffe: fold 
+raivo82 lämnar bordet
+Trish4901: call $0.02
+rikiluu: call $0.01
+maas_money: check 
+*** FLOPP *** [6c 9h Ah]
+rikiluu: check 
+maas_money: check 
+Trish4901: check 
+*** TURN *** [6c 9h Ah] [3h]
+rikiluu: check 
+maas_money: check 
+Trish4901: check 
+*** RIVER *** [6c 9h Ah 3h] [5s]
+sanaz9 sätter sig ned vid bordet på plats #5 
+rikiluu: check 
+maas_money: check 
+Trish4901: check 
+*** VISNING ***
+rikiluu: visar [Qh Tc] (högt kort ess)
+maas_money: visar inte 
+Trish4901: visar [Ks 7s] (högt kort ess - kung sidokort)
+Trish4901 vann $0.06 från potten
+*** SAMMANFATTNING ***
+Total pott $0.06 | Avgift $0 
+Bord [6c 9h Ah 3h 5s]
+Plats 2: den_kkeffe foldade innan Flopp (satsade inte)
+Plats 4: Trish4901 (knappen) visade [Ks 7s] och vann ($0.06) med högt kort ess
+Plats 6: rikiluu (small blind) visade [Qh Tc] och förlorade med högt kort ess
+Plats 7: maas_money (big blind) visade ej [Jd 2h]
+Plats 8: raivo82 foldade innan Flopp (satsade inte)
+
+
+
+PokerStars hand nr 239059653610:  Holdem No limit ($0.01/$0.02 USD) - 2022-10-06 9:41:05 CET [2022-10-06 3:41:05 ET]
+Bord 'Hercules' 9-max Plats #6 har knappen
+Plats 2: den_kkeffe ($1.05 i marker) 
+Plats 4: Trish4901 ($2.34 i marker) 
+Plats 5: sanaz9 ($2 i marker) 
+Plats 6: rikiluu ($1.88 i marker) 
+Plats 7: maas_money ($1.87 i marker) 
+maas_money: lägger small blind $0.01
+den_kkeffe: lägger big blind $0.02
+sanaz9: lägger big blind $0.02
+*** HÅLKORT ***
+Utdelat till den_kkeffe [5s Tc]
+Trish4901: fold 
+sanaz9: check 
+rikiluu: fold 
+maas_money: fold 
+den_kkeffe: check 
+*** FLOPP *** [9d As 3c]
+den_kkeffe: check 
+alexcbobr sätter sig ned vid bordet på plats #3 
+sanaz9: bet $0.05
+den_kkeffe: fold 
+Ej synad satsning ($0.05) returnerad till sanaz9
+sanaz9 vann $0.05 från potten
+*** SAMMANFATTNING ***
+Total pott $0.05 | Avgift $0 
+Bord [9d As 3c]
+Plats 2: den_kkeffe (big blind) foldade på Flopp
+Plats 4: Trish4901 foldade innan Flopp (satsade inte)
+Plats 5: sanaz9 vann ($0.05)
+Plats 6: rikiluu (knappen) foldade innan Flopp (satsade inte)
+Plats 7: maas_money (small blind) foldade innan Flopp
+
+
+
+PokerStars hand nr 239059657356:  Holdem No limit ($0.01/$0.02 USD) - 2022-10-06 9:41:36 CET [2022-10-06 3:41:36 ET]
+Bord 'Hercules' 9-max Plats #7 har knappen
+Plats 2: den_kkeffe ($1.03 i marker) 
+Plats 3: alexcbobr ($2 i marker) 
+Plats 4: Trish4901 ($2.34 i marker) 
+Plats 5: sanaz9 ($2.03 i marker) 
+Plats 6: rikiluu ($1.88 i marker) 
+Plats 7: maas_money ($1.86 i marker) 
+den_kkeffe: lägger small blind $0.01
+alexcbobr: lägger big blind $0.02
+*** HÅLKORT ***
+Utdelat till den_kkeffe [Kd 4s]
+Trish4901: fold 
+sanaz9: call $0.02
+rikiluu: fold 
+maas_money: fold 
+den_kkeffe: call $0.01
+alexcbobr: check 
+*** FLOPP *** [Jd Tc 8h]
+den_kkeffe: check 
+alexcbobr: check 
+sanaz9: bet $0.02
+den_kkeffe: fold 
+alexcbobr: fold 
+Ej synad satsning ($0.02) returnerad till sanaz9
+sanaz9 vann $0.06 från potten
+*** SAMMANFATTNING ***
+Total pott $0.06 | Avgift $0 
+Bord [Jd Tc 8h]
+Plats 2: den_kkeffe (small blind) foldade på Flopp
+Plats 3: alexcbobr (big blind) foldade på Flopp
+Plats 4: Trish4901 foldade innan Flopp (satsade inte)
+Plats 5: sanaz9 vann ($0.06)
+Plats 6: rikiluu foldade innan Flopp (satsade inte)
+Plats 7: maas_money (knappen) foldade innan Flopp (satsade inte)
+
+
+

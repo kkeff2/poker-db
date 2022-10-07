@@ -2,6 +2,16 @@
 
 A Poker DB with info about who you are currently playing using local saved logs
 
+## Next
+
+- How to know that a tournament is finished
+  - Check the tournament summary if the tournament is finished
+  - Check if there are more hands than the latest hand saved in DB
+- Loop all hands in all files
+  - When some are already saved
+- For each player played save the hand
+- What?
+
 ## TODO
 
 - Use typescript types that are shared when sending/receiving messages

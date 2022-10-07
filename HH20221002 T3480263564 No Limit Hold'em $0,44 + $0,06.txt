@@ -1,0 +1,1099 @@
+PokerStars hand nr 238995561129: Turnering #3480263564, $0.44+$0.06 USD Holdem No limit - Nivå I (10/20) - 2022-10-02 21:10:55 CET [2022-10-02 15:10:55 ET]
+Bord '3480263564 1' 9-max Plats #1 har knappen
+Plats 1: Sefi0309 (1500 i marker) 
+Plats 2: payda300 (1500 i marker) 
+Plats 3: den_kkeffe (1500 i marker) 
+Plats 4: john oky (1500 i marker) 
+Plats 5: Abnerzs (1500 i marker) 
+Plats 6: lucasveiga20 (1500 i marker) 
+Plats 7: Heresia274 (1500 i marker) 
+Plats 8: marcoshig864 (1500 i marker) står över
+Plats 9: CHLe96 (1500 i marker) 
+payda300: lägger small blind 10
+den_kkeffe: lägger big blind 20
+*** HÅLKORT ***
+Utdelat till den_kkeffe [Td 6s]
+john oky: raise 20 till 40
+Abnerzs: fold 
+lucasveiga20: fold 
+Heresia274: fold 
+marcoshig864: fold 
+CHLe96: fold 
+Sefi0309: fold 
+marcoshig864 har förlorat anslutningen 
+marcoshig864 har kommit tillbaka
+payda300 tid har gått ut
+payda300: fold 
+payda300 står över
+den_kkeffe: fold 
+Ej synad satsning (20) returnerad till john oky
+john oky vann 50 från potten
+*** SAMMANFATTNING ***
+Total pott 50 | Avgift 0 
+Plats 1: Sefi0309 (knappen) foldade innan Flopp (satsade inte)
+Plats 2: payda300 (small blind) foldade innan Flopp
+Plats 3: den_kkeffe (big blind) foldade innan Flopp
+Plats 4: john oky vann (50)
+Plats 5: Abnerzs foldade innan Flopp (satsade inte)
+Plats 6: lucasveiga20 foldade innan Flopp (satsade inte)
+Plats 7: Heresia274 foldade innan Flopp (satsade inte)
+Plats 8: marcoshig864 foldade innan Flopp (satsade inte)
+Plats 9: CHLe96 foldade innan Flopp (satsade inte)
+
+
+
+PokerStars hand nr 238995584739: Turnering #3480263564, $0.44+$0.06 USD Holdem No limit - Nivå I (10/20) - 2022-10-02 21:11:47 CET [2022-10-02 15:11:47 ET]
+Bord '3480263564 1' 9-max Plats #2 har knappen
+Plats 1: Sefi0309 (1500 i marker) 
+Plats 2: payda300 (1490 i marker) står över
+Plats 3: den_kkeffe (1480 i marker) 
+Plats 4: john oky (1530 i marker) 
+Plats 5: Abnerzs (1500 i marker) 
+Plats 6: lucasveiga20 (1500 i marker) 
+Plats 7: Heresia274 (1500 i marker) 
+Plats 8: marcoshig864 (1500 i marker) 
+Plats 9: CHLe96 (1500 i marker) 
+den_kkeffe: lägger small blind 10
+john oky: lägger big blind 20
+*** HÅLKORT ***
+Utdelat till den_kkeffe [8c 7d]
+Abnerzs: fold 
+lucasveiga20: fold 
+Heresia274: raise 40 till 60
+marcoshig864: call 60
+CHLe96: fold 
+Sefi0309: fold 
+payda300: fold 
+den_kkeffe: fold 
+john oky: fold 
+*** FLOPP *** [9h 3h 4h]
+Heresia274: check 
+marcoshig864: bet 45
+Heresia274: call 45
+*** TURN *** [9h 3h 4h] [Td]
+Heresia274: check 
+payda300 har kommit tillbaka
+marcoshig864: bet 154
+Heresia274: raise 186 till 340
+marcoshig864: call 186
+*** RIVER *** [9h 3h 4h Td] [Kc]
+Heresia274: bet 1055 och är all-in
+marcoshig864: call 1055 och är all-in
+*** VISNING ***
+Heresia274: visar [Ah Jh] (färg, ess hög)
+marcoshig864: visar [Js Qc] (stege, nia till kung)
+Heresia274 vann 3030 från potten
+marcoshig864 avslutade turneringen på 9:e plats
+*** SAMMANFATTNING ***
+Total pott 3030 | Avgift 0 
+Bord [9h 3h 4h Td Kc]
+Plats 1: Sefi0309 foldade innan Flopp (satsade inte)
+Plats 2: payda300 (knappen) foldade innan Flopp (satsade inte)
+Plats 3: den_kkeffe (small blind) foldade innan Flopp
+Plats 4: john oky (big blind) foldade innan Flopp
+Plats 5: Abnerzs foldade innan Flopp (satsade inte)
+Plats 6: lucasveiga20 foldade innan Flopp (satsade inte)
+Plats 7: Heresia274 visade [Ah Jh] och vann (3030) med färg, ess hög
+Plats 8: marcoshig864 visade [Js Qc] och förlorade med stege, nia till kung
+Plats 9: CHLe96 foldade innan Flopp (satsade inte)
+
+
+
+PokerStars hand nr 238995614471: Turnering #3480263564, $0.44+$0.06 USD Holdem No limit - Nivå I (10/20) - 2022-10-02 21:12:53 CET [2022-10-02 15:12:53 ET]
+Bord '3480263564 1' 9-max Plats #3 har knappen
+Plats 1: Sefi0309 (1500 i marker) 
+Plats 2: payda300 (1490 i marker) 
+Plats 3: den_kkeffe (1470 i marker) 
+Plats 4: john oky (1510 i marker) 
+Plats 5: Abnerzs (1500 i marker) 
+Plats 6: lucasveiga20 (1500 i marker) 
+Plats 7: Heresia274 (3030 i marker) 
+Plats 9: CHLe96 (1500 i marker) 
+john oky: lägger small blind 10
+Abnerzs: lägger big blind 20
+*** HÅLKORT ***
+Utdelat till den_kkeffe [Ac Qc]
+lucasveiga20: raise 40 till 60
+Heresia274: fold 
+CHLe96: fold 
+Sefi0309: fold 
+payda300: fold 
+den_kkeffe: raise 120 till 180
+john oky: fold 
+Abnerzs: fold 
+lucasveiga20: call 120
+*** FLOPP *** [5s 9s Qh]
+lucasveiga20: check 
+den_kkeffe: bet 240
+lucasveiga20: fold 
+Ej synad satsning (240) returnerad till den_kkeffe
+den_kkeffe vann 390 från potten
+*** SAMMANFATTNING ***
+Total pott 390 | Avgift 0 
+Bord [5s 9s Qh]
+Plats 1: Sefi0309 foldade innan Flopp (satsade inte)
+Plats 2: payda300 foldade innan Flopp (satsade inte)
+Plats 3: den_kkeffe (knappen) vann (390)
+Plats 4: john oky (small blind) foldade innan Flopp
+Plats 5: Abnerzs (big blind) foldade innan Flopp
+Plats 6: lucasveiga20 foldade på Flopp
+Plats 7: Heresia274 foldade innan Flopp (satsade inte)
+Plats 9: CHLe96 foldade innan Flopp (satsade inte)
+
+
+
+PokerStars hand nr 238995634900: Turnering #3480263564, $0.44+$0.06 USD Holdem No limit - Nivå I (10/20) - 2022-10-02 21:13:38 CET [2022-10-02 15:13:38 ET]
+Bord '3480263564 1' 9-max Plats #4 har knappen
+Plats 1: Sefi0309 (1500 i marker) 
+Plats 2: payda300 (1490 i marker) 
+Plats 3: den_kkeffe (1680 i marker) 
+Plats 4: john oky (1500 i marker) 
+Plats 5: Abnerzs (1480 i marker) 
+Plats 6: lucasveiga20 (1320 i marker) 
+Plats 7: Heresia274 (3030 i marker) 
+Plats 9: CHLe96 (1500 i marker) 
+Abnerzs: lägger small blind 10
+lucasveiga20: lägger big blind 20
+*** HÅLKORT ***
+Utdelat till den_kkeffe [9h 8d]
+Heresia274: raise 40 till 60
+CHLe96: fold 
+Sefi0309: fold 
+payda300: fold 
+den_kkeffe: fold 
+john oky: call 60
+Abnerzs: fold 
+lucasveiga20: fold 
+*** FLOPP *** [Js Ts 5h]
+Heresia274: bet 88
+john oky: call 88
+*** TURN *** [Js Ts 5h] [5d]
+Heresia274: bet 231
+john oky: call 231
+*** RIVER *** [Js Ts 5h 5d] [7c]
+Heresia274: bet 340
+john oky: fold 
+Ej synad satsning (340) returnerad till Heresia274
+Heresia274 vann 788 från potten
+Heresia274: visar inte sin hand 
+*** SAMMANFATTNING ***
+Total pott 788 | Avgift 0 
+Bord [Js Ts 5h 5d 7c]
+Plats 1: Sefi0309 foldade innan Flopp (satsade inte)
+Plats 2: payda300 foldade innan Flopp (satsade inte)
+Plats 3: den_kkeffe foldade innan Flopp (satsade inte)
+Plats 4: john oky (knappen) foldade på River
+Plats 5: Abnerzs (small blind) foldade innan Flopp
+Plats 6: lucasveiga20 (big blind) foldade innan Flopp
+Plats 7: Heresia274 vann (788)
+Plats 9: CHLe96 foldade innan Flopp (satsade inte)
+
+
+
+PokerStars hand nr 238995666723: Turnering #3480263564, $0.44+$0.06 USD Holdem No limit - Nivå I (10/20) - 2022-10-02 21:14:48 CET [2022-10-02 15:14:48 ET]
+Bord '3480263564 1' 9-max Plats #5 har knappen
+Plats 1: Sefi0309 (1500 i marker) 
+Plats 2: payda300 (1490 i marker) 
+Plats 3: den_kkeffe (1680 i marker) 
+Plats 4: john oky (1121 i marker) 
+Plats 5: Abnerzs (1470 i marker) 
+Plats 6: lucasveiga20 (1300 i marker) 
+Plats 7: Heresia274 (3439 i marker) 
+Plats 9: CHLe96 (1500 i marker) 
+lucasveiga20: lägger small blind 10
+Heresia274: lägger big blind 20
+*** HÅLKORT ***
+Utdelat till den_kkeffe [Jh 7d]
+CHLe96: call 20
+Sefi0309: fold 
+payda300: call 20
+den_kkeffe: fold 
+john oky: call 20
+Abnerzs: fold 
+lucasveiga20: fold 
+Heresia274: check 
+*** FLOPP *** [Ts 4h 4s]
+Heresia274: check 
+CHLe96: bet 20
+payda300: call 20
+john oky: fold 
+Heresia274: call 20
+*** TURN *** [Ts 4h 4s] [2h]
+Heresia274: check 
+CHLe96: bet 75
+payda300: fold 
+Heresia274: call 75
+*** RIVER *** [Ts 4h 4s 2h] [6d]
+Heresia274: check 
+CHLe96: bet 150
+Heresia274: fold 
+Ej synad satsning (150) returnerad till CHLe96
+CHLe96 vann 300 från potten
+*** SAMMANFATTNING ***
+Total pott 300 | Avgift 0 
+Bord [Ts 4h 4s 2h 6d]
+Plats 1: Sefi0309 foldade innan Flopp (satsade inte)
+Plats 2: payda300 foldade på Turn
+Plats 3: den_kkeffe foldade innan Flopp (satsade inte)
+Plats 4: john oky foldade på Flopp
+Plats 5: Abnerzs (knappen) foldade innan Flopp (satsade inte)
+Plats 6: lucasveiga20 (small blind) foldade innan Flopp
+Plats 7: Heresia274 (big blind) foldade på River
+Plats 9: CHLe96 vann (300)
+
+
+
+PokerStars hand nr 238995703120: Turnering #3480263564, $0.44+$0.06 USD Holdem No limit - Nivå II (15/30) - 2022-10-02 21:16:07 CET [2022-10-02 15:16:07 ET]
+Bord '3480263564 1' 9-max Plats #6 har knappen
+Plats 1: Sefi0309 (1500 i marker) 
+Plats 2: payda300 (1450 i marker) 
+Plats 3: den_kkeffe (1680 i marker) 
+Plats 4: john oky (1101 i marker) 
+Plats 5: Abnerzs (1470 i marker) 
+Plats 6: lucasveiga20 (1290 i marker) 
+Plats 7: Heresia274 (3324 i marker) 
+Plats 9: CHLe96 (1685 i marker) 
+Heresia274: lägger small blind 15
+CHLe96: lägger big blind 30
+*** HÅLKORT ***
+Utdelat till den_kkeffe [Ks Js]
+Sefi0309: fold 
+payda300: call 30
+den_kkeffe: call 30
+john oky: call 30
+Abnerzs: raise 60 till 90
+lucasveiga20: raise 1200 till 1290 och är all-in
+Heresia274: fold 
+CHLe96: fold 
+payda300: fold 
+den_kkeffe: fold 
+john oky: fold 
+Abnerzs: fold 
+Ej synad satsning (1200) returnerad till lucasveiga20
+lucasveiga20 vann 315 från potten
+lucasveiga20: visar inte sin hand 
+*** SAMMANFATTNING ***
+Total pott 315 | Avgift 0 
+Plats 1: Sefi0309 foldade innan Flopp (satsade inte)
+Plats 2: payda300 foldade innan Flopp
+Plats 3: den_kkeffe foldade innan Flopp
+Plats 4: john oky foldade innan Flopp
+Plats 5: Abnerzs foldade innan Flopp
+Plats 6: lucasveiga20 (knappen) vann (315)
+Plats 7: Heresia274 (small blind) foldade innan Flopp
+Plats 9: CHLe96 (big blind) foldade innan Flopp
+
+
+
+PokerStars hand nr 238995721934: Turnering #3480263564, $0.44+$0.06 USD Holdem No limit - Nivå II (15/30) - 2022-10-02 21:16:48 CET [2022-10-02 15:16:48 ET]
+Bord '3480263564 1' 9-max Plats #7 har knappen
+Plats 1: Sefi0309 (1500 i marker) 
+Plats 2: payda300 (1420 i marker) 
+Plats 3: den_kkeffe (1650 i marker) 
+Plats 4: john oky (1071 i marker) 
+Plats 5: Abnerzs (1380 i marker) 
+Plats 6: lucasveiga20 (1515 i marker) 
+Plats 7: Heresia274 (3309 i marker) 
+Plats 9: CHLe96 (1655 i marker) 
+CHLe96: lägger small blind 15
+Sefi0309: lägger big blind 30
+*** HÅLKORT ***
+Utdelat till den_kkeffe [7h Th]
+payda300: call 30
+den_kkeffe: call 30
+john oky tid har gått ut
+john oky: fold 
+john oky står över
+Abnerzs: fold 
+lucasveiga20: fold 
+Heresia274: call 30
+CHLe96: call 15
+Sefi0309: check 
+*** FLOPP *** [5s 9h 3c]
+john oky har kommit tillbaka
+CHLe96: bet 30
+Sefi0309: call 30
+payda300: call 30
+den_kkeffe: fold 
+Heresia274: call 30
+*** TURN *** [5s 9h 3c] [Jd]
+CHLe96: bet 30
+Sefi0309: call 30
+payda300: call 30
+Heresia274: call 30
+*** RIVER *** [5s 9h 3c Jd] [Jh]
+CHLe96: check 
+Sefi0309: check 
+payda300: check 
+Heresia274: check 
+*** VISNING ***
+CHLe96: visar [Qc 4h] (par i knektar)
+Sefi0309: visar [Td 9s] (två par, knektar och nior)
+payda300: visar inte 
+Heresia274: visar inte 
+Sefi0309 vann 390 från potten
+*** SAMMANFATTNING ***
+Total pott 390 | Avgift 0 
+Bord [5s 9h 3c Jd Jh]
+Plats 1: Sefi0309 (big blind) visade [Td 9s] och vann (390) med två par, knektar och nior
+Plats 2: payda300 visade ej [As 2h]
+Plats 3: den_kkeffe foldade på Flopp
+Plats 4: john oky foldade innan Flopp (satsade inte)
+Plats 5: Abnerzs foldade innan Flopp (satsade inte)
+Plats 6: lucasveiga20 foldade innan Flopp (satsade inte)
+Plats 7: Heresia274 (knappen) visade ej [Ac 5c]
+Plats 9: CHLe96 (small blind) visade [Qc 4h] och förlorade med par i knektar
+
+
+
+PokerStars hand nr 238995755838: Turnering #3480263564, $0.44+$0.06 USD Holdem No limit - Nivå II (15/30) - 2022-10-02 21:18:02 CET [2022-10-02 15:18:02 ET]
+Bord '3480263564 1' 9-max Plats #9 har knappen
+Plats 1: Sefi0309 (1800 i marker) 
+Plats 2: payda300 (1330 i marker) 
+Plats 3: den_kkeffe (1620 i marker) 
+Plats 4: john oky (1071 i marker) 
+Plats 5: Abnerzs (1380 i marker) 
+Plats 6: lucasveiga20 (1515 i marker) 
+Plats 7: Heresia274 (3219 i marker) 
+Plats 9: CHLe96 (1565 i marker) 
+Sefi0309: lägger small blind 15
+payda300: lägger big blind 30
+*** HÅLKORT ***
+Utdelat till den_kkeffe [Ah 2h]
+den_kkeffe: raise 36 till 66
+john oky: fold 
+Abnerzs: fold 
+lucasveiga20: fold 
+Heresia274: fold 
+CHLe96: fold 
+Sefi0309: fold 
+payda300: raise 204 till 270
+den_kkeffe: fold 
+Ej synad satsning (204) returnerad till payda300
+payda300 vann 147 från potten
+*** SAMMANFATTNING ***
+Total pott 147 | Avgift 0 
+Plats 1: Sefi0309 (small blind) foldade innan Flopp
+Plats 2: payda300 (big blind) vann (147)
+Plats 3: den_kkeffe foldade innan Flopp
+Plats 4: john oky foldade innan Flopp (satsade inte)
+Plats 5: Abnerzs foldade innan Flopp (satsade inte)
+Plats 6: lucasveiga20 foldade innan Flopp (satsade inte)
+Plats 7: Heresia274 foldade innan Flopp (satsade inte)
+Plats 9: CHLe96 (knappen) foldade innan Flopp (satsade inte)
+
+
+
+PokerStars hand nr 238995775394: Turnering #3480263564, $0.44+$0.06 USD Holdem No limit - Nivå II (15/30) - 2022-10-02 21:18:45 CET [2022-10-02 15:18:45 ET]
+Bord '3480263564 1' 9-max Plats #1 har knappen
+Plats 1: Sefi0309 (1785 i marker) 
+Plats 2: payda300 (1411 i marker) 
+Plats 3: den_kkeffe (1554 i marker) 
+Plats 4: john oky (1071 i marker) 
+Plats 5: Abnerzs (1380 i marker) 
+Plats 6: lucasveiga20 (1515 i marker) 
+Plats 7: Heresia274 (3219 i marker) 
+Plats 9: CHLe96 (1565 i marker) 
+payda300: lägger small blind 15
+den_kkeffe: lägger big blind 30
+*** HÅLKORT ***
+Utdelat till den_kkeffe [Js 9c]
+john oky: call 30
+Abnerzs: raise 30 till 60
+lucasveiga20: fold 
+Heresia274: fold 
+CHLe96: call 60
+Sefi0309: fold 
+payda300: call 45
+den_kkeffe: call 30
+john oky: call 30
+*** FLOPP *** [7s 4h Qh]
+payda300: check 
+den_kkeffe: check 
+john oky: check 
+Abnerzs: check 
+CHLe96: bet 30
+payda300: call 30
+den_kkeffe: fold 
+john oky: call 30
+Abnerzs: call 30
+*** TURN *** [7s 4h Qh] [Ah]
+payda300: check 
+john oky: bet 30
+Abnerzs: call 30
+CHLe96: call 30
+payda300: fold 
+*** RIVER *** [7s 4h Qh Ah] [Qs]
+john oky: bet 90
+Abnerzs: fold 
+CHLe96: raise 1355 till 1445 och är all-in
+john oky: call 861 och är all-in
+Ej synad satsning (494) returnerad till CHLe96
+*** VISNING ***
+CHLe96: visar [As Ad] (kåk, ess över damer)
+john oky: visar [Jh 5h] (färg, ess hög)
+CHLe96 vann 2412 från potten
+john oky avslutade turneringen på 8:e plats
+*** SAMMANFATTNING ***
+Total pott 2412 | Avgift 0 
+Bord [7s 4h Qh Ah Qs]
+Plats 1: Sefi0309 (knappen) foldade innan Flopp (satsade inte)
+Plats 2: payda300 (small blind) foldade på Turn
+Plats 3: den_kkeffe (big blind) foldade på Flopp
+Plats 4: john oky visade [Jh 5h] och förlorade med färg, ess hög
+Plats 5: Abnerzs foldade på River
+Plats 6: lucasveiga20 foldade innan Flopp (satsade inte)
+Plats 7: Heresia274 foldade innan Flopp (satsade inte)
+Plats 9: CHLe96 visade [As Ad] och vann (2412) med kåk, ess över damer
+
+
+
+PokerStars hand nr 238995830919: Turnering #3480263564, $0.44+$0.06 USD Holdem No limit - Nivå II (15/30) - 2022-10-02 21:20:46 CET [2022-10-02 15:20:46 ET]
+Bord '3480263564 1' 9-max Plats #2 har knappen
+Plats 1: Sefi0309 (1785 i marker) 
+Plats 2: payda300 (1321 i marker) 
+Plats 3: den_kkeffe (1494 i marker) 
+Plats 5: Abnerzs (1260 i marker) 
+Plats 6: lucasveiga20 (1515 i marker) 
+Plats 7: Heresia274 (3219 i marker) 
+Plats 9: CHLe96 (2906 i marker) 
+den_kkeffe: lägger small blind 15
+Abnerzs: lägger big blind 30
+*** HÅLKORT ***
+Utdelat till den_kkeffe [7d Qd]
+lucasveiga20: raise 45 till 75
+Heresia274: fold 
+CHLe96: fold 
+Sefi0309: fold 
+payda300: call 75
+den_kkeffe: fold 
+Abnerzs: fold 
+*** FLOPP *** [Kc 5s Kd]
+lucasveiga20: bet 57
+payda300: call 57
+*** TURN *** [Kc 5s Kd] [Kh]
+lucasveiga20: bet 206
+payda300: call 206
+*** RIVER *** [Kc 5s Kd Kh] [7h]
+lucasveiga20: check 
+payda300: bet 420
+lucasveiga20: call 420
+*** VISNING ***
+payda300: visar [5c 4s] (kåk, kungar över femmor)
+lucasveiga20: visar [9c 9h] (kåk, kungar över nior)
+lucasveiga20 vann 1561 från potten
+*** SAMMANFATTNING ***
+Total pott 1561 | Avgift 0 
+Bord [Kc 5s Kd Kh 7h]
+Plats 1: Sefi0309 foldade innan Flopp (satsade inte)
+Plats 2: payda300 (knappen) visade [5c 4s] och förlorade med kåk, kungar över femmor
+Plats 3: den_kkeffe (small blind) foldade innan Flopp
+Plats 5: Abnerzs (big blind) foldade innan Flopp
+Plats 6: lucasveiga20 visade [9c 9h] och vann (1561) med kåk, kungar över nior
+Plats 7: Heresia274 foldade innan Flopp (satsade inte)
+Plats 9: CHLe96 foldade innan Flopp (satsade inte)
+
+
+
+PokerStars hand nr 238995850653: Turnering #3480263564, $0.44+$0.06 USD Holdem No limit - Nivå III (25/50) - 2022-10-02 21:21:29 CET [2022-10-02 15:21:29 ET]
+Bord '3480263564 1' 9-max Plats #3 har knappen
+Plats 1: Sefi0309 (1785 i marker) 
+Plats 2: payda300 (563 i marker) 
+Plats 3: den_kkeffe (1479 i marker) 
+Plats 5: Abnerzs (1230 i marker) 
+Plats 6: lucasveiga20 (2318 i marker) 
+Plats 7: Heresia274 (3219 i marker) 
+Plats 9: CHLe96 (2906 i marker) 
+Abnerzs: lägger small blind 25
+lucasveiga20: lägger big blind 50
+*** HÅLKORT ***
+Utdelat till den_kkeffe [8c 2s]
+Heresia274: raise 50 till 100
+CHLe96: fold 
+Sefi0309: fold 
+payda300: call 100
+den_kkeffe: fold 
+Abnerzs: call 75
+lucasveiga20: fold 
+*** FLOPP *** [9s 4h 2h]
+Abnerzs: check 
+Heresia274: check 
+payda300: bet 200
+Abnerzs: fold 
+Heresia274: fold 
+Ej synad satsning (200) returnerad till payda300
+payda300 vann 350 från potten
+*** SAMMANFATTNING ***
+Total pott 350 | Avgift 0 
+Bord [9s 4h 2h]
+Plats 1: Sefi0309 foldade innan Flopp (satsade inte)
+Plats 2: payda300 vann (350)
+Plats 3: den_kkeffe (knappen) foldade innan Flopp (satsade inte)
+Plats 5: Abnerzs (small blind) foldade på Flopp
+Plats 6: lucasveiga20 (big blind) foldade innan Flopp
+Plats 7: Heresia274 foldade på Flopp
+Plats 9: CHLe96 foldade innan Flopp (satsade inte)
+
+
+
+PokerStars hand nr 238995873920: Turnering #3480263564, $0.44+$0.06 USD Holdem No limit - Nivå III (25/50) - 2022-10-02 21:22:19 CET [2022-10-02 15:22:19 ET]
+Bord '3480263564 1' 9-max Plats #5 har knappen
+Plats 1: Sefi0309 (1785 i marker) 
+Plats 2: payda300 (813 i marker) 
+Plats 3: den_kkeffe (1479 i marker) 
+Plats 5: Abnerzs (1130 i marker) 
+Plats 6: lucasveiga20 (2268 i marker) 
+Plats 7: Heresia274 (3119 i marker) 
+Plats 9: CHLe96 (2906 i marker) 
+lucasveiga20: lägger small blind 25
+Heresia274: lägger big blind 50
+*** HÅLKORT ***
+Utdelat till den_kkeffe [4h Ah]
+CHLe96: call 50
+Sefi0309: fold 
+payda300: fold 
+den_kkeffe: call 50
+Abnerzs: fold 
+lucasveiga20: raise 150 till 200
+Heresia274: call 150
+CHLe96: fold 
+den_kkeffe: call 150
+*** FLOPP *** [Kd 9h 7h]
+lucasveiga20: bet 189
+Heresia274: call 189
+den_kkeffe: raise 1090 till 1279 och är all-in
+lucasveiga20: fold 
+Heresia274: call 1090
+*** TURN *** [Kd 9h 7h] [Jh]
+*** RIVER *** [Kd 9h 7h Jh] [8c]
+*** VISNING ***
+Heresia274: visar [Ad Ks] (par i kungar)
+den_kkeffe: visar [4h Ah] (färg, ess hög)
+den_kkeffe vann 3397 från potten
+*** SAMMANFATTNING ***
+Total pott 3397 | Avgift 0 
+Bord [Kd 9h 7h Jh 8c]
+Plats 1: Sefi0309 foldade innan Flopp (satsade inte)
+Plats 2: payda300 foldade innan Flopp (satsade inte)
+Plats 3: den_kkeffe visade [4h Ah] och vann (3397) med färg, ess hög
+Plats 5: Abnerzs (knappen) foldade innan Flopp (satsade inte)
+Plats 6: lucasveiga20 (small blind) foldade på Flopp
+Plats 7: Heresia274 (big blind) visade [Ad Ks] och förlorade med par i kungar
+Plats 9: CHLe96 foldade innan Flopp
+
+
+
+PokerStars hand nr 238995898261: Turnering #3480263564, $0.44+$0.06 USD Holdem No limit - Nivå III (25/50) - 2022-10-02 21:23:12 CET [2022-10-02 15:23:12 ET]
+Bord '3480263564 1' 9-max Plats #6 har knappen
+Plats 1: Sefi0309 (1785 i marker) 
+Plats 2: payda300 (813 i marker) 
+Plats 3: den_kkeffe (3397 i marker) 
+Plats 5: Abnerzs (1130 i marker) 
+Plats 6: lucasveiga20 (1879 i marker) 
+Plats 7: Heresia274 (1640 i marker) 
+Plats 9: CHLe96 (2856 i marker) 
+Heresia274: lägger small blind 25
+CHLe96: lägger big blind 50
+*** HÅLKORT ***
+Utdelat till den_kkeffe [6c 4h]
+Sefi0309: fold 
+payda300: fold 
+den_kkeffe: fold 
+Abnerzs: raise 50 till 100
+lucasveiga20: fold 
+Heresia274: fold 
+CHLe96: fold 
+Ej synad satsning (50) returnerad till Abnerzs
+Abnerzs vann 125 från potten
+Abnerzs: visar inte sin hand 
+*** SAMMANFATTNING ***
+Total pott 125 | Avgift 0 
+Plats 1: Sefi0309 foldade innan Flopp (satsade inte)
+Plats 2: payda300 foldade innan Flopp (satsade inte)
+Plats 3: den_kkeffe foldade innan Flopp (satsade inte)
+Plats 5: Abnerzs vann (125)
+Plats 6: lucasveiga20 (knappen) foldade innan Flopp (satsade inte)
+Plats 7: Heresia274 (small blind) foldade innan Flopp
+Plats 9: CHLe96 (big blind) foldade innan Flopp
+
+
+
+PokerStars hand nr 238995906482: Turnering #3480263564, $0.44+$0.06 USD Holdem No limit - Nivå III (25/50) - 2022-10-02 21:23:31 CET [2022-10-02 15:23:31 ET]
+Bord '3480263564 1' 9-max Plats #7 har knappen
+Plats 1: Sefi0309 (1785 i marker) 
+Plats 2: payda300 (813 i marker) 
+Plats 3: den_kkeffe (3397 i marker) 
+Plats 5: Abnerzs (1205 i marker) 
+Plats 6: lucasveiga20 (1879 i marker) 
+Plats 7: Heresia274 (1615 i marker) 
+Plats 9: CHLe96 (2806 i marker) 
+CHLe96: lägger small blind 25
+Sefi0309: lägger big blind 50
+*** HÅLKORT ***
+Utdelat till den_kkeffe [Qs Js]
+payda300: fold 
+den_kkeffe: raise 60 till 110
+Abnerzs: raise 1095 till 1205 och är all-in
+lucasveiga20: fold 
+Heresia274: fold 
+CHLe96: fold 
+Sefi0309: fold 
+den_kkeffe: fold 
+Ej synad satsning (1095) returnerad till Abnerzs
+Abnerzs vann 295 från potten
+Abnerzs: visar inte sin hand 
+*** SAMMANFATTNING ***
+Total pott 295 | Avgift 0 
+Plats 1: Sefi0309 (big blind) foldade innan Flopp
+Plats 2: payda300 foldade innan Flopp (satsade inte)
+Plats 3: den_kkeffe foldade innan Flopp
+Plats 5: Abnerzs vann (295)
+Plats 6: lucasveiga20 foldade innan Flopp (satsade inte)
+Plats 7: Heresia274 (knappen) foldade innan Flopp (satsade inte)
+Plats 9: CHLe96 (small blind) foldade innan Flopp
+
+
+
+PokerStars hand nr 238995919104: Turnering #3480263564, $0.44+$0.06 USD Holdem No limit - Nivå III (25/50) - 2022-10-02 21:23:58 CET [2022-10-02 15:23:58 ET]
+Bord '3480263564 1' 9-max Plats #9 har knappen
+Plats 1: Sefi0309 (1735 i marker) 
+Plats 2: payda300 (813 i marker) 
+Plats 3: den_kkeffe (3287 i marker) 
+Plats 5: Abnerzs (1390 i marker) 
+Plats 6: lucasveiga20 (1879 i marker) 
+Plats 7: Heresia274 (1615 i marker) 
+Plats 9: CHLe96 (2781 i marker) 
+Sefi0309: lägger small blind 25
+payda300: lägger big blind 50
+*** HÅLKORT ***
+Utdelat till den_kkeffe [8d 6c]
+den_kkeffe: fold 
+Abnerzs: fold 
+lucasveiga20: fold 
+Heresia274: raise 50 till 100
+CHLe96: call 100
+Sefi0309: fold 
+payda300: call 50
+*** FLOPP *** [9c 2c As]
+payda300: check 
+Heresia274: check 
+CHLe96: bet 50
+payda300: call 50
+Heresia274: fold 
+*** TURN *** [9c 2c As] [Ts]
+payda300: check 
+CHLe96: bet 50
+payda300: call 50
+*** RIVER *** [9c 2c As Ts] [Ks]
+payda300: check 
+CHLe96: bet 262
+payda300: fold 
+Ej synad satsning (262) returnerad till CHLe96
+CHLe96 vann 525 från potten
+*** SAMMANFATTNING ***
+Total pott 525 | Avgift 0 
+Bord [9c 2c As Ts Ks]
+Plats 1: Sefi0309 (small blind) foldade innan Flopp
+Plats 2: payda300 (big blind) foldade på River
+Plats 3: den_kkeffe foldade innan Flopp (satsade inte)
+Plats 5: Abnerzs foldade innan Flopp (satsade inte)
+Plats 6: lucasveiga20 foldade innan Flopp (satsade inte)
+Plats 7: Heresia274 foldade på Flopp
+Plats 9: CHLe96 (knappen) vann (525)
+
+
+
+PokerStars hand nr 238995946619: Turnering #3480263564, $0.44+$0.06 USD Holdem No limit - Nivå III (25/50) - 2022-10-02 21:24:58 CET [2022-10-02 15:24:58 ET]
+Bord '3480263564 1' 9-max Plats #1 har knappen
+Plats 1: Sefi0309 (1710 i marker) 
+Plats 2: payda300 (613 i marker) 
+Plats 3: den_kkeffe (3287 i marker) 
+Plats 5: Abnerzs (1390 i marker) 
+Plats 6: lucasveiga20 (1879 i marker) 
+Plats 7: Heresia274 (1515 i marker) 
+Plats 9: CHLe96 (3106 i marker) 
+payda300: lägger small blind 25
+den_kkeffe: lägger big blind 50
+*** HÅLKORT ***
+Utdelat till den_kkeffe [Qc 7s]
+Abnerzs: raise 50 till 100
+lucasveiga20: fold 
+Heresia274: fold 
+CHLe96: fold 
+Sefi0309: fold 
+payda300: fold 
+den_kkeffe: fold 
+Ej synad satsning (50) returnerad till Abnerzs
+Abnerzs vann 125 från potten
+Abnerzs: visar inte sin hand 
+*** SAMMANFATTNING ***
+Total pott 125 | Avgift 0 
+Plats 1: Sefi0309 (knappen) foldade innan Flopp (satsade inte)
+Plats 2: payda300 (small blind) foldade innan Flopp
+Plats 3: den_kkeffe (big blind) foldade innan Flopp
+Plats 5: Abnerzs vann (125)
+Plats 6: lucasveiga20 foldade innan Flopp (satsade inte)
+Plats 7: Heresia274 foldade innan Flopp (satsade inte)
+Plats 9: CHLe96 foldade innan Flopp (satsade inte)
+
+
+
+PokerStars hand nr 238995958222: Turnering #3480263564, $0.44+$0.06 USD Holdem No limit - Nivå III (25/50) - 2022-10-02 21:25:23 CET [2022-10-02 15:25:23 ET]
+Bord '3480263564 1' 9-max Plats #2 har knappen
+Plats 1: Sefi0309 (1710 i marker) 
+Plats 2: payda300 (588 i marker) 
+Plats 3: den_kkeffe (3237 i marker) 
+Plats 5: Abnerzs (1465 i marker) 
+Plats 6: lucasveiga20 (1879 i marker) 
+Plats 7: Heresia274 (1515 i marker) 
+Plats 9: CHLe96 (3106 i marker) 
+den_kkeffe: lägger small blind 25
+Abnerzs: lägger big blind 50
+*** HÅLKORT ***
+Utdelat till den_kkeffe [4c Kh]
+lucasveiga20: fold 
+Heresia274: raise 50 till 100
+CHLe96: call 100
+Sefi0309: fold 
+payda300: fold 
+den_kkeffe: fold 
+Abnerzs: fold 
+*** FLOPP *** [Ac 3s 9d]
+Heresia274: bet 140
+CHLe96: call 140
+*** TURN *** [Ac 3s 9d] [Js]
+Heresia274: check 
+CHLe96: bet 277
+Heresia274: fold 
+Ej synad satsning (277) returnerad till CHLe96
+CHLe96 vann 555 från potten
+*** SAMMANFATTNING ***
+Total pott 555 | Avgift 0 
+Bord [Ac 3s 9d Js]
+Plats 1: Sefi0309 foldade innan Flopp (satsade inte)
+Plats 2: payda300 (knappen) foldade innan Flopp (satsade inte)
+Plats 3: den_kkeffe (small blind) foldade innan Flopp
+Plats 5: Abnerzs (big blind) foldade innan Flopp
+Plats 6: lucasveiga20 foldade innan Flopp (satsade inte)
+Plats 7: Heresia274 foldade på Turn
+Plats 9: CHLe96 vann (555)
+
+
+
+PokerStars hand nr 238995979332: Turnering #3480263564, $0.44+$0.06 USD Holdem No limit - Nivå IV (50/100) - 2022-10-02 21:26:09 CET [2022-10-02 15:26:09 ET]
+Bord '3480263564 1' 9-max Plats #3 har knappen
+Plats 1: Sefi0309 (1710 i marker) 
+Plats 2: payda300 (588 i marker) 
+Plats 3: den_kkeffe (3212 i marker) 
+Plats 5: Abnerzs (1415 i marker) 
+Plats 6: lucasveiga20 (1879 i marker) 
+Plats 7: Heresia274 (1275 i marker) 
+Plats 9: CHLe96 (3421 i marker) 
+Abnerzs: lägger small blind 50
+lucasveiga20: lägger big blind 100
+*** HÅLKORT ***
+Utdelat till den_kkeffe [Kh 6c]
+Heresia274: fold 
+CHLe96: fold 
+Sefi0309: fold 
+payda300: call 100
+den_kkeffe: fold 
+Abnerzs: raise 1315 till 1415 och är all-in
+lucasveiga20: fold 
+payda300: fold 
+Ej synad satsning (1315) returnerad till Abnerzs
+Abnerzs vann 300 från potten
+Abnerzs: visar inte sin hand 
+*** SAMMANFATTNING ***
+Total pott 300 | Avgift 0 
+Plats 1: Sefi0309 foldade innan Flopp (satsade inte)
+Plats 2: payda300 foldade innan Flopp
+Plats 3: den_kkeffe (knappen) foldade innan Flopp (satsade inte)
+Plats 5: Abnerzs (small blind) vann (300)
+Plats 6: lucasveiga20 (big blind) foldade innan Flopp
+Plats 7: Heresia274 foldade innan Flopp (satsade inte)
+Plats 9: CHLe96 foldade innan Flopp (satsade inte)
+
+
+
+PokerStars hand nr 238995989363: Turnering #3480263564, $0.44+$0.06 USD Holdem No limit - Nivå IV (50/100) - 2022-10-02 21:26:31 CET [2022-10-02 15:26:31 ET]
+Bord '3480263564 1' 9-max Plats #5 har knappen
+Plats 1: Sefi0309 (1710 i marker) 
+Plats 2: payda300 (488 i marker) 
+Plats 3: den_kkeffe (3212 i marker) 
+Plats 5: Abnerzs (1615 i marker) 
+Plats 6: lucasveiga20 (1779 i marker) 
+Plats 7: Heresia274 (1275 i marker) 
+Plats 9: CHLe96 (3421 i marker) 
+lucasveiga20: lägger small blind 50
+Heresia274: lägger big blind 100
+*** HÅLKORT ***
+Utdelat till den_kkeffe [6s 3c]
+CHLe96: call 100
+Sefi0309: call 100
+payda300: fold 
+den_kkeffe: fold 
+Abnerzs: fold 
+lucasveiga20: fold 
+Heresia274: raise 1175 till 1275 och är all-in
+CHLe96: call 1175
+Sefi0309: fold 
+*** FLOPP *** [Js 9h 4d]
+*** TURN *** [Js 9h 4d] [Ad]
+*** RIVER *** [Js 9h 4d Ad] [Qh]
+*** VISNING ***
+Heresia274: visar [8d 8h] (par i åttor)
+CHLe96: visar [Td Ts] (par i tior)
+CHLe96 vann 2700 från potten
+Heresia274 avslutade turneringen på 7:e plats
+*** SAMMANFATTNING ***
+Total pott 2700 | Avgift 0 
+Bord [Js 9h 4d Ad Qh]
+Plats 1: Sefi0309 foldade innan Flopp
+Plats 2: payda300 foldade innan Flopp (satsade inte)
+Plats 3: den_kkeffe foldade innan Flopp (satsade inte)
+Plats 5: Abnerzs (knappen) foldade innan Flopp (satsade inte)
+Plats 6: lucasveiga20 (small blind) foldade innan Flopp
+Plats 7: Heresia274 (big blind) visade [8d 8h] och förlorade med par i åttor
+Plats 9: CHLe96 visade [Td Ts] och vann (2700) med par i tior
+
+
+
+PokerStars hand nr 238996005202: Turnering #3480263564, $0.44+$0.06 USD Holdem No limit - Nivå IV (50/100) - 2022-10-02 21:27:05 CET [2022-10-02 15:27:05 ET]
+Bord '3480263564 1' 9-max Plats #6 har knappen
+Plats 1: Sefi0309 (1610 i marker) 
+Plats 2: payda300 (488 i marker) 
+Plats 3: den_kkeffe (3212 i marker) 
+Plats 5: Abnerzs (1615 i marker) 
+Plats 6: lucasveiga20 (1729 i marker) 
+Plats 9: CHLe96 (4846 i marker) 
+CHLe96: lägger small blind 50
+Sefi0309: lägger big blind 100
+*** HÅLKORT ***
+Utdelat till den_kkeffe [Qh 8h]
+payda300: fold 
+den_kkeffe: fold 
+Abnerzs: fold 
+lucasveiga20: fold 
+CHLe96: call 50
+Sefi0309: check 
+*** FLOPP *** [3s Jh 8c]
+CHLe96: bet 100
+Sefi0309: call 100
+*** TURN *** [3s Jh 8c] [Js]
+CHLe96: bet 100
+Sefi0309: call 100
+*** RIVER *** [3s Jh 8c Js] [Qs]
+CHLe96: bet 100
+Sefi0309: call 100
+*** VISNING ***
+CHLe96: visar [Qd 7h] (två par, damer och knektar)
+Sefi0309: visar [2s 8s] (färg, dam hög)
+Sefi0309 vann 800 från potten
+*** SAMMANFATTNING ***
+Total pott 800 | Avgift 0 
+Bord [3s Jh 8c Js Qs]
+Plats 1: Sefi0309 (big blind) visade [2s 8s] och vann (800) med färg, dam hög
+Plats 2: payda300 foldade innan Flopp (satsade inte)
+Plats 3: den_kkeffe foldade innan Flopp (satsade inte)
+Plats 5: Abnerzs foldade innan Flopp (satsade inte)
+Plats 6: lucasveiga20 (knappen) foldade innan Flopp (satsade inte)
+Plats 9: CHLe96 (small blind) visade [Qd 7h] och förlorade med två par, damer och knektar
+
+
+
+PokerStars hand nr 238996020245: Turnering #3480263564, $0.44+$0.06 USD Holdem No limit - Nivå IV (50/100) - 2022-10-02 21:27:38 CET [2022-10-02 15:27:38 ET]
+Bord '3480263564 1' 9-max Plats #9 har knappen
+Plats 1: Sefi0309 (2010 i marker) 
+Plats 2: payda300 (488 i marker) 
+Plats 3: den_kkeffe (3212 i marker) 
+Plats 5: Abnerzs (1615 i marker) 
+Plats 6: lucasveiga20 (1729 i marker) 
+Plats 9: CHLe96 (4446 i marker) 
+Sefi0309: lägger small blind 50
+payda300: lägger big blind 100
+*** HÅLKORT ***
+Utdelat till den_kkeffe [8d 5c]
+den_kkeffe: fold 
+Abnerzs: fold 
+lucasveiga20: fold 
+CHLe96: fold 
+Sefi0309: fold 
+Ej synad satsning (50) returnerad till payda300
+payda300 vann 100 från potten
+*** SAMMANFATTNING ***
+Total pott 100 | Avgift 0 
+Plats 1: Sefi0309 (small blind) foldade innan Flopp
+Plats 2: payda300 (big blind) vann (100)
+Plats 3: den_kkeffe foldade innan Flopp (satsade inte)
+Plats 5: Abnerzs foldade innan Flopp (satsade inte)
+Plats 6: lucasveiga20 foldade innan Flopp (satsade inte)
+Plats 9: CHLe96 (knappen) foldade innan Flopp (satsade inte)
+
+
+
+PokerStars hand nr 238996025169: Turnering #3480263564, $0.44+$0.06 USD Holdem No limit - Nivå IV (50/100) - 2022-10-02 21:27:48 CET [2022-10-02 15:27:48 ET]
+Bord '3480263564 1' 9-max Plats #1 har knappen
+Plats 1: Sefi0309 (1960 i marker) 
+Plats 2: payda300 (538 i marker) 
+Plats 3: den_kkeffe (3212 i marker) 
+Plats 5: Abnerzs (1615 i marker) 
+Plats 6: lucasveiga20 (1729 i marker) 
+Plats 9: CHLe96 (4446 i marker) 
+payda300: lägger small blind 50
+den_kkeffe: lägger big blind 100
+*** HÅLKORT ***
+Utdelat till den_kkeffe [3s Ad]
+Abnerzs: fold 
+lucasveiga20: fold 
+CHLe96: fold 
+Sefi0309: fold 
+payda300: call 50
+den_kkeffe: raise 3112 till 3212 och är all-in
+payda300: call 438 och är all-in
+Ej synad satsning (2674) returnerad till den_kkeffe
+*** FLOPP *** [9h 8d Js]
+*** TURN *** [9h 8d Js] [2h]
+*** RIVER *** [9h 8d Js 2h] [6h]
+*** VISNING ***
+payda300: visar [6d As] (par i sexor)
+den_kkeffe: visar [3s Ad] (högt kort ess)
+payda300 vann 1076 från potten
+*** SAMMANFATTNING ***
+Total pott 1076 | Avgift 0 
+Bord [9h 8d Js 2h 6h]
+Plats 1: Sefi0309 (knappen) foldade innan Flopp (satsade inte)
+Plats 2: payda300 (small blind) visade [6d As] och vann (1076) med par i sexor
+Plats 3: den_kkeffe (big blind) visade [3s Ad] och förlorade med högt kort ess
+Plats 5: Abnerzs foldade innan Flopp (satsade inte)
+Plats 6: lucasveiga20 foldade innan Flopp (satsade inte)
+Plats 9: CHLe96 foldade innan Flopp (satsade inte)
+
+
+
+PokerStars hand nr 238996036557: Turnering #3480263564, $0.44+$0.06 USD Holdem No limit - Nivå IV (50/100) - 2022-10-02 21:28:13 CET [2022-10-02 15:28:13 ET]
+Bord '3480263564 1' 9-max Plats #2 har knappen
+Plats 1: Sefi0309 (1960 i marker) 
+Plats 2: payda300 (1076 i marker) 
+Plats 3: den_kkeffe (2674 i marker) 
+Plats 5: Abnerzs (1615 i marker) 
+Plats 6: lucasveiga20 (1729 i marker) 
+Plats 9: CHLe96 (4446 i marker) 
+den_kkeffe: lägger small blind 50
+Abnerzs: lägger big blind 100
+*** HÅLKORT ***
+Utdelat till den_kkeffe [3c 6s]
+lucasveiga20: fold 
+CHLe96: fold 
+Sefi0309 tid har gått ut
+Sefi0309: fold 
+Sefi0309 står över
+Sefi0309 har kommit tillbaka
+payda300: call 100
+den_kkeffe: fold 
+Abnerzs: check 
+*** FLOPP *** [As Jd Ad]
+Abnerzs: bet 100
+payda300: fold 
+Ej synad satsning (100) returnerad till Abnerzs
+Abnerzs vann 250 från potten
+Abnerzs: visar inte sin hand 
+*** SAMMANFATTNING ***
+Total pott 250 | Avgift 0 
+Bord [As Jd Ad]
+Plats 1: Sefi0309 foldade innan Flopp (satsade inte)
+Plats 2: payda300 (knappen) foldade på Flopp
+Plats 3: den_kkeffe (small blind) foldade innan Flopp
+Plats 5: Abnerzs (big blind) vann (250)
+Plats 6: lucasveiga20 foldade innan Flopp (satsade inte)
+Plats 9: CHLe96 foldade innan Flopp (satsade inte)
+
+
+
+PokerStars hand nr 238996062518: Turnering #3480263564, $0.44+$0.06 USD Holdem No limit - Nivå IV (50/100) - 2022-10-02 21:29:10 CET [2022-10-02 15:29:10 ET]
+Bord '3480263564 1' 9-max Plats #3 har knappen
+Plats 1: Sefi0309 (1960 i marker) 
+Plats 2: payda300 (976 i marker) 
+Plats 3: den_kkeffe (2624 i marker) 
+Plats 5: Abnerzs (1765 i marker) 
+Plats 6: lucasveiga20 (1729 i marker) 
+Plats 9: CHLe96 (4446 i marker) 
+Abnerzs: lägger small blind 50
+lucasveiga20: lägger big blind 100
+*** HÅLKORT ***
+Utdelat till den_kkeffe [9d As]
+CHLe96: fold 
+Sefi0309: call 100
+payda300: fold 
+den_kkeffe: raise 400 till 500
+Abnerzs: fold 
+lucasveiga20: fold 
+Sefi0309: call 400
+*** FLOPP *** [2d 6d Jc]
+Sefi0309: check 
+den_kkeffe: bet 575
+Sefi0309: call 575
+*** TURN *** [2d 6d Jc] [4d]
+Sefi0309: check 
+den_kkeffe: check 
+*** RIVER *** [2d 6d Jc 4d] [5d]
+Sefi0309: bet 885 och är all-in
+den_kkeffe: call 885
+*** VISNING ***
+Sefi0309: visar [Ad Td] (färg, ess hög)
+den_kkeffe: visar [9d As] (färg, nia hög)
+Sefi0309 vann 4070 från potten
+*** SAMMANFATTNING ***
+Total pott 4070 | Avgift 0 
+Bord [2d 6d Jc 4d 5d]
+Plats 1: Sefi0309 visade [Ad Td] och vann (4070) med färg, ess hög
+Plats 2: payda300 foldade innan Flopp (satsade inte)
+Plats 3: den_kkeffe (knappen) visade [9d As] och förlorade med färg, nia hög
+Plats 5: Abnerzs (small blind) foldade innan Flopp
+Plats 6: lucasveiga20 (big blind) foldade innan Flopp
+Plats 9: CHLe96 foldade innan Flopp (satsade inte)
+
+
+
+PokerStars hand nr 238996087871: Turnering #3480263564, $0.44+$0.06 USD Holdem No limit - Nivå IV (50/100) - 2022-10-02 21:30:06 CET [2022-10-02 15:30:06 ET]
+Bord '3480263564 1' 9-max Plats #5 har knappen
+Plats 1: Sefi0309 (4070 i marker) 
+Plats 2: payda300 (976 i marker) 
+Plats 3: den_kkeffe (664 i marker) 
+Plats 5: Abnerzs (1715 i marker) 
+Plats 6: lucasveiga20 (1629 i marker) 
+Plats 9: CHLe96 (4446 i marker) 
+lucasveiga20: lägger small blind 50
+CHLe96: lägger big blind 100
+*** HÅLKORT ***
+Utdelat till den_kkeffe [7s Th]
+Sefi0309: fold 
+payda300: raise 200 till 300
+den_kkeffe: raise 364 till 664 och är all-in
+Abnerzs: fold 
+lucasveiga20: fold 
+CHLe96: call 564
+payda300: raise 312 till 976 och är all-in
+CHLe96: call 312
+*** FLOPP *** [3c 7c 4h]
+*** TURN *** [3c 7c 4h] [2d]
+*** RIVER *** [3c 7c 4h 2d] [Jd]
+*** VISNING ***
+CHLe96: visar [6d Ah] (högt kort ess)
+payda300: visar [7h Ac] (par i sjuor)
+payda300 vann 624 från  sidopotten
+den_kkeffe: visar [7s Th] (par i sjuor - lägre sidokort)
+payda300 vann 2042 från  huvudpotten
+den_kkeffe avslutade turneringen på 6:e plats
+*** SAMMANFATTNING ***
+Total pott 2666 Huvudpott 2042. Sidopott 624. | Avgift 0 
+Bord [3c 7c 4h 2d Jd]
+Plats 1: Sefi0309 foldade innan Flopp (satsade inte)
+Plats 2: payda300 visade [7h Ac] och vann (2666) med par i sjuor
+Plats 3: den_kkeffe visade [7s Th] och förlorade med par i sjuor
+Plats 5: Abnerzs (knappen) foldade innan Flopp (satsade inte)
+Plats 6: lucasveiga20 (small blind) foldade innan Flopp
+Plats 9: CHLe96 (big blind) visade [6d Ah] och förlorade med högt kort ess
+
+
+

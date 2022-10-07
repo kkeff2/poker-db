@@ -2690,10 +2690,123 @@ var import_sender = __toESM(require_sender(), 1);
 var import_websocket = __toESM(require_websocket(), 1);
 var import_websocket_server = __toESM(require_websocket_server(), 1);
 
+// src/database.ts
+var initDb = () => {
+  console.log("startDB");
+};
+
+// src/handHistory.ts
+var import_fs = __toESM(require("fs"));
+var import_path = __toESM(require("path"));
+
+// src/config.ts
+var config = {
+  pathToHandHistoryLogs: "/Users/kasperbartholdigustavii/Library/Application Support/PokerStarsSE/HandHistory/den_kkeffe",
+  pathToTournamentLogs: "/Users/kasperbartholdigustavii/Library/Application Support/PokerStarsSE/TournSummary/den_kkeffe"
+};
+var getHandInfo = (hand) => {
+  const handRows = hand.split("\n");
+  const tableSize = getTableSize(handRows);
+  const players = getPlayers(handRows, tableSize);
+  return {
+    tableSize,
+    players,
+    handId: getHandId(handRows),
+    gameType: getGameType(handRows),
+    pokerType: "NLHE",
+    tournamentId: getGameType(handRows) == "TOURNAMENT" ? getTournamentId(handRows) : void 0,
+    gameName: getGameName(handRows),
+    tableId: getTableId(handRows)
+  };
+};
+var getHandId = (handRows) => {
+  return handRows[0].split(" ")[3];
+};
+var getGameType = (handRows) => {
+  return handRows[0].includes("Turnering") ? "TOURNAMENT" : "CASH_GAME";
+};
+var getTournamentId = (handRows) => {
+  return handRows[0].split("#")[1].split(",")[0];
+};
+var getGameName = (handRows) => {
+  return handRows[0].split(":")[1].split("-")[0].trim();
+};
+var getTableId = (handRows) => {
+  return handRows[1].split("'")[1];
+};
+var getTableSize = (handRows) => {
+  const tableSizePosition = handRows[1].search("-max");
+  return parseInt(handRows[1].charAt(tableSizePosition - 1));
+};
+var getPlayers = (handRows, tableSize) => {
+  const players = {};
+  for (let playerIndex = 2; playerIndex <= tableSize + 2; playerIndex++) {
+    const row = handRows[playerIndex];
+    if (!row.startsWith("Plats ")) {
+      break;
+    }
+    const playerName = row.split(":")[1].split("-")[0].split("(")[0].trim();
+    players[playerName] = {
+      position: parseInt(row.split(" ")[1]),
+      name: row.split(":")[1].split("-")[0].split("(")[0].trim(),
+      preFlop: []
+    };
+  }
+  let i = handRows.indexOf(HOLE_CARDS) + 2;
+  do {
+    const row = handRows[i];
+    if (row.indexOf(":") == -1) {
+      i++;
+      continue;
+    }
+    const rowList = handRows[i].split(":");
+    const playerName = rowList[0];
+    const action = rowList[1].split(" ")[1];
+    console.log("ACTIONACTION", action);
+    players[playerName] = {
+      ...players[playerName],
+      preFlop: [...players[playerName].preFlop, action]
+    };
+    i++;
+  } while (!(handRows[i].includes(FLOP) || handRows[i].includes(SUMMARY)));
+  console.log("players", players);
+  return players;
+};
+var HOLE_CARDS = "*** H\xC5LKORT ***";
+var FLOP = "*** FLOPP ***";
+var SUMMARY = "*** SAMMANFATTNING ***";
+
+// src/handHistory.ts
+var poll;
+var setPolling = () => {
+  poll = setTimeout(() => {
+    pollNewFiles();
+  }, 1e3);
+};
+var initHandHistoryPoll = () => {
+  setPolling();
+};
+var pollNewFiles = () => {
+  const files = import_fs.default.readdirSync(config.pathToHandHistoryLogs);
+  for (var i = 0; i < files.length; i++) {
+    var filename = import_path.default.join(config.pathToHandHistoryLogs, files[i]);
+    import_fs.default.readFile(filename, "utf8", function(err, data) {
+      if (err)
+        throw err;
+      const hands = data.split("\n\n\n");
+      console.log("hands.length", hands.length);
+      const firstHand = hands[0];
+      console.log("handID", getHandInfo(firstHand));
+    });
+  }
+};
+
 // src/index.ts
 var wss = new import_websocket_server.default({ port: 8080 });
-console.log("DSASDsasdadsDSA2");
+initHandHistoryPoll();
 wss.on("connection", function connection(ws) {
+  initDb();
+  initHandHistoryPoll();
   ws.on("message", function message(data) {
     console.log("received: %s", data);
   });
