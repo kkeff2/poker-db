@@ -2708,6 +2708,7 @@ var getHandInfo = (hand) => {
   const handRows = hand.split("\n");
   const tableSize = getTableSize(handRows);
   const players = getPlayers(handRows, tableSize);
+  const test = players["asd"];
   return {
     tableSize,
     players,
@@ -2738,43 +2739,102 @@ var getTableSize = (handRows) => {
   const tableSizePosition = handRows[1].search("-max");
   return parseInt(handRows[1].charAt(tableSizePosition - 1));
 };
-var getPlayers = (handRows, tableSize) => {
-  const players = {};
+var getAction = (possibleAction) => {
+  switch (possibleAction) {
+    case FOLD:
+      return "FOLD";
+    case CALL:
+      return "CALL";
+    case RAISE:
+      return "RAISE";
+    case CHECK:
+      return "CHECK";
+    case BET:
+      return "BET";
+    default:
+      throw Error(`${possibleAction} is not a Action`);
+  }
+};
+var getPlayerRoundActions = ({
+  handRows,
+  playerId,
+  round
+}) => {
+  const config2 = actionsConfig[round];
+  const startIndex = handRows.indexOf(config2.startString);
+  if (startIndex == -1) {
+    return [];
+  }
+  const endIndex = handRows.findIndex((row) => {
+    return row.startsWith(config2.endString) || row.startsWith(SUMMARY);
+  });
+  const roundRows = handRows.splice(startIndex, endIndex - startIndex);
+  const playerRounds = roundRows.filter((row) => row.startsWith(playerId));
+  const playerActionRounds = playerRounds.filter((row) => {
+    if (row.indexOf(":") != -1)
+      return true;
+  });
+  console.log("playerActionRounds", playerActionRounds);
+  const actions = playerActionRounds.map((row) => getAction(row.split(":")[1].split(" ")[1]));
+  console.log("actions", actions);
+  return actions;
+};
+var getPlayersTableInfo = (handRows, tableSize) => {
+  let players = [];
   for (let playerIndex = 2; playerIndex <= tableSize + 2; playerIndex++) {
     const row = handRows[playerIndex];
     if (!row.startsWith("Plats ")) {
       break;
     }
     const playerName = row.split(":")[1].split("-")[0].split("(")[0].trim();
-    players[playerName] = {
+    const player = {
       position: parseInt(row.split(" ")[1]),
-      name: row.split(":")[1].split("-")[0].split("(")[0].trim(),
-      preFlop: []
+      name: playerName
     };
+    players.push(player);
   }
-  let i = handRows.indexOf(HOLE_CARDS) + 2;
-  do {
-    const row = handRows[i];
-    if (row.indexOf(":") == -1) {
-      i++;
-      continue;
-    }
-    const rowList = handRows[i].split(":");
-    const playerName = rowList[0];
-    const action = rowList[1].split(" ")[1];
-    console.log("ACTIONACTION", action);
-    players[playerName] = {
-      ...players[playerName],
-      preFlop: [...players[playerName].preFlop, action]
-    };
-    i++;
-  } while (!(handRows[i].includes(FLOP) || handRows[i].includes(SUMMARY)));
-  console.log("players", players);
   return players;
 };
-var HOLE_CARDS = "*** H\xC5LKORT ***";
-var FLOP = "*** FLOPP ***";
+var getPlayers = (handRows, tableSize) => {
+  const playersWithTableInfo = getPlayersTableInfo(handRows, tableSize);
+  const players = playersWithTableInfo.map((player) => {
+    return {
+      ...player,
+      actions: {
+        preFlop: getPlayerRoundActions({
+          handRows,
+          playerId: player.name,
+          round: "PRE_FLOP"
+        }),
+        flop: [],
+        turn: [],
+        river: []
+      }
+    };
+  });
+  return players;
+};
+var HOLE_CARDS_DIVIDER = "*** H\xC5LKORT ***";
+var FLOP_DIVIDER = "*** FLOPP ***";
+var TURN_DIVIDER = "*** TURN ***";
+var RIVER_DIVIDER = "*** RIVER ***";
+var SHOW_DIVIDER = "*** VISNING ***";
 var SUMMARY = "*** SAMMANFATTNING ***";
+var RAISE = "raise";
+var BET = "bet";
+var CALL = "call";
+var FOLD = "fold";
+var CHECK = "check";
+var actionsConfig = {
+  PRE_FLOP: {
+    startString: HOLE_CARDS_DIVIDER,
+    endString: FLOP_DIVIDER,
+    key: "preFlop"
+  },
+  FLOP: { startString: FLOP_DIVIDER, endString: TURN_DIVIDER, key: "flop" },
+  TURN: { startString: TURN_DIVIDER, endString: RIVER_DIVIDER, key: "turn" },
+  RIVER: { startString: RIVER_DIVIDER, endString: SHOW_DIVIDER, key: "river" }
+};
 
 // src/handHistory.ts
 var poll;
@@ -2793,10 +2853,9 @@ var pollNewFiles = () => {
     import_fs.default.readFile(filename, "utf8", function(err, data) {
       if (err)
         throw err;
-      const hands = data.split("\n\n\n");
-      console.log("hands.length", hands.length);
-      const firstHand = hands[0];
-      console.log("handID", getHandInfo(firstHand));
+      const rawHands = data.split("\n\n\n\n");
+      const rawCompleteHands = rawHands.filter((hand) => hand.split("\n").length != 1);
+      const hands = rawCompleteHands.map((hand) => getHandInfo(hand));
     });
   }
 };

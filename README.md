@@ -4,6 +4,9 @@ A Poker DB with info about who you are currently playing using local saved logs
 
 ## Next
 
+- Per HandHistory file create players
+- When there are players there send in the player list and create new for new players
+-
 - How to know that a tournament is finished
   - Check the tournament summary if the tournament is finished
   - Check if there are more hands than the latest hand saved in DB
@@ -16,7 +19,7 @@ A Poker DB with info about who you are currently playing using local saved logs
 
 - Use typescript types that are shared when sending/receiving messages
 - Scan log folder for new tournaments
-- Important stats
+- Important stats (PER PLAYER!)
   - Amount of hands together
   - Raise before flop
   - Limps?

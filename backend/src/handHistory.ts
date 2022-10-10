@@ -21,6 +21,8 @@ const handHistoryLogFinished = () => {
   return false;
 };
 
+const removeEmptyLastHand = (rawHand: string) => r;
+
 const pollNewFiles = () => {
   const files = fs.readdirSync(config.pathToHandHistoryLogs);
   for (var i = 0; i < files.length; i++) {
@@ -31,12 +33,12 @@ const pollNewFiles = () => {
       if (err) throw err;
       // console.log("OK: " + filename);
       // console.log(data);
-      const hands = data.split("\n\n\n");
-      console.log("hands.length", hands.length);
-      const firstHand = hands[0];
-      console.log("handID", getHandInfo(firstHand));
-      // console.log("handID", getHandId(firstHand));
-      // firstHand.
+      const rawHands = data.split("\n\n\n\n");
+      // console.log("hands.length", hands.length);
+      const rawCompleteHands = rawHands.filter(
+        (hand) => hand.split("\n").length != 1
+      );
+      const hands = rawCompleteHands.map((hand) => getHandInfo(hand));
     });
   }
 };

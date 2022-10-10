@@ -7,6 +7,9 @@ export const config = {
 
 type GameType = "TOURNAMENT" | "CASH_GAME";
 type PokerType = "NLHE" | "PLO";
+type Round = "PRE_FLOP" | "FLOP" | "TURN" | "RIVER";
+type Action = "FOLD" | "CALL" | "RAISE" | "CHECK" | "BET"; // "RE_RAISE" |
+type PlayerId = string;
 
 type Hand = {
   handId: string;
@@ -16,27 +19,25 @@ type Hand = {
   gameName: string;
   tableId: string;
   tableSize: number;
-  players: { string: Player };
+  players: Player[];
 };
 
 type Player = {
-  name: string;
+  name: PlayerId;
   position: number;
   actions: {
-    preFlop: Actions[];
-    flop?: Actions[];
-    turn?: Actions[];
-    river?: Actions[];
+    preFlop: Action[];
+    flop: Action[];
+    turn: Action[];
+    river: Action[];
   };
 };
-
-type Actions = "FOLD" | "CALL" | "RAISE" | "RE_RAISE" | "CHECK";
 
 export const getHandInfo = (hand: string): Hand => {
   const handRows = hand.split("\n");
   const tableSize = getTableSize(handRows);
   const players = getPlayers(handRows, tableSize);
-
+  const test = players["asd"];
   return {
     tableSize,
     players,
@@ -69,6 +70,10 @@ export const getTournamentId = (handRows: string[]) => {
 };
 
 export const getGameName = (handRows: string[]) => {
+  // console.log("handRows", handRows);
+  // console.log("handRows[0]", handRows[0]);
+  // console.log('handRows[0].split(":")', handRows[0].split(":"));
+  // console.log('handRows[0].split(":")[1]', handRows[0].split(":")[1]);
   return handRows[0].split(":")[1].split("-")[0].trim();
 };
 
@@ -85,13 +90,63 @@ export const getPositionOnButton = (handRows: string[]) => {
   return handRows[tableIndex].split("#")[1].charAt(0);
 };
 
-export const getPlayers = (
-  handRows: string[],
-  tableSize: number
-): { string?: Player } => {
-  // TODO: Fix type
-  // const buttonPosition = getPositionOnButton(handRows);
-  const players: { string?: Player } = {};
+const getAction = (possibleAction: string): Action => {
+  switch (possibleAction) {
+    case FOLD:
+      return "FOLD";
+    case CALL:
+      return "CALL";
+    case RAISE:
+      return "RAISE";
+    case CHECK:
+      return "CHECK";
+    case BET:
+      return "BET";
+    default:
+      throw Error(`${possibleAction} is not a Action`);
+  }
+};
+
+const getPlayerRoundActions = ({
+  handRows,
+  playerId,
+  round,
+}: {
+  handRows: string[];
+  playerId: PlayerId;
+  round: Round;
+}) => {
+  const config = actionsConfig[round];
+
+  const startIndex = handRows.indexOf(config.startString);
+  if (startIndex == -1) {
+    return [];
+  }
+
+  const endIndex = handRows.findIndex((row) => {
+    return row.startsWith(config.endString) || row.startsWith(SUMMARY);
+  });
+  const roundRows = handRows.splice(startIndex, endIndex - startIndex);
+
+  const playerRounds = roundRows.filter((row) => row.startsWith(playerId));
+  const playerActionRounds = playerRounds.filter((row) => {
+    if (row.indexOf(":") != -1) return true;
+    // return !row.split(":")[1].trim().startsWith(SHOWS);
+  });
+
+  console.log("playerActionRounds", playerActionRounds);
+
+  const actions = playerActionRounds.map((row) =>
+    getAction(row.split(":")[1].split(" ")[1])
+  );
+
+  console.log("actions", actions);
+
+  return actions;
+};
+
+const getPlayersTableInfo = (handRows: string[], tableSize: number) => {
+  let players: Omit<Player, "actions">[] = [];
   for (let playerIndex = 2; playerIndex <= tableSize + 2; playerIndex++) {
     const row = handRows[playerIndex];
     // TODO: Better check needed? If a player starts with Plats error will occur
@@ -100,48 +155,62 @@ export const getPlayers = (
     }
 
     const playerName = row.split(":")[1].split("-")[0].split("(")[0].trim();
-    players[playerName] = {
+    const player: Omit<Player, "actions"> = {
       position: parseInt(row.split(" ")[1]),
-      name: row.split(":")[1].split("-")[0].split("(")[0].trim(),
-      preFlop: [],
+      name: playerName,
     };
+    players.push(player);
   }
-  let i = handRows.indexOf(HOLE_CARDS) + 2;
-  do {
-    const row = handRows[i];
-    // console.log("i", i);
-    // console.log("ROW", row);
-    if (row.indexOf(":") == -1) {
-      i++;
-      continue;
-    }
-
-    const rowList = handRows[i].split(":");
-    const playerName = rowList[0];
-    const action = rowList[1].split(" ")[1];
-    console.log("ACTIONACTION", action);
-
-    players[playerName] = {
-      ...players[playerName],
-      preFlop: [...players[playerName].preFlop, action],
-    };
-    i++;
-  } while (!(handRows[i].includes(FLOP) || handRows[i].includes(SUMMARY)));
-  console.log("players", players);
   return players;
 };
 
-const getPreFlopAction = (handRows: string[], players: Player[]) => {
-  const positionOnButton = getPositionOnButton(handRows);
-  const firstToAct = players.find((p) => positionOnButton == p.name);
+export const getPlayers = (handRows: string[], tableSize: number): Player[] => {
+  const playersWithTableInfo = getPlayersTableInfo(handRows, tableSize);
+  const players: Player[] = playersWithTableInfo.map((player) => {
+    return {
+      ...player,
+      actions: {
+        preFlop: getPlayerRoundActions({
+          handRows,
+          playerId: player.name,
+          round: "PRE_FLOP",
+        }),
+        flop: [],
+        turn: [],
+        river: [],
+      },
+    };
+  });
+  return players;
 };
 
-const HOLE_CARDS = "*** HÅLKORT ***";
-const FLOP = "*** FLOPP ***";
+// ROUNDS
+const HOLE_CARDS_DIVIDER = "*** HÅLKORT ***";
+const FLOP_DIVIDER = "*** FLOPP ***";
+const TURN_DIVIDER = "*** TURN ***";
+const RIVER_DIVIDER = "*** RIVER ***";
+const SHOW_DIVIDER = "*** VISNING ***";
 const SUMMARY = "*** SAMMANFATTNING ***";
-const SHOW_DOWN = "*** VISNING ***";
+
+// ACTIONS
 const RAISE = "raise";
 const BET = "bet";
 const CALL = "call";
 const FOLD = "fold";
-const WON = "vann";
+// const WON = "vann";
+const CHECK = "check";
+const SHOWS = "visar";
+
+const actionsConfig: Record<
+  Round,
+  { startString: string; endString: string; key: string }
+> = {
+  PRE_FLOP: {
+    startString: HOLE_CARDS_DIVIDER,
+    endString: FLOP_DIVIDER,
+    key: "preFlop",
+  },
+  FLOP: { startString: FLOP_DIVIDER, endString: TURN_DIVIDER, key: "flop" },
+  TURN: { startString: TURN_DIVIDER, endString: RIVER_DIVIDER, key: "turn" },
+  RIVER: { startString: RIVER_DIVIDER, endString: SHOW_DIVIDER, key: "river" },
+};
