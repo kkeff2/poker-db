@@ -2708,7 +2708,6 @@ var getHandInfo = (hand) => {
   const handRows = hand.split("\n");
   const tableSize = getTableSize(handRows);
   const players = getPlayers(handRows, tableSize);
-  const test = players["asd"];
   return {
     tableSize,
     players,
@@ -2755,13 +2754,11 @@ var getAction = (possibleAction) => {
       throw Error(`${possibleAction} is not a Action`);
   }
 };
-var getPlayerRoundActions = ({
-  handRows,
-  playerId,
-  round
-}) => {
+var getRoundActionsRows = (round, handRows) => {
   const config2 = actionsConfig[round];
-  const startIndex = handRows.indexOf(config2.startString);
+  const startIndex = handRows.findIndex((row) => {
+    return row.startsWith(config2.startString);
+  });
   if (startIndex == -1) {
     return [];
   }
@@ -2769,14 +2766,17 @@ var getPlayerRoundActions = ({
     return row.startsWith(config2.endString) || row.startsWith(SUMMARY);
   });
   const roundRows = handRows.splice(startIndex, endIndex - startIndex);
-  const playerRounds = roundRows.filter((row) => row.startsWith(playerId));
-  const playerActionRounds = playerRounds.filter((row) => {
-    if (row.indexOf(":") != -1)
-      return true;
+  const roundActionRows = roundRows.filter((row) => row.indexOf(":") != -1);
+  return roundActionRows.filter((row) => {
+    return !row.split(":")[1].trim().startsWith(SHOWS);
   });
-  console.log("playerActionRounds", playerActionRounds);
-  const actions = playerActionRounds.map((row) => getAction(row.split(":")[1].split(" ")[1]));
-  console.log("actions", actions);
+};
+var getPlayerRoundActions = ({
+  roundRows,
+  playerId
+}) => {
+  const playerRounds = roundRows.filter((row) => row.startsWith(playerId));
+  const actions = playerRounds.map((row) => getAction(row.split(":")[1].split(" ")[1]));
   return actions;
 };
 var getPlayersTableInfo = (handRows, tableSize) => {
@@ -2797,18 +2797,32 @@ var getPlayersTableInfo = (handRows, tableSize) => {
 };
 var getPlayers = (handRows, tableSize) => {
   const playersWithTableInfo = getPlayersTableInfo(handRows, tableSize);
+  const roundActionRows = {
+    preFlop: getRoundActionsRows("PRE_FLOP", handRows),
+    flop: getRoundActionsRows("FLOP", handRows),
+    turn: getRoundActionsRows("TURN", handRows),
+    river: getRoundActionsRows("RIVER", handRows)
+  };
   const players = playersWithTableInfo.map((player) => {
     return {
       ...player,
       actions: {
         preFlop: getPlayerRoundActions({
-          handRows,
-          playerId: player.name,
-          round: "PRE_FLOP"
+          roundRows: roundActionRows.preFlop,
+          playerId: player.name
         }),
-        flop: [],
-        turn: [],
-        river: []
+        flop: getPlayerRoundActions({
+          roundRows: roundActionRows.flop,
+          playerId: player.name
+        }),
+        turn: getPlayerRoundActions({
+          roundRows: roundActionRows.turn,
+          playerId: player.name
+        }),
+        river: getPlayerRoundActions({
+          roundRows: roundActionRows.river,
+          playerId: player.name
+        })
       }
     };
   });
@@ -2825,6 +2839,7 @@ var BET = "bet";
 var CALL = "call";
 var FOLD = "fold";
 var CHECK = "check";
+var SHOWS = "visar";
 var actionsConfig = {
   PRE_FLOP: {
     startString: HOLE_CARDS_DIVIDER,
@@ -2846,6 +2861,20 @@ var setPolling = () => {
 var initHandHistoryPoll = () => {
   setPolling();
 };
+var initPlayerTotal = {
+  totalHands: 0,
+  flop: 0,
+  turn: 0,
+  river: 0
+};
+var addToPlayerTotal = (currentStats, player) => {
+  return {
+    totalHands: currentStats.totalHands + 1,
+    flop: currentStats.flop + (player.actions.flop.length > 0 ? 1 : 0),
+    turn: currentStats.turn + (player.actions.turn.length > 0 ? 1 : 0),
+    river: currentStats.river + (player.actions.river.length > 0 ? 1 : 0)
+  };
+};
 var pollNewFiles = () => {
   const files = import_fs.default.readdirSync(config.pathToHandHistoryLogs);
   for (var i = 0; i < files.length; i++) {
@@ -2856,6 +2885,15 @@ var pollNewFiles = () => {
       const rawHands = data.split("\n\n\n\n");
       const rawCompleteHands = rawHands.filter((hand) => hand.split("\n").length != 1);
       const hands = rawCompleteHands.map((hand) => getHandInfo(hand));
+      const playerHands = hands.map((h) => h.players);
+      const players = {};
+      playerHands.forEach((hand) => hand.forEach((player) => {
+        if (!players[player.name]) {
+          players[player.name] = initPlayerTotal;
+        }
+        players[player.name] = addToPlayerTotal(players[player.name], player);
+      }));
+      console.log(players);
     });
   }
 };

@@ -19,10 +19,10 @@ type Hand = {
   gameName: string;
   tableId: string;
   tableSize: number;
-  players: Player[];
+  players: PlayerHand[];
 };
 
-type Player = {
+export type PlayerHand = {
   name: PlayerId;
   position: number;
   actions: {
@@ -37,7 +37,6 @@ export const getHandInfo = (hand: string): Hand => {
   const handRows = hand.split("\n");
   const tableSize = getTableSize(handRows);
   const players = getPlayers(handRows, tableSize);
-  const test = players["asd"];
   return {
     tableSize,
     players,
@@ -50,7 +49,6 @@ export const getHandInfo = (hand: string): Hand => {
         : undefined,
     gameName: getGameName(handRows),
     tableId: getTableId(handRows),
-    // preFlop: getPreFlopAction(handRows, players),
   };
 };
 
@@ -70,10 +68,6 @@ export const getTournamentId = (handRows: string[]) => {
 };
 
 export const getGameName = (handRows: string[]) => {
-  // console.log("handRows", handRows);
-  // console.log("handRows[0]", handRows[0]);
-  // console.log('handRows[0].split(":")', handRows[0].split(":"));
-  // console.log('handRows[0].split(":")[1]', handRows[0].split(":")[1]);
   return handRows[0].split(":")[1].split("-")[0].trim();
 };
 
@@ -107,18 +101,11 @@ const getAction = (possibleAction: string): Action => {
   }
 };
 
-const getPlayerRoundActions = ({
-  handRows,
-  playerId,
-  round,
-}: {
-  handRows: string[];
-  playerId: PlayerId;
-  round: Round;
-}) => {
+const getRoundActionsRows = (round: Round, handRows: string[]) => {
   const config = actionsConfig[round];
-
-  const startIndex = handRows.indexOf(config.startString);
+  const startIndex = handRows.findIndex((row) => {
+    return row.startsWith(config.startString);
+  });
   if (startIndex == -1) {
     return [];
   }
@@ -127,26 +114,29 @@ const getPlayerRoundActions = ({
     return row.startsWith(config.endString) || row.startsWith(SUMMARY);
   });
   const roundRows = handRows.splice(startIndex, endIndex - startIndex);
-
-  const playerRounds = roundRows.filter((row) => row.startsWith(playerId));
-  const playerActionRounds = playerRounds.filter((row) => {
-    if (row.indexOf(":") != -1) return true;
-    // return !row.split(":")[1].trim().startsWith(SHOWS);
+  const roundActionRows = roundRows.filter((row) => row.indexOf(":") != -1);
+  // Filter out shows action
+  return roundActionRows.filter((row) => {
+    return !row.split(":")[1].trim().startsWith(SHOWS);
   });
+};
 
-  console.log("playerActionRounds", playerActionRounds);
-
-  const actions = playerActionRounds.map((row) =>
+const getPlayerRoundActions = ({
+  roundRows,
+  playerId,
+}: {
+  roundRows: string[];
+  playerId: PlayerId;
+}) => {
+  const playerRounds = roundRows.filter((row) => row.startsWith(playerId));
+  const actions = playerRounds.map((row) =>
     getAction(row.split(":")[1].split(" ")[1])
   );
-
-  console.log("actions", actions);
-
   return actions;
 };
 
 const getPlayersTableInfo = (handRows: string[], tableSize: number) => {
-  let players: Omit<Player, "actions">[] = [];
+  let players: Omit<PlayerHand, "actions">[] = [];
   for (let playerIndex = 2; playerIndex <= tableSize + 2; playerIndex++) {
     const row = handRows[playerIndex];
     // TODO: Better check needed? If a player starts with Plats error will occur
@@ -155,7 +145,7 @@ const getPlayersTableInfo = (handRows: string[], tableSize: number) => {
     }
 
     const playerName = row.split(":")[1].split("-")[0].split("(")[0].trim();
-    const player: Omit<Player, "actions"> = {
+    const player: Omit<PlayerHand, "actions"> = {
       position: parseInt(row.split(" ")[1]),
       name: playerName,
     };
@@ -164,20 +154,37 @@ const getPlayersTableInfo = (handRows: string[], tableSize: number) => {
   return players;
 };
 
-export const getPlayers = (handRows: string[], tableSize: number): Player[] => {
+export const getPlayers = (
+  handRows: string[],
+  tableSize: number
+): PlayerHand[] => {
   const playersWithTableInfo = getPlayersTableInfo(handRows, tableSize);
-  const players: Player[] = playersWithTableInfo.map((player) => {
+  const roundActionRows = {
+    preFlop: getRoundActionsRows("PRE_FLOP", handRows),
+    flop: getRoundActionsRows("FLOP", handRows),
+    turn: getRoundActionsRows("TURN", handRows),
+    river: getRoundActionsRows("RIVER", handRows),
+  };
+  const players: PlayerHand[] = playersWithTableInfo.map((player) => {
     return {
       ...player,
       actions: {
         preFlop: getPlayerRoundActions({
-          handRows,
+          roundRows: roundActionRows.preFlop,
           playerId: player.name,
-          round: "PRE_FLOP",
         }),
-        flop: [],
-        turn: [],
-        river: [],
+        flop: getPlayerRoundActions({
+          roundRows: roundActionRows.flop,
+          playerId: player.name,
+        }),
+        turn: getPlayerRoundActions({
+          roundRows: roundActionRows.turn,
+          playerId: player.name,
+        }),
+        river: getPlayerRoundActions({
+          roundRows: roundActionRows.river,
+          playerId: player.name,
+        }),
       },
     };
   });
