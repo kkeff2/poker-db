@@ -7,8 +7,8 @@ export const config = {
 
 type GameType = "TOURNAMENT" | "CASH_GAME";
 type PokerType = "NLHE" | "PLO";
-type Round = "PRE_FLOP" | "FLOP" | "TURN" | "RIVER";
-type Action = "FOLD" | "CALL" | "RAISE" | "CHECK" | "BET"; // "RE_RAISE" |
+export type Round = "PRE_FLOP" | "FLOP" | "TURN" | "RIVER";
+export type Action = "FOLD" | "CALL" | "RAISE" | "CHECK" | "BET"; // "RE_RAISE" |
 type PlayerId = string;
 
 type Hand = {
@@ -25,12 +25,7 @@ type Hand = {
 export type PlayerHand = {
   name: PlayerId;
   position: number;
-  actions: {
-    preFlop: Action[];
-    flop: Action[];
-    turn: Action[];
-    river: Action[];
-  };
+  actions: Record<Round, Action[]>;
 };
 
 export const getHandInfo = (hand: string): Hand => {
@@ -169,19 +164,19 @@ export const getPlayers = (
     return {
       ...player,
       actions: {
-        preFlop: getPlayerRoundActions({
+        PRE_FLOP: getPlayerRoundActions({
           roundRows: roundActionRows.preFlop,
           playerId: player.name,
         }),
-        flop: getPlayerRoundActions({
+        FLOP: getPlayerRoundActions({
           roundRows: roundActionRows.flop,
           playerId: player.name,
         }),
-        turn: getPlayerRoundActions({
+        TURN: getPlayerRoundActions({
           roundRows: roundActionRows.turn,
           playerId: player.name,
         }),
-        river: getPlayerRoundActions({
+        RIVER: getPlayerRoundActions({
           roundRows: roundActionRows.river,
           playerId: player.name,
         }),

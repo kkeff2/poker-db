@@ -13,9 +13,11 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "ws": "8.9.0",
+    "dotenv": "^16.0.3",
+    "esbuild": "0.14.25",
+    "mysql2": "2.3.3",
     "nodemon": "2.0.20",
-    "esbuild": "0.14.25"
+    "ws": "8.9.0"
   },
   "author": "",
   "license": "ISC"
