@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "npm start --workspaces",
+    "start:backend": "npm run start -w backend",
+    "start:frontend": "npm run start -w frontend",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {

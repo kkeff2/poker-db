@@ -8,10 +8,10 @@ export const config = {
 type GameType = "TOURNAMENT" | "CASH_GAME";
 type PokerType = "NLHE" | "PLO";
 export type Round = "PRE_FLOP" | "FLOP" | "TURN" | "RIVER";
-export type Action = "FOLD" | "CALL" | "RAISE" | "CHECK" | "BET"; // "RE_RAISE" |
+export type Action = "FOLD" | "CALL" | "RAISE" | "CHECK" | "BET" | "RE_RAISE";
 type PlayerId = string;
 
-type Hand = {
+export type Hand = {
   handId: string;
   pokerType: PokerType;
   gameType: GameType;
@@ -37,7 +37,7 @@ export const getHandInfo = (hand: string): Hand => {
     players,
     handId: getHandId(handRows),
     gameType: getGameType(handRows),
-    pokerType: "NLHE",
+    pokerType: getPokerType(handRows),
     tournamentId:
       getGameType(handRows) == "TOURNAMENT"
         ? getTournamentId(handRows)
@@ -47,7 +47,6 @@ export const getHandInfo = (hand: string): Hand => {
   };
 };
 
-const handIndex = 0;
 const tableIndex = 1;
 
 export const getHandId = (handRows: string[]) => {
@@ -60,6 +59,16 @@ export const getGameType = (handRows: string[]): GameType => {
 
 export const getTournamentId = (handRows: string[]) => {
   return handRows[0].split("#")[1].split(",")[0];
+};
+
+export const getPokerType = (handRows: string[]): PokerType => {
+  if (handRows[0].includes("Holdem No limit")) {
+    return "NLHE";
+  }
+  if (handRows[0].includes("PLO")) {
+    return "PLO";
+  }
+  throw new Error("Unknown PokerType");
 };
 
 export const getGameName = (handRows: string[]) => {
@@ -79,14 +88,17 @@ export const getPositionOnButton = (handRows: string[]) => {
   return handRows[tableIndex].split("#")[1].charAt(0);
 };
 
-const getAction = (possibleAction: string): Action => {
+const getAction = (
+  possibleAction: string,
+  hasPreviousAggression = false
+): Action => {
   switch (possibleAction) {
     case FOLD:
       return "FOLD";
     case CALL:
       return "CALL";
     case RAISE:
-      return "RAISE";
+      return hasPreviousAggression ? "RE_RAISE" : "RAISE";
     case CHECK:
       return "CHECK";
     case BET:
@@ -123,10 +135,18 @@ const getPlayerRoundActions = ({
   roundRows: string[];
   playerId: PlayerId;
 }) => {
-  const playerRounds = roundRows.filter((row) => row.startsWith(playerId));
-  const actions = playerRounds.map((row) =>
-    getAction(row.split(":")[1].split(" ")[1])
-  );
+  const firstAggressionIndex = roundRows.findIndex((row) => {
+    const action = getAction(row.split(":")[1].split(" ")[1]);
+    return action == "BET" || action == "RAISE";
+  });
+  const actions = roundRows.map((row, i) => {
+    if (row.startsWith(playerId)) {
+      return getAction(
+        row.split(":")[1].split(" ")[1],
+        firstAggressionIndex < i
+      );
+    }
+  });
   return actions;
 };
 

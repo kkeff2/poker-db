@@ -1,4 +1,4 @@
-const DB_NAME = "poker_db";
+export const DB_NAME = "poker_db";
 const PLAYERS_TABLE = "players";
 const HAND_HISTORIES_TABLE = "hand_histories";
 

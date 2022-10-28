@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { Action, config, getHandInfo, PlayerHand, Round } from "./config";
+import { Action, config, getHandInfo, Hand, PlayerHand, Round } from "./config";
 
 let poll: NodeJS.Timeout;
 
@@ -30,6 +30,7 @@ const initPlayerTotal: PlayerStats = {
       CHECK: 0,
       FOLD: 0,
       RAISE: 0,
+      RE_RAISE: 0,
     },
     seen: 0,
   },
@@ -41,6 +42,7 @@ const initPlayerTotal: PlayerStats = {
       CHECK: 0,
       FOLD: 0,
       RAISE: 0,
+      RE_RAISE: 0,
     },
     seen: 0,
   },
@@ -52,6 +54,7 @@ const initPlayerTotal: PlayerStats = {
       CHECK: 0,
       FOLD: 0,
       RAISE: 0,
+      RE_RAISE: 0,
     },
     seen: 0,
   },
@@ -63,26 +66,39 @@ const initPlayerTotal: PlayerStats = {
       CHECK: 0,
       FOLD: 0,
       RAISE: 0,
+      RE_RAISE: 0,
     },
     seen: 0,
   },
 };
 
-const getActionTypesCount = (actions: Action[], action: Action) => {
-  return actions.filter((a) => a == action).length;
+const getActionTypesCount = ({
+  playerRoundActions,
+  actionsToCount,
+}: {
+  playerRoundActions: Action[];
+  actionsToCount: Action[];
+}) => {
+  return playerRoundActions.filter((a) => actionsToCount.includes(a)).length;
 };
 
-const getUpdatedStats = (
-  roundAction: Action[],
-  currentStats: RoundStats
-): RoundStats["perAction"] => {
+const getUpdatedActions = ({
+  playerRoundActions,
+  currentRoundStats,
+}: {
+  playerRoundActions: Action[];
+  currentRoundStats: RoundStats;
+  hand: Hand;
+}): RoundStats["perAction"] => {
   return ACTIONS.reduce<RoundStats["perAction"]>(
     (previousValue: RoundStats["perAction"], action: Action) => {
       return {
         ...previousValue,
         [action]:
-          getActionTypesCount(roundAction, action) +
-          currentStats.perAction[action],
+          getActionTypesCount({
+            playerRoundActions,
+            actionsToCount: [action],
+          }) + currentRoundStats.perAction[action],
       };
     },
     {} as RoundStats["perAction"]
@@ -90,26 +106,37 @@ const getUpdatedStats = (
 };
 
 const ROUNDS: Round[] = ["FLOP", "PRE_FLOP", "RIVER", "TURN"];
-const ACTIONS: Action[] = ["FOLD", "CALL", "RAISE", "CHECK", "BET"];
+const ACTIONS: Action[] = ["FOLD", "CALL", "RAISE", "CHECK", "BET", "RE_RAISE"];
 
-const addToPlayerTotal = (
-  currentStats: PlayerStats,
-  currentActions: PlayerHand["actions"]
-): PlayerStats => {
+const addToPlayerTotal = ({
+  currentStats,
+  playerHandActions,
+  hand,
+}: {
+  currentStats: PlayerStats;
+  playerHandActions: PlayerHand["actions"];
+  hand: Hand;
+}): PlayerStats => {
   return ROUNDS.reduce<PlayerStats>(
     (previousValue: PlayerStats, round: Round) => {
-      if (currentActions[round].length > 0) {
+      if (playerHandActions[round].length > 0) {
+        console.log(previousValue);
         return {
           ...previousValue,
           [round]: {
             seen: currentStats[round].seen + 1,
             // TODO: Calculate aggression to include bet and to add to total
             // TODO: Add percentage of seen
-            aggression: getActionTypesCount(currentActions[round], "RAISE"),
-            perAction: getUpdatedStats(
-              currentActions[round],
-              currentStats[round]
-            ),
+            aggression: getActionTypesCount({
+              playerRoundActions: playerHandActions[round],
+              // TODO: RERAISE
+              actionsToCount: ["RAISE", "BET"],
+            }),
+            perAction: getUpdatedActions({
+              playerRoundActions: playerHandActions[round],
+              currentRoundStats: currentStats[round],
+              hand,
+            }),
           },
         };
       } else {
@@ -146,20 +173,21 @@ const pollNewFiles = () => {
         (hand) => hand.split("\n").length != 1
       );
       const hands = rawCompleteHands.map((hand) => getHandInfo(hand));
-      const playerHands = hands.map((h) => h.players);
+      // const playerHands = hands.map((h) => h.players);
       const players: Record<string, PlayerStats> = {};
-      playerHands.forEach((hand) =>
-        hand.forEach((player) => {
+      hands.forEach((hand) =>
+        hand.players.forEach((player) => {
           if (!players[player.name]) {
             players[player.name] = initPlayerTotal;
           }
-          players[player.name] = addToPlayerTotal(
-            players[player.name],
-            player.actions
-          );
+          players[player.name] = addToPlayerTotal({
+            currentStats: players[player.name],
+            playerHandActions: player.actions,
+            hand: hand,
+          });
         })
       );
-      console.log(players);
+      // console.log(players);
     });
   }
 };

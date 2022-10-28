@@ -1,5 +1,5 @@
 import { WebSocketServer } from "ws";
-import { initDb } from "./database/database";
+import { initDb } from "./database/init";
 import { initHandHistoryPoll } from "./handHistory";
 
 const wss = new WebSocketServer({ port: 8080 });

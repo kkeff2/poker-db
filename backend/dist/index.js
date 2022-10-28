@@ -18658,7 +18658,7 @@ var import_sender = __toESM(require_sender(), 1);
 var import_websocket = __toESM(require_websocket(), 1);
 var import_websocket_server = __toESM(require_websocket_server(), 1);
 
-// src/database/database.ts
+// src/database/init.ts
 var import_mysql2 = __toESM(require_mysql2());
 
 // src/database/sql.ts
@@ -18669,7 +18669,7 @@ var CREATE_DB_SQL = `CREATE DATABASE IF NOT EXISTS ${DB_NAME};`;
 var CREATE_PLAYERS_TABLE = `CREATE TABLE IF NOT EXISTS ${PLAYERS_TABLE} ( user_name VARCHAR(255) NOT NULL, data JSON NOT NULL )`;
 var CREATE_HAND_HISTORY_TABLE = `CREATE TABLE IF NOT EXISTS ${HAND_HISTORIES_TABLE} ( filename VARCHAR(255) NOT NULL, last_updated TIMESTAMP, last_hand_id_added VARCHAR(255) )`;
 
-// src/database/database.ts
+// src/database/init.ts
 require_main().config();
 var dbConnection;
 var initDb = () => {
@@ -18678,21 +18678,26 @@ var initDb = () => {
     host: "localhost",
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME
+    database: DB_NAME
   });
   dbConnection.connect(function(err) {
     if (err)
       throw err;
     console.log("Connected!");
-    dbConnection.query(CREATE_DB_SQL, (error) => {
+    dbConnection.query(CREATE_DB_SQL, (error, result) => {
       if (error)
         throw error;
-      console.log("Database created");
+      console.log("Database initiated");
     });
     dbConnection.query(CREATE_PLAYERS_TABLE, function(error) {
       if (error)
         throw error;
-      console.log("Table created");
+      console.log("Players table initiated");
+    });
+    dbConnection.query(CREATE_HAND_HISTORY_TABLE, function(error) {
+      if (error)
+        throw error;
+      console.log("Hand history table initiated");
     });
   });
 };
@@ -18715,7 +18720,7 @@ var getHandInfo = (hand) => {
     players,
     handId: getHandId(handRows),
     gameType: getGameType(handRows),
-    pokerType: "NLHE",
+    pokerType: getPokerType(handRows),
     tournamentId: getGameType(handRows) == "TOURNAMENT" ? getTournamentId(handRows) : void 0,
     gameName: getGameName(handRows),
     tableId: getTableId(handRows)
@@ -18730,6 +18735,15 @@ var getGameType = (handRows) => {
 var getTournamentId = (handRows) => {
   return handRows[0].split("#")[1].split(",")[0];
 };
+var getPokerType = (handRows) => {
+  if (handRows[0].includes("Holdem No limit")) {
+    return "NLHE";
+  }
+  if (handRows[0].includes("PLO")) {
+    return "PLO";
+  }
+  throw new Error("Unknown PokerType");
+};
 var getGameName = (handRows) => {
   return handRows[0].split(":")[1].split("-")[0].trim();
 };
@@ -18740,14 +18754,14 @@ var getTableSize = (handRows) => {
   const tableSizePosition = handRows[1].search("-max");
   return parseInt(handRows[1].charAt(tableSizePosition - 1));
 };
-var getAction = (possibleAction) => {
+var getAction = (possibleAction, hasPreviousAggression = false) => {
   switch (possibleAction) {
     case FOLD:
       return "FOLD";
     case CALL:
       return "CALL";
     case RAISE:
-      return "RAISE";
+      return hasPreviousAggression ? "RE_RAISE" : "RAISE";
     case CHECK:
       return "CHECK";
     case BET:
@@ -18777,8 +18791,15 @@ var getPlayerRoundActions = ({
   roundRows,
   playerId
 }) => {
-  const playerRounds = roundRows.filter((row) => row.startsWith(playerId));
-  const actions = playerRounds.map((row) => getAction(row.split(":")[1].split(" ")[1]));
+  const firstAggressionIndex = roundRows.findIndex((row) => {
+    const action = getAction(row.split(":")[1].split(" ")[1]);
+    return action == "BET" || action == "RAISE";
+  });
+  const actions = roundRows.map((row, i) => {
+    if (row.startsWith(playerId)) {
+      return getAction(row.split(":")[1].split(" ")[1], firstAggressionIndex < i);
+    }
+  });
   return actions;
 };
 var getPlayersTableInfo = (handRows, tableSize) => {
@@ -18872,7 +18893,8 @@ var initPlayerTotal = {
       CALL: 0,
       CHECK: 0,
       FOLD: 0,
-      RAISE: 0
+      RAISE: 0,
+      RE_RAISE: 0
     },
     seen: 0
   },
@@ -18883,7 +18905,8 @@ var initPlayerTotal = {
       CALL: 0,
       CHECK: 0,
       FOLD: 0,
-      RAISE: 0
+      RAISE: 0,
+      RE_RAISE: 0
     },
     seen: 0
   },
@@ -18894,7 +18917,8 @@ var initPlayerTotal = {
       CALL: 0,
       CHECK: 0,
       FOLD: 0,
-      RAISE: 0
+      RAISE: 0,
+      RE_RAISE: 0
     },
     seen: 0
   },
@@ -18905,33 +18929,55 @@ var initPlayerTotal = {
       CALL: 0,
       CHECK: 0,
       FOLD: 0,
-      RAISE: 0
+      RAISE: 0,
+      RE_RAISE: 0
     },
     seen: 0
   }
 };
-var getActionTypesCount = (actions, action) => {
-  return actions.filter((a) => a == action).length;
+var getActionTypesCount = ({
+  playerRoundActions,
+  actionsToCount
+}) => {
+  return playerRoundActions.filter((a) => actionsToCount.includes(a)).length;
 };
-var getUpdatedStats = (roundAction, currentStats) => {
+var getUpdatedActions = ({
+  playerRoundActions,
+  currentRoundStats
+}) => {
   return ACTIONS.reduce((previousValue, action) => {
     return {
       ...previousValue,
-      [action]: getActionTypesCount(roundAction, action) + currentStats.perAction[action]
+      [action]: getActionTypesCount({
+        playerRoundActions,
+        actionsToCount: [action]
+      }) + currentRoundStats.perAction[action]
     };
   }, {});
 };
 var ROUNDS = ["FLOP", "PRE_FLOP", "RIVER", "TURN"];
-var ACTIONS = ["FOLD", "CALL", "RAISE", "CHECK", "BET"];
-var addToPlayerTotal = (currentStats, currentActions) => {
+var ACTIONS = ["FOLD", "CALL", "RAISE", "CHECK", "BET", "RE_RAISE"];
+var addToPlayerTotal = ({
+  currentStats,
+  playerHandActions,
+  hand
+}) => {
   return ROUNDS.reduce((previousValue, round) => {
-    if (currentActions[round].length > 0) {
+    if (playerHandActions[round].length > 0) {
+      console.log(previousValue);
       return {
         ...previousValue,
         [round]: {
           seen: currentStats[round].seen + 1,
-          aggression: getActionTypesCount(currentActions[round], "RAISE"),
-          perAction: getUpdatedStats(currentActions[round], currentStats[round])
+          aggression: getActionTypesCount({
+            playerRoundActions: playerHandActions[round],
+            actionsToCount: ["RAISE", "BET"]
+          }),
+          perAction: getUpdatedActions({
+            playerRoundActions: playerHandActions[round],
+            currentRoundStats: currentStats[round],
+            hand
+          })
         }
       };
     } else {
@@ -18952,15 +18998,17 @@ var pollNewFiles = () => {
       const rawHands = data.split("\n\n\n\n");
       const rawCompleteHands = rawHands.filter((hand) => hand.split("\n").length != 1);
       const hands = rawCompleteHands.map((hand) => getHandInfo(hand));
-      const playerHands = hands.map((h) => h.players);
       const players = {};
-      playerHands.forEach((hand) => hand.forEach((player) => {
+      hands.forEach((hand) => hand.players.forEach((player) => {
         if (!players[player.name]) {
           players[player.name] = initPlayerTotal;
         }
-        players[player.name] = addToPlayerTotal(players[player.name], player.actions);
+        players[player.name] = addToPlayerTotal({
+          currentStats: players[player.name],
+          playerHandActions: player.actions,
+          hand
+        });
       }));
-      console.log(players);
     });
   }
 };
