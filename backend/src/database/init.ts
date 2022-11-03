@@ -9,7 +9,7 @@ require("dotenv").config();
 
 let dbConnection: Connection;
 
-export const getDbConnection = () => {
+export const getDdCon = () => {
   if (!dbConnection) {
     throw new Error("dbConnection not initiated");
   }
@@ -26,18 +26,14 @@ export const initDb = () => {
   });
   dbConnection.connect(function (err) {
     if (err) throw err;
-    console.log("Connected!");
-    dbConnection.query(CREATE_DB_SQL, (error, result) => {
+    dbConnection.query(CREATE_DB_SQL, (error) => {
       if (error) throw error;
-      console.log("Database initiated");
     });
     dbConnection.query(CREATE_PLAYERS_TABLE, function (error) {
       if (error) throw error;
-      console.log("Players table initiated");
     });
     dbConnection.query(CREATE_HAND_HISTORY_TABLE, function (error) {
       if (error) throw error;
-      console.log("Hand history table initiated");
     });
   });
 };

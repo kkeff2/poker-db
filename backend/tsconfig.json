@@ -9,6 +9,5 @@
     "target": "ES2019",
     "skipLibCheck": true,
     "strict": true
-  },
-  "files": ["../node_modules/@kivra/common/global.d.ts"]
+  }
 }

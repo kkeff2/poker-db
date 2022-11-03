@@ -12,6 +12,12 @@ Check each HH file in the beginning. If last_updated > file.last_updated
 
 Use last_hand_id_added - to limit the amount of new hands counted
 
+### Next 22-11-01
+
+- F:R JOBBIGT MED { NLH: { TOURNAMENT: { ... STATS ... }}}
+  Kor export type GameId = "NLHE_TOURNAMENT" | "PLO_CASH";
+  Istallet. Borde gora det lite enklare?
+
 ### Next 22-10-20
 
 - Save to database
