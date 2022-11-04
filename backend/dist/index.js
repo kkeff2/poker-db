@@ -18666,12 +18666,23 @@ var DB_NAME = "poker_db";
 var PLAYERS_TABLE = "players";
 var HAND_HISTORIES_TABLE = "hand_histories";
 var CREATE_DB_SQL = `CREATE DATABASE IF NOT EXISTS ${DB_NAME};`;
-var CREATE_PLAYERS_TABLE = `CREATE TABLE IF NOT EXISTS ${PLAYERS_TABLE} ( user_name VARCHAR(255) NOT NULL, data JSON NOT NULL )`;
-var CREATE_HAND_HISTORY_TABLE = `CREATE TABLE IF NOT EXISTS ${HAND_HISTORIES_TABLE} ( filename VARCHAR(255) NOT NULL, last_updated TIMESTAMP, last_hand_id_added VARCHAR(255) )`;
+var CREATE_PLAYERS_TABLE = `CREATE TABLE IF NOT EXISTS ${PLAYERS_TABLE} ( player_id VARCHAR(255) NOT NULL PRIMARY KEY, data JSON NOT NULL )`;
+var CREATE_HAND_HISTORY_TABLE = `CREATE TABLE IF NOT EXISTS ${HAND_HISTORIES_TABLE} ( filename VARCHAR(255) NOT NULL PRIMARY KEY, last_updated TIMESTAMP NOT NULL, last_hand_id_added VARCHAR(255) )`;
+var getHandHistoryQuery = (filename) => {
+  return `SELECT * FROM ${HAND_HISTORIES_TABLE} WHERE filename="${filename}"`;
+};
+var createHandHistoryQuery = `INSERT INTO ${HAND_HISTORIES_TABLE} (filename, last_updated, last_hand_id_added) VALUES(?, now(), ?) ON DUPLICATE KEY UPDATE last_updated = VALUES(last_updated),last_hand_id_added = VALUES(last_hand_id_added)`;
+var createPlayerStatsQuery = `INSERT INTO ${PLAYERS_TABLE}(player_id, data) VALUES(?,?)ON DUPLICATE KEY UPDATE data = VALUES(data)`;
 
 // src/database/init.ts
 require_main().config();
 var dbConnection;
+var getDdCon = () => {
+  if (!dbConnection) {
+    throw new Error("dbConnection not initiated");
+  }
+  return dbConnection;
+};
 var initDb = () => {
   console.log("startDB");
   dbConnection = (0, import_mysql2.createConnection)({
@@ -18730,6 +18741,36 @@ var SHOWS = "visar";
 var config = {
   pathToHandHistoryLogs: "/Users/kasperbartholdigustavii/Library/Application Support/PokerStarsSE/HandHistory/den_kkeffe",
   pathToTournamentLogs: "/Users/kasperbartholdigustavii/Library/Application Support/PokerStarsSE/TournSummary/den_kkeffe"
+};
+
+// src/database/integration.ts
+var updatePlayerStats = (players) => {
+  return new Promise((_resolve, reject) => {
+    getDdCon().query(createPlayerStatsQuery, Object.entries(players), (err) => {
+      if (err)
+        reject(err);
+    });
+  });
+};
+var updateHandHistory = (filename, lastHand) => {
+  return new Promise((_resolve, reject) => {
+    getDdCon().query(createHandHistoryQuery, [filename, lastHand.handId], (err) => {
+      if (err)
+        reject(err);
+    });
+  });
+};
+var getHandHistories = async (filename) => {
+  const sql = getHandHistoryQuery(filename);
+  return new Promise((resolve, reject) => {
+    getDdCon().query(sql, (error, result) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(result == null ? void 0 : result[0]);
+      }
+    });
+  });
 };
 
 // src/hand.ts
@@ -18907,10 +18948,9 @@ var actionsConfig = {
 // src/handHistory.ts
 var poll;
 var setPolling = () => {
-  pollNewFiles();
   poll = setTimeout(() => {
-    setPolling();
-  }, 1e8);
+    pollNewFiles();
+  }, 1e3);
 };
 var initHandHistoryPoll = () => {
   setPolling();
@@ -18968,19 +19008,27 @@ var getUpdatedGameStats = ({
 var pollNewFiles = () => {
   const files = import_fs.default.readdirSync(config.pathToHandHistoryLogs);
   for (var i = 0; i < files.length; i++) {
-    const filename = import_path.default.join(config.pathToHandHistoryLogs, files[i]);
-    import_fs.default.readFile(filename, "utf8", function(err, data) {
+    const fullPath = import_path.default.join(config.pathToHandHistoryLogs, files[i]);
+    const filename = files[i];
+    console.log("files[i];v", files[i]);
+    import_fs.default.readFile(fullPath, "utf8", async (err, data) => {
       if (err)
         throw err;
+      const handHistory = await getHandHistories(filename);
+      console.log("handHistory", handHistory);
       const rawHands = data.split("\n\n\n\n");
-      console.log("TODO: Check if last hand is complete");
       const rawCompleteHands = rawHands.filter((hand) => hand.split("\n").length != 1);
       const hands = rawCompleteHands.map((hand) => getHandInfo(hand));
-      const players = getStatsAggregatedOnPlayers(hands);
-      for (const p in players) {
-        for (const game in players[p]) {
-        }
+      const lastHand = hands.reverse()[0];
+      console.log(handHistory == null ? void 0 : handHistory.last_hand_id_added);
+      console.log(lastHand.handId);
+      if ((handHistory == null ? void 0 : handHistory.last_hand_id_added) === lastHand.handId) {
+        return;
       }
+      console.log("WHERE", filename);
+      const players = getStatsAggregatedOnPlayers(hands);
+      await updatePlayerStats(players);
+      await updateHandHistory(filename, lastHand);
     });
   }
 };
@@ -18998,6 +19046,7 @@ var getStatsAggregatedOnPlayers = (hands) => {
       });
     });
   });
+  console.log({ players });
   return players;
 };
 var initGameStats = ROUNDS.reduce((previousValue, round) => {
