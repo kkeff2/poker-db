@@ -9,7 +9,7 @@ require("dotenv").config();
 
 let dbConnection: Connection;
 
-export const getDdCon = () => {
+export const con = () => {
   if (!dbConnection) {
     throw new Error("dbConnection not initiated");
   }

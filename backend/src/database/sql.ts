@@ -26,5 +26,27 @@ export const createPlayerStatsQuery =
   "ON DUPLICATE KEY UPDATE " +
   "data = VALUES(data)";
 
-export const getPlayerStatsQuery = (playerId: string) =>
-  `SELECT * FROM ${HAND_HISTORIES_TABLE} WHERE player_id="${playerId}`;
+export const playerStatsQuery = `SELECT * FROM ${HAND_HISTORIES_TABLE} WHERE player_id IN (?)`;
+
+/**
+ * 
+DECLARE @BookCount int
+ 
+BEGIN TRANSACTION AddBook
+ 
+  INSERT INTO Books
+  VALUES (20, 'Book15', 'Cat5', 2000)
+ 
+  SELECT @BookCount = COUNT(*) FROM Books WHERE name = 'Book15'
+ 
+  IF @BookCount > 1
+    BEGIN 
+      ROLLBACK TRANSACTION AddBook
+      PRINT 'A book with the same name already exists'
+    END
+  ELSE
+    BEGIN
+      COMMIT TRANSACTION AddStudent
+      PRINT 'New book added successfully'
+    END
+ */

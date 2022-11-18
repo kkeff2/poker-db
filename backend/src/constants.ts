@@ -22,6 +22,7 @@ export const SUMMARY = "*** SAMMANFATTNING ***";
 export const PLACE = "Plats";
 export const TOURNAMENT = "Turnering";
 export const HOLDEM_NO_LIMIT = "Holdem No limit";
+export const OMAHA_POT_LIMIT = "Omaha Pot limit";
 
 // ACTIONS
 export const RAISE = "raise";

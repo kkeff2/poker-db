@@ -15,6 +15,7 @@ import {
   PLACE,
   TOURNAMENT,
   HOLDEM_NO_LIMIT,
+  OMAHA_POT_LIMIT,
 } from "./constants";
 import {
   Action,
@@ -103,7 +104,7 @@ export const getPokerType = (gameRow: string): PokerType => {
   if (gameRow.includes(HOLDEM_NO_LIMIT)) {
     return "NLHE";
   }
-  if (gameRow.includes("PLO")) {
+  if (gameRow.includes(OMAHA_POT_LIMIT)) {
     return "PLO";
   }
   throw new Error("Unknown PokerType");

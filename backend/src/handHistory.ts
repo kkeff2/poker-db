@@ -3,6 +3,7 @@ import path from "path";
 import { ACTIONS, ROUNDS, config } from "./constants";
 import {
   getHandHistories,
+  getPlayerStats,
   updateHandHistory,
   updatePlayerStats,
 } from "./database/integration";
@@ -23,12 +24,18 @@ let poll: NodeJS.Timeout;
 const setPolling = () => {
   poll = setTimeout(() => {
     pollNewFiles();
-    // setPolling();
-  }, 1000);
+    setPolling();
+  }, 5000);
+};
+const setPollingOnce = () => {
+  poll = setTimeout(() => {
+    pollNewFiles();
+  }, 10);
 };
 
 export const initHandHistoryPoll = () => {
-  setPolling();
+  // setPolling();
+  setPollingOnce();
 };
 
 const handHistoryLogFinished = () => {
@@ -110,33 +117,37 @@ const pollNewFiles = () => {
   for (var i = 0; i < files.length; i++) {
     const fullPath = path.join(config.pathToHandHistoryLogs, files[i]);
     const filename = files[i];
-    console.log("files[i];v", files[i]);
+    // console.log("files[i];v", files[i]);
     // TODO: IS FILE MARKED AS DONE?
     fs.readFile(fullPath, "utf8", async (err, data) => {
       if (err) throw err;
       // TODO: IS FILE UPDATED AT RELEVANT?
       const handHistory = await getHandHistories(filename);
 
-      console.log("handHistory", handHistory);
+      // console.log("handHistory", handHistory);
       const rawHands = data.split("\n\n\n\n");
       const rawCompleteHands = rawHands.filter(
         (hand) => hand.split("\n").length != 1
       );
       const hands = rawCompleteHands.map((hand) => getHandInfo(hand));
       const lastHand = hands.reverse()[0];
-
-      console.log(handHistory?.last_hand_id_added);
-      console.log(lastHand.handId);
+      // console.log(handHistory?.last_hand_id_added);
+      // console.log(lastHand.handId);
       if (handHistory?.last_hand_id_added === lastHand.handId) {
         return;
       }
 
-      console.log("WHERE", filename);
+      // console.log("WHERE", filename);
       const players: Record<PlayerId, PlayerStats> =
         getStatsAggregatedOnPlayers(hands);
-
-      await updatePlayerStats(players);
-      await updateHandHistory(filename, lastHand);
+      const playerIds = Object.keys(players);
+      // const currentPlayers = await getPlayerStats(playerIds);
+      console.log(
+        Object.entries(players).forEach(([id, stats]) => console.log(id, stats))
+      );
+      console.log("|||||||||||||||||||||||||||||||||||||");
+      await updatePlayerStats({ players, handHistory: { filename, lastHand } });
+      // await updateHandHistory(filename, lastHand);
 
       // TODO Update BD HERE with players
     });
@@ -159,7 +170,7 @@ export const getStatsAggregatedOnPlayers = (
       });
     });
   });
-  console.log({ players });
+  // console.log({ players });
   // console.log(s
   //   Object.values(players).forEach((a) => console.log(a.NLHE_TOURNAMENT))
   // );
