@@ -3,6 +3,7 @@ import Query from "mysql2/typings/mysql/lib/protocol/sequences/Query";
 import { Hand, PlayerId, PlayerStats } from "../types";
 import { con } from "./init";
 import {
+  allHandHistoriesQuery,
   createHandHistoryQuery,
   createPlayerStatsQuery,
   getHandHistoryQuery,
@@ -78,6 +79,21 @@ export const getPlayerStats = (playerIds: string[]): Promise<IPlayerStats> => {
         reject(error);
       } else {
         resolve(result?.[0]);
+      }
+    });
+  });
+};
+
+export const getAllPlayerStats = (): Promise<IHandHistory[]> => {
+  return new Promise((resolve, reject) => {
+    const sql = allHandHistoriesQuery;
+    con().query<IHandHistory[]>(sql, (error, result) => {
+      if (error) {
+        console.log({ error });
+        reject(error);
+      } else {
+        console.log({ result });
+        resolve(result);
       }
     });
   });

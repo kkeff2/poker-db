@@ -12728,10 +12728,10 @@ var require_resultset_header = __commonJS({
     var EncodingToCharset = require_encoding_charset();
     var sessionInfoTypes = require_session_track();
     var ResultSetHeader = class {
-      constructor(packet, connection2) {
-        const bigNumberStrings = connection2.config.bigNumberStrings;
-        const encoding = connection2.serverEncoding;
-        const flags = connection2._handshakePacket.capabilityFlags;
+      constructor(packet, connection3) {
+        const bigNumberStrings = connection3.config.bigNumberStrings;
+        const encoding = connection3.serverEncoding;
+        const flags = connection3._handshakePacket.capabilityFlags;
         const isSet = function(flag) {
           return flags & ClientConstants[flag];
         };
@@ -12776,7 +12776,7 @@ var require_resultset_header = __commonJS({
                 stateChanges.systemVariables[key] = val;
                 if (key === "character_set_client") {
                   const charsetNumber = EncodingToCharset[val];
-                  connection2.config.charsetNumber = charsetNumber;
+                  connection3.config.charsetNumber = charsetNumber;
                 }
               } else if (type === sessionInfoTypes.SCHEMA) {
                 key = packet.readLengthCodedString(encoding);
@@ -13040,13 +13040,13 @@ var require_command = __commonJS({
         }
         return "unknown name";
       }
-      execute(packet, connection2) {
+      execute(packet, connection3) {
         if (!this.next) {
           this.next = this.start;
-          connection2._resetSequenceId();
+          connection3._resetSequenceId();
         }
         if (packet && packet.isError()) {
-          const err = packet.asError(connection2.clientEncoding);
+          const err = packet.asError(connection3.clientEncoding);
           err.sql = this.sql || this.query;
           if (this.queryTimeout) {
             Timers.clearTimeout(this.queryTimeout);
@@ -13061,7 +13061,7 @@ var require_command = __commonJS({
           }
           return true;
         }
-        this.next = this.next(packet, connection2);
+        this.next = this.next(packet, connection3);
         if (this.next) {
           return false;
         }
@@ -13088,10 +13088,10 @@ var require_sha256_password = __commonJS({
       const stage1 = xor(Buffer.from(`${password}\0`, "utf8").toString("binary"), scramble.toString("binary"));
       return crypto.publicEncrypt(key, stage1);
     }
-    module2.exports = (pluginOptions = {}) => ({ connection: connection2 }) => {
+    module2.exports = (pluginOptions = {}) => ({ connection: connection3 }) => {
       let state = 0;
       let scramble = null;
-      const password = connection2.config.password;
+      const password = connection3.config.password;
       const authWithKey = (serverKey) => {
         const _password = encrypt(password, scramble, serverKey);
         state = STATE_FINAL;
@@ -13152,10 +13152,10 @@ var require_caching_sha2_password = __commonJS({
       const stage1 = xorRotating(Buffer.from(`${password}\0`, "utf8").toString("binary"), scramble.toString("binary"));
       return crypto.publicEncrypt(key, stage1);
     }
-    module2.exports = (pluginOptions = {}) => ({ connection: connection2 }) => {
+    module2.exports = (pluginOptions = {}) => ({ connection: connection3 }) => {
       let state = 0;
       let scramble = null;
-      const password = connection2.config.password;
+      const password = connection3.config.password;
       const authWithKey = (serverKey) => {
         const _password = encrypt(password, scramble, serverKey);
         state = STATE_FINAL;
@@ -13173,7 +13173,7 @@ var require_caching_sha2_password = __commonJS({
               return null;
             }
             if (PERFORM_FULL_AUTHENTICATION_PACKET.equals(data)) {
-              const isSecureConnection = typeof pluginOptions.overrideIsSecure === "undefined" ? connection2.config.ssl || connection2.config.socketPath : pluginOptions.overrideIsSecure;
+              const isSecureConnection = typeof pluginOptions.overrideIsSecure === "undefined" ? connection3.config.ssl || connection3.config.socketPath : pluginOptions.overrideIsSecure;
               if (isSecureConnection) {
                 state = STATE_FINAL;
                 return Buffer.from(`${password}\0`, "utf8");
@@ -13204,9 +13204,9 @@ var require_mysql_native_password = __commonJS({
   "../node_modules/mysql2/lib/auth_plugins/mysql_native_password.js"(exports, module2) {
     "use strict";
     var auth41 = require_auth_41();
-    module2.exports = (pluginOptions) => ({ connection: connection2, command }) => {
-      const password = command.password || pluginOptions.password || connection2.config.password;
-      const passwordSha1 = command.passwordSha1 || pluginOptions.passwordSha1 || connection2.config.passwordSha1;
+    module2.exports = (pluginOptions) => ({ connection: connection3, command }) => {
+      const password = command.password || pluginOptions.password || connection3.config.password;
+      const passwordSha1 = command.passwordSha1 || pluginOptions.passwordSha1 || connection3.config.passwordSha1;
       return (data) => {
         const authPluginData1 = data.slice(0, 8);
         const authPluginData2 = data.slice(8, 20);
@@ -13243,17 +13243,17 @@ var require_auth_switch = __commonJS({
       error.fatal = true;
       command.emit("error", error);
     }
-    function authSwitchRequest(packet, connection2, command) {
+    function authSwitchRequest(packet, connection3, command) {
       const { pluginName, pluginData } = Packets.AuthSwitchRequest.fromPacket(packet);
-      let authPlugin = connection2.config.authPlugins && connection2.config.authPlugins[pluginName];
-      if (connection2.config.authSwitchHandler && pluginName !== "mysql_native_password") {
-        const legacySwitchHandler = connection2.config.authSwitchHandler;
+      let authPlugin = connection3.config.authPlugins && connection3.config.authPlugins[pluginName];
+      if (connection3.config.authSwitchHandler && pluginName !== "mysql_native_password") {
+        const legacySwitchHandler = connection3.config.authSwitchHandler;
         warnLegacyAuthSwitch();
         legacySwitchHandler({ pluginName, pluginData }, (err, data) => {
           if (err) {
             return authSwitchPluginError(err, command);
           }
-          connection2.writePacket(new Packets.AuthSwitchResponse(data).toPacket());
+          connection3.writePacket(new Packets.AuthSwitchResponse(data).toPacket());
         });
         return;
       }
@@ -13263,34 +13263,34 @@ var require_auth_switch = __commonJS({
       if (!authPlugin) {
         throw new Error(`Server requests authentication using unknown plugin ${pluginName}. See ${"TODO: add plugins doco here"} on how to configure or author authentication plugins.`);
       }
-      connection2._authPlugin = authPlugin({ connection: connection2, command });
-      Promise.resolve(connection2._authPlugin(pluginData)).then((data) => {
+      connection3._authPlugin = authPlugin({ connection: connection3, command });
+      Promise.resolve(connection3._authPlugin(pluginData)).then((data) => {
         if (data) {
-          connection2.writePacket(new Packets.AuthSwitchResponse(data).toPacket());
+          connection3.writePacket(new Packets.AuthSwitchResponse(data).toPacket());
         }
       }).catch((err) => {
         authSwitchPluginError(err, command);
       });
     }
-    function authSwitchRequestMoreData(packet, connection2, command) {
+    function authSwitchRequestMoreData(packet, connection3, command) {
       const { data } = Packets.AuthSwitchRequestMoreData.fromPacket(packet);
-      if (connection2.config.authSwitchHandler) {
-        const legacySwitchHandler = connection2.config.authSwitchHandler;
+      if (connection3.config.authSwitchHandler) {
+        const legacySwitchHandler = connection3.config.authSwitchHandler;
         warnLegacyAuthSwitch();
         legacySwitchHandler({ pluginData: data }, (err, data2) => {
           if (err) {
             return authSwitchPluginError(err, command);
           }
-          connection2.writePacket(new Packets.AuthSwitchResponse(data2).toPacket());
+          connection3.writePacket(new Packets.AuthSwitchResponse(data2).toPacket());
         });
         return;
       }
-      if (!connection2._authPlugin) {
+      if (!connection3._authPlugin) {
         throw new Error("AuthPluginMoreData received but no auth plugin instance found");
       }
-      Promise.resolve(connection2._authPlugin(data)).then((data2) => {
+      Promise.resolve(connection3._authPlugin(data)).then((data2) => {
         if (data2) {
-          connection2.writePacket(new Packets.AuthSwitchResponse(data2).toPacket());
+          connection3.writePacket(new Packets.AuthSwitchResponse(data2).toPacket());
         }
       }).catch((err) => {
         authSwitchPluginError(err, command);
@@ -13431,25 +13431,25 @@ var require_compressed_protocol = __commonJS({
     var zlib = require("zlib");
     var PacketParser = require_packet_parser();
     function handleCompressedPacket(packet) {
-      const connection2 = this;
+      const connection3 = this;
       const deflatedLength = packet.readInt24();
       const body = packet.readBuffer();
       if (deflatedLength !== 0) {
-        connection2.inflateQueue.push((task) => {
+        connection3.inflateQueue.push((task) => {
           zlib.inflate(body, (err, data) => {
             if (err) {
-              connection2._handleNetworkError(err);
+              connection3._handleNetworkError(err);
               return;
             }
-            connection2._bumpCompressedSequenceId(packet.numPackets);
-            connection2._inflatedPacketsParser.execute(data);
+            connection3._bumpCompressedSequenceId(packet.numPackets);
+            connection3._inflatedPacketsParser.execute(data);
             task.done();
           });
         });
       } else {
-        connection2.inflateQueue.push((task) => {
-          connection2._bumpCompressedSequenceId(packet.numPackets);
-          connection2._inflatedPacketsParser.execute(body);
+        connection3.inflateQueue.push((task) => {
+          connection3._bumpCompressedSequenceId(packet.numPackets);
+          connection3._inflatedPacketsParser.execute(body);
           task.done();
         });
       }
@@ -13463,14 +13463,14 @@ var require_compressed_protocol = __commonJS({
         }
         return;
       }
-      const connection2 = this;
+      const connection3 = this;
       let packetLen = buffer.length;
       const compressHeader = Buffer.allocUnsafe(7);
       (function(seqId) {
-        connection2.deflateQueue.push((task) => {
+        connection3.deflateQueue.push((task) => {
           zlib.deflate(buffer, (err, compressed) => {
             if (err) {
-              connection2._handleFatalError(err);
+              connection3._handleFatalError(err);
               return;
             }
             let compressedLength = compressed.length;
@@ -13480,8 +13480,8 @@ var require_compressed_protocol = __commonJS({
               compressHeader.writeUInt8(seqId, 3);
               compressHeader.writeUInt8(packetLen & 255, 4);
               compressHeader.writeUInt16LE(packetLen >> 8, 5);
-              connection2.writeUncompressed(compressHeader);
-              connection2.writeUncompressed(compressed);
+              connection3.writeUncompressed(compressHeader);
+              connection3.writeUncompressed(compressed);
             } else {
               compressedLength = packetLen;
               packetLen = 0;
@@ -13490,31 +13490,31 @@ var require_compressed_protocol = __commonJS({
               compressHeader.writeUInt8(seqId, 3);
               compressHeader.writeUInt8(packetLen & 255, 4);
               compressHeader.writeUInt16LE(packetLen >> 8, 5);
-              connection2.writeUncompressed(compressHeader);
-              connection2.writeUncompressed(buffer);
+              connection3.writeUncompressed(compressHeader);
+              connection3.writeUncompressed(buffer);
             }
             task.done();
           });
         });
-      })(connection2.compressedSequenceId);
-      connection2._bumpCompressedSequenceId(1);
+      })(connection3.compressedSequenceId);
+      connection3._bumpCompressedSequenceId(1);
     }
-    function enableCompression(connection2) {
-      connection2._lastWrittenPacketId = 0;
-      connection2._lastReceivedPacketId = 0;
-      connection2._handleCompressedPacket = handleCompressedPacket;
-      connection2._inflatedPacketsParser = new PacketParser((p) => {
-        connection2.handlePacket(p);
+    function enableCompression(connection3) {
+      connection3._lastWrittenPacketId = 0;
+      connection3._lastReceivedPacketId = 0;
+      connection3._handleCompressedPacket = handleCompressedPacket;
+      connection3._inflatedPacketsParser = new PacketParser((p) => {
+        connection3.handlePacket(p);
       }, 4);
-      connection2._inflatedPacketsParser._lastPacket = 0;
-      connection2.packetParser = new PacketParser((packet) => {
-        connection2._handleCompressedPacket(packet);
+      connection3._inflatedPacketsParser._lastPacket = 0;
+      connection3.packetParser = new PacketParser((packet) => {
+        connection3._handleCompressedPacket(packet);
       }, 7);
-      connection2.writeUncompressed = connection2.write;
-      connection2.write = writeCompressed;
+      connection3.writeUncompressed = connection3.write;
+      connection3.write = writeCompressed;
       const seqqueue = require_seq_queue2();
-      connection2.inflateQueue = seqqueue.createQueue();
-      connection2.deflateQueue = seqqueue.createQueue();
+      connection3.inflateQueue = seqqueue.createQueue();
+      connection3.deflateQueue = seqqueue.createQueue();
     }
     module2.exports = {
       enableCompression
@@ -13549,18 +13549,18 @@ var require_client_handshake = __commonJS({
       start() {
         return ClientHandshake.prototype.handshakeInit;
       }
-      sendSSLRequest(connection2) {
-        const sslRequest = new Packets.SSLRequest(this.clientFlags, connection2.config.charsetNumber);
-        connection2.writePacket(sslRequest.toPacket());
+      sendSSLRequest(connection3) {
+        const sslRequest = new Packets.SSLRequest(this.clientFlags, connection3.config.charsetNumber);
+        connection3.writePacket(sslRequest.toPacket());
       }
-      sendCredentials(connection2) {
-        if (connection2.config.debug) {
+      sendCredentials(connection3) {
+        if (connection3.config.debug) {
           console.log("Sending handshake packet: flags:%d=(%s)", this.clientFlags, flagNames(this.clientFlags).join(", "));
         }
-        this.user = connection2.config.user;
-        this.password = connection2.config.password;
-        this.passwordSha1 = connection2.config.passwordSha1;
-        this.database = connection2.config.database;
+        this.user = connection3.config.user;
+        this.password = connection3.config.password;
+        this.passwordSha1 = connection3.config.passwordSha1;
+        this.database = connection3.config.database;
         this.autPluginName = this.handshake.autPluginName;
         const handshakeResponse = new Packets.HandshakeResponse({
           flags: this.clientFlags,
@@ -13568,13 +13568,13 @@ var require_client_handshake = __commonJS({
           database: this.database,
           password: this.password,
           passwordSha1: this.passwordSha1,
-          charsetNumber: connection2.config.charsetNumber,
+          charsetNumber: connection3.config.charsetNumber,
           authPluginData1: this.handshake.authPluginData1,
           authPluginData2: this.handshake.authPluginData2,
-          compress: connection2.config.compress,
-          connectAttributes: connection2.config.connectAttributes
+          compress: connection3.config.compress,
+          connectAttributes: connection3.config.connectAttributes
         });
-        connection2.writePacket(handshakeResponse.toPacket());
+        connection3.writePacket(handshakeResponse.toPacket());
       }
       calculateNativePasswordAuthToken(authPluginData) {
         const authPluginData1 = authPluginData.slice(0, 8);
@@ -13587,22 +13587,22 @@ var require_client_handshake = __commonJS({
         }
         return authToken;
       }
-      handshakeInit(helloPacket, connection2) {
+      handshakeInit(helloPacket, connection3) {
         this.on("error", (e) => {
-          connection2._fatalError = e;
-          connection2._protocolError = e;
+          connection3._fatalError = e;
+          connection3._protocolError = e;
         });
         this.handshake = Packets.Handshake.fromPacket(helloPacket);
-        if (connection2.config.debug) {
+        if (connection3.config.debug) {
           console.log("Server hello packet: capability flags:%d=(%s)", this.handshake.capabilityFlags, flagNames(this.handshake.capabilityFlags).join(", "));
         }
-        connection2.serverCapabilityFlags = this.handshake.capabilityFlags;
-        connection2.serverEncoding = CharsetToEncoding[this.handshake.characterSet];
-        connection2.connectionId = this.handshake.connectionId;
+        connection3.serverCapabilityFlags = this.handshake.capabilityFlags;
+        connection3.serverEncoding = CharsetToEncoding[this.handshake.characterSet];
+        connection3.connectionId = this.handshake.connectionId;
         const serverSSLSupport = this.handshake.capabilityFlags & ClientConstants.SSL;
-        connection2.config.compress = connection2.config.compress && this.handshake.capabilityFlags & ClientConstants.COMPRESS;
-        this.clientFlags = this.clientFlags | connection2.config.compress;
-        if (connection2.config.ssl) {
+        connection3.config.compress = connection3.config.compress && this.handshake.capabilityFlags & ClientConstants.COMPRESS;
+        this.clientFlags = this.clientFlags | connection3.config.compress;
+        if (connection3.config.ssl) {
           if (!serverSSLSupport) {
             const err = new Error("Server does not support secure connnection");
             err.code = "HANDSHAKE_NO_SSL_SUPPORT";
@@ -13611,30 +13611,30 @@ var require_client_handshake = __commonJS({
             return false;
           }
           this.clientFlags |= ClientConstants.SSL;
-          this.sendSSLRequest(connection2);
-          connection2.startTLS((err) => {
+          this.sendSSLRequest(connection3);
+          connection3.startTLS((err) => {
             if (err) {
               err.code = "HANDSHAKE_SSL_ERROR";
               err.fatal = true;
               this.emit("error", err);
               return;
             }
-            this.sendCredentials(connection2);
+            this.sendCredentials(connection3);
           });
         } else {
-          this.sendCredentials(connection2);
+          this.sendCredentials(connection3);
         }
         return ClientHandshake.prototype.handshakeResult;
       }
-      handshakeResult(packet, connection2) {
+      handshakeResult(packet, connection3) {
         const marker = packet.peekByte();
         if (marker === 254 || marker === 1) {
           const authSwitch = require_auth_switch();
           try {
             if (marker === 1) {
-              authSwitch.authSwitchRequestMoreData(packet, connection2, this);
+              authSwitch.authSwitchRequestMoreData(packet, connection3, this);
             } else {
-              authSwitch.authSwitchRequest(packet, connection2, this);
+              authSwitch.authSwitchRequest(packet, connection3, this);
             }
             return ClientHandshake.prototype.handshakeResult;
           } catch (err) {
@@ -13659,11 +13659,11 @@ var require_client_handshake = __commonJS({
           }
           return null;
         }
-        if (!connection2.authorized) {
-          connection2.authorized = true;
-          if (connection2.config.compress) {
+        if (!connection3.authorized) {
+          connection3.authorized = true;
+          if (connection3.config.compress) {
             const enableCompression = require_compressed_protocol().enableCompression;
-            enableCompression(connection2);
+            enableCompression(connection3);
           }
         }
         if (this.onResult) {
@@ -13689,100 +13689,100 @@ var require_server_handshake = __commonJS({
         super();
         this.args = args;
       }
-      start(packet, connection2) {
+      start(packet, connection3) {
         const serverHelloPacket = new Packets.Handshake(this.args);
         this.serverHello = serverHelloPacket;
         serverHelloPacket.setScrambleData((err) => {
           if (err) {
-            connection2.emit("error", new Error("Error generating random bytes"));
+            connection3.emit("error", new Error("Error generating random bytes"));
             return;
           }
-          connection2.writePacket(serverHelloPacket.toPacket(0));
+          connection3.writePacket(serverHelloPacket.toPacket(0));
         });
         return ServerHandshake.prototype.readClientReply;
       }
-      readClientReply(packet, connection2) {
+      readClientReply(packet, connection3) {
         const clientHelloReply = Packets.HandshakeResponse.fromPacket(packet);
-        connection2.clientHelloReply = clientHelloReply;
+        connection3.clientHelloReply = clientHelloReply;
         if (this.args.authCallback) {
           this.args.authCallback({
             user: clientHelloReply.user,
             database: clientHelloReply.database,
-            address: connection2.stream.remoteAddress,
+            address: connection3.stream.remoteAddress,
             authPluginData1: this.serverHello.authPluginData1,
             authPluginData2: this.serverHello.authPluginData2,
             authToken: clientHelloReply.authToken
           }, (err, mysqlError) => {
             if (!mysqlError) {
-              connection2.writeOk();
+              connection3.writeOk();
             } else {
-              connection2.writeError({
+              connection3.writeError({
                 message: mysqlError.message || "",
                 code: mysqlError.code || 1045
               });
-              connection2.close();
+              connection3.close();
             }
           });
         } else {
-          connection2.writeOk();
+          connection3.writeOk();
         }
         return ServerHandshake.prototype.dispatchCommands;
       }
-      dispatchCommands(packet, connection2) {
+      dispatchCommands(packet, connection3) {
         let knownCommand = true;
-        const encoding = connection2.clientHelloReply.encoding;
+        const encoding = connection3.clientHelloReply.encoding;
         const commandCode = packet.readInt8();
         switch (commandCode) {
           case CommandCode.QUIT:
-            if (connection2.listeners("quit").length) {
-              connection2.emit("quit");
+            if (connection3.listeners("quit").length) {
+              connection3.emit("quit");
             } else {
-              connection2.stream.end();
+              connection3.stream.end();
             }
             break;
           case CommandCode.INIT_DB:
-            if (connection2.listeners("init_db").length) {
+            if (connection3.listeners("init_db").length) {
               const schemaName = packet.readString(void 0, encoding);
-              connection2.emit("init_db", schemaName);
+              connection3.emit("init_db", schemaName);
             } else {
-              connection2.writeOk();
+              connection3.writeOk();
             }
             break;
           case CommandCode.QUERY:
-            if (connection2.listeners("query").length) {
+            if (connection3.listeners("query").length) {
               const query = packet.readString(void 0, encoding);
-              connection2.emit("query", query);
+              connection3.emit("query", query);
             } else {
-              connection2.writeError({
+              connection3.writeError({
                 code: Errors.HA_ERR_INTERNAL_ERROR,
                 message: "No query handler"
               });
             }
             break;
           case CommandCode.FIELD_LIST:
-            if (connection2.listeners("field_list").length) {
+            if (connection3.listeners("field_list").length) {
               const table = packet.readNullTerminatedString();
               const fields = packet.readString(void 0, encoding);
-              connection2.emit("field_list", table, fields);
+              connection3.emit("field_list", table, fields);
             } else {
-              connection2.writeError({
+              connection3.writeError({
                 code: Errors.ER_WARN_DEPRECATED_SYNTAX,
                 message: "As of MySQL 5.7.11, COM_FIELD_LIST is deprecated and will be removed in a future version of MySQL."
               });
             }
             break;
           case CommandCode.PING:
-            if (connection2.listeners("ping").length) {
-              connection2.emit("ping");
+            if (connection3.listeners("ping").length) {
+              connection3.emit("ping");
             } else {
-              connection2.writeOk();
+              connection3.writeOk();
             }
             break;
           default:
             knownCommand = false;
         }
-        if (connection2.listeners("packet").length) {
-          connection2.emit("packet", packet.clone(), knownCommand, commandCode);
+        if (connection3.listeners("packet").length) {
+          connection3.emit("packet", packet.clone(), knownCommand, commandCode);
         } else if (!knownCommand) {
           console.log("Unknown command:", commandCode);
         }
@@ -14543,15 +14543,15 @@ var require_query2 = __commonJS({
         console.log(err);
         throw new Error(err);
       }
-      start(_packet, connection2) {
-        if (connection2.config.debug) {
+      start(_packet, connection3) {
+        if (connection3.config.debug) {
           console.log("        Sending query command: %s", this.sql);
         }
-        this._connection = connection2;
-        this.options = Object.assign({}, connection2.config, this._queryOptions);
+        this._connection = connection3;
+        this.options = Object.assign({}, connection3.config, this._queryOptions);
         this._setTimeout();
-        const cmdPacket = new Packets.Query(this.sql, connection2.config.charsetNumber);
-        connection2.writePacket(cmdPacket.toPacket(1));
+        const cmdPacket = new Packets.Query(this.sql, connection3.config.charsetNumber);
+        connection3.writePacket(cmdPacket.toPacket(1));
         return Query.prototype.resultsetHeader;
       }
       done() {
@@ -14603,29 +14603,29 @@ var require_query2 = __commonJS({
         }
         return this.done();
       }
-      resultsetHeader(packet, connection2) {
-        const rs = new Packets.ResultSetHeader(packet, connection2);
+      resultsetHeader(packet, connection3) {
+        const rs = new Packets.ResultSetHeader(packet, connection3);
         this._fieldCount = rs.fieldCount;
-        if (connection2.config.debug) {
+        if (connection3.config.debug) {
           console.log(`        Resultset header received, expecting ${rs.fieldCount} column definition packets`);
         }
         if (this._fieldCount === 0) {
           return this.doneInsert(rs);
         }
         if (this._fieldCount === null) {
-          return this._streamLocalInfile(connection2, rs.infileName);
+          return this._streamLocalInfile(connection3, rs.infileName);
         }
         this._receivedFieldsCount = 0;
         this._rows.push([]);
         this._fields.push([]);
         return this.readField;
       }
-      _streamLocalInfile(connection2, path2) {
+      _streamLocalInfile(connection3, path2) {
         if (this._streamFactory) {
           this._localStream = this._streamFactory(path2);
         } else {
           this._localStreamError = new Error(`As a result of LOCAL INFILE command server wants to read ${path2} file, but as of v2.0 you must provide streamFactory option returning ReadStream.`);
-          connection2.writePacket(EmptyPacket);
+          connection3.writePacket(EmptyPacket);
           return this.infileOk;
         }
         const onConnectionError = () => {
@@ -14640,38 +14640,38 @@ var require_query2 = __commonJS({
         const onData = function(data) {
           const dataWithHeader = Buffer.allocUnsafe(data.length + 4);
           data.copy(dataWithHeader, 4);
-          connection2.writePacket(new Packets.Packet(0, dataWithHeader, 0, dataWithHeader.length));
+          connection3.writePacket(new Packets.Packet(0, dataWithHeader, 0, dataWithHeader.length));
         };
         const onEnd = () => {
-          connection2.removeListener("error", onConnectionError);
-          connection2.writePacket(EmptyPacket);
+          connection3.removeListener("error", onConnectionError);
+          connection3.writePacket(EmptyPacket);
         };
         const onError = (err) => {
           this._localStreamError = err;
-          connection2.removeListener("error", onConnectionError);
-          connection2.writePacket(EmptyPacket);
+          connection3.removeListener("error", onConnectionError);
+          connection3.writePacket(EmptyPacket);
         };
         this._unpipeStream = () => {
-          connection2.stream.removeListener("pause", onPause);
-          connection2.stream.removeListener("drain", onDrain);
+          connection3.stream.removeListener("pause", onPause);
+          connection3.stream.removeListener("drain", onDrain);
           this._localStream.removeListener("data", onData);
           this._localStream.removeListener("end", onEnd);
           this._localStream.removeListener("error", onError);
         };
-        connection2.stream.on("pause", onPause);
-        connection2.stream.on("drain", onDrain);
+        connection3.stream.on("pause", onPause);
+        connection3.stream.on("drain", onDrain);
         this._localStream.on("data", onData);
         this._localStream.on("end", onEnd);
         this._localStream.on("error", onError);
-        connection2.once("error", onConnectionError);
+        connection3.once("error", onConnectionError);
         return this.infileOk;
       }
-      readField(packet, connection2) {
+      readField(packet, connection3) {
         this._receivedFieldsCount++;
         if (this._fields[this._resultIndex].length !== this._fieldCount) {
-          const field = new Packets.ColumnDefinition(packet, connection2.clientEncoding);
+          const field = new Packets.ColumnDefinition(packet, connection3.clientEncoding);
           this._fields[this._resultIndex].push(field);
-          if (connection2.config.debug) {
+          if (connection3.config.debug) {
             console.log("        Column definition:");
             console.log(`          name: ${field.name}`);
             console.log(`          type: ${field.columnType}`);
@@ -14681,14 +14681,14 @@ var require_query2 = __commonJS({
         if (this._receivedFieldsCount === this._fieldCount) {
           const fields = this._fields[this._resultIndex];
           this.emit("fields", fields);
-          this._rowParser = new (getTextParser(fields, this.options, connection2.config))(fields);
+          this._rowParser = new (getTextParser(fields, this.options, connection3.config))(fields);
           return Query.prototype.fieldsEOF;
         }
         return Query.prototype.readField;
       }
-      fieldsEOF(packet, connection2) {
+      fieldsEOF(packet, connection3) {
         if (!packet.isEOF()) {
-          return connection2.protocolError("Expected EOF packet");
+          return connection3.protocolError("Expected EOF packet");
         }
         return this.row;
       }
@@ -14716,8 +14716,8 @@ var require_query2 = __commonJS({
         }
         return Query.prototype.row;
       }
-      infileOk(packet, connection2) {
-        const rs = new Packets.ResultSetHeader(packet, connection2);
+      infileOk(packet, connection3) {
+        const rs = new Packets.ResultSetHeader(packet, connection3);
         return this.doneInsert(rs);
       }
       stream(options) {
@@ -14783,8 +14783,8 @@ var require_close_statement2 = __commonJS({
         super();
         this.id = id;
       }
-      start(packet, connection2) {
-        connection2.writePacket(new Packets.CloseStatement(this.id).toPacket(1));
+      start(packet, connection3) {
+        connection3.writePacket(new Packets.CloseStatement(this.id).toPacket(1));
         return null;
       }
     };
@@ -14990,24 +14990,24 @@ var require_execute2 = __commonJS({
         this._streamFactory = options.infileStreamFactory;
         this._connection = null;
       }
-      buildParserFromFields(fields, connection2) {
-        return getBinaryParser(fields, this.options, connection2.config);
+      buildParserFromFields(fields, connection3) {
+        return getBinaryParser(fields, this.options, connection3.config);
       }
-      start(packet, connection2) {
-        this._connection = connection2;
-        this.options = Object.assign({}, connection2.config, this._executeOptions);
+      start(packet, connection3) {
+        this._connection = connection3;
+        this.options = Object.assign({}, connection3.config, this._executeOptions);
         this._setTimeout();
-        const executePacket = new Packets.Execute(this.statement.id, this.parameters, connection2.config.charsetNumber, connection2.config.timezone);
+        const executePacket = new Packets.Execute(this.statement.id, this.parameters, connection3.config.charsetNumber, connection3.config.timezone);
         try {
-          connection2.writePacket(executePacket.toPacket(1));
+          connection3.writePacket(executePacket.toPacket(1));
         } catch (error) {
           this.onResult(error);
         }
         return Execute.prototype.resultsetHeader;
       }
-      readField(packet, connection2) {
+      readField(packet, connection3) {
         let fields;
-        const field = new Packets.ColumnDefinition(packet, connection2.clientEncoding);
+        const field = new Packets.ColumnDefinition(packet, connection3.clientEncoding);
         this._receivedFieldsCount++;
         this._fields[this._resultIndex].push(field);
         if (this._receivedFieldsCount === this._fieldCount) {
@@ -15017,11 +15017,11 @@ var require_execute2 = __commonJS({
         }
         return Execute.prototype.readField;
       }
-      fieldsEOF(packet, connection2) {
+      fieldsEOF(packet, connection3) {
         if (!packet.isEOF()) {
-          return connection2.protocolError("Expected EOF packet");
+          return connection3.protocolError("Expected EOF packet");
         }
-        this._rowParser = new (this.buildParserFromFields(this._fields[this._resultIndex], connection2))();
+        this._rowParser = new (this.buildParserFromFields(this._fields[this._resultIndex], connection3))();
         return Execute.prototype.row;
       }
     };
@@ -15047,13 +15047,13 @@ var require_prepare = __commonJS({
     var CloseStatement = require_close_statement2();
     var Execute = require_execute2();
     var PreparedStatementInfo = class {
-      constructor(query, id, columns, parameters, connection2) {
+      constructor(query, id, columns, parameters, connection3) {
         this.query = query;
         this.id = id;
         this.columns = columns;
         this.parameters = parameters;
         this.rowParser = null;
-        this._connection = connection2;
+        this._connection = connection3;
       }
       close() {
         return this._connection.addCommand(new CloseStatement(this.id));
@@ -15078,21 +15078,21 @@ var require_prepare = __commonJS({
         this.parameterDefinitions = [];
         this.options = options;
       }
-      start(packet, connection2) {
-        const Connection2 = connection2.constructor;
+      start(packet, connection3) {
+        const Connection2 = connection3.constructor;
         this.key = Connection2.statementKey(this.options);
-        const statement = connection2._statements.get(this.key);
+        const statement = connection3._statements.get(this.key);
         if (statement) {
           if (this.onResult) {
             this.onResult(null, statement);
           }
           return null;
         }
-        const cmdPacket = new Packets.PrepareStatement(this.query, connection2.config.charsetNumber);
-        connection2.writePacket(cmdPacket.toPacket(1));
+        const cmdPacket = new Packets.PrepareStatement(this.query, connection3.config.charsetNumber);
+        connection3.writePacket(cmdPacket.toPacket(1));
         return Prepare.prototype.prepareHeader;
       }
-      prepareHeader(packet, connection2) {
+      prepareHeader(packet, connection3) {
         const header = new Packets.PreparedStatementHeader(packet);
         this.id = header.id;
         this.fieldCount = header.fieldCount;
@@ -15103,42 +15103,42 @@ var require_prepare = __commonJS({
         if (this.fieldCount > 0) {
           return Prepare.prototype.readField;
         }
-        return this.prepareDone(connection2);
+        return this.prepareDone(connection3);
       }
-      readParameter(packet, connection2) {
-        const def = new Packets.ColumnDefinition(packet, connection2.clientEncoding);
+      readParameter(packet, connection3) {
+        const def = new Packets.ColumnDefinition(packet, connection3.clientEncoding);
         this.parameterDefinitions.push(def);
         if (this.parameterDefinitions.length === this.parameterCount) {
           return Prepare.prototype.parametersEOF;
         }
         return this.readParameter;
       }
-      readField(packet, connection2) {
-        const def = new Packets.ColumnDefinition(packet, connection2.clientEncoding);
+      readField(packet, connection3) {
+        const def = new Packets.ColumnDefinition(packet, connection3.clientEncoding);
         this.fields.push(def);
         if (this.fields.length === this.fieldCount) {
           return Prepare.prototype.fieldsEOF;
         }
         return Prepare.prototype.readField;
       }
-      parametersEOF(packet, connection2) {
+      parametersEOF(packet, connection3) {
         if (!packet.isEOF()) {
-          return connection2.protocolError("Expected EOF packet after parameters");
+          return connection3.protocolError("Expected EOF packet after parameters");
         }
         if (this.fieldCount > 0) {
           return Prepare.prototype.readField;
         }
-        return this.prepareDone(connection2);
+        return this.prepareDone(connection3);
       }
-      fieldsEOF(packet, connection2) {
+      fieldsEOF(packet, connection3) {
         if (!packet.isEOF()) {
-          return connection2.protocolError("Expected EOF packet after fields");
+          return connection3.protocolError("Expected EOF packet after fields");
         }
-        return this.prepareDone(connection2);
+        return this.prepareDone(connection3);
       }
-      prepareDone(connection2) {
-        const statement = new PreparedStatementInfo(this.query, this.id, this.fields, this.parameterDefinitions, connection2);
-        connection2._statements.set(this.key, statement);
+      prepareDone(connection3) {
+        const statement = new PreparedStatementInfo(this.query, this.id, this.fields, this.parameterDefinitions, connection3);
+        connection3._statements.set(this.key, statement);
         if (this.onResult) {
           this.onResult(null, statement);
         }
@@ -15161,9 +15161,9 @@ var require_ping = __commonJS({
         super();
         this.onResult = callback;
       }
-      start(packet, connection2) {
+      start(packet, connection3) {
         const ping = new Packet(0, Buffer.from([1, 0, 0, 0, CommandCode.PING]), 0, 5);
-        connection2.writePacket(ping);
+        connection3.writePacket(ping);
         return Ping.prototype.pingResponse;
       }
       pingResponse() {
@@ -15189,9 +15189,9 @@ var require_register_slave2 = __commonJS({
         this.onResult = callback;
         this.opts = opts;
       }
-      start(packet, connection2) {
+      start(packet, connection3) {
         const newPacket = new Packets.RegisterSlave(this.opts);
-        connection2.writePacket(newPacket.toPacket(1));
+        connection3.writePacket(newPacket.toPacket(1));
         return RegisterSlave.prototype.registerResponse;
       }
       registerResponse() {
@@ -15328,9 +15328,9 @@ var require_binlog_dump2 = __commonJS({
         super();
         this.opts = opts;
       }
-      start(packet, connection2) {
+      start(packet, connection3) {
         const newPacket = new Packets.BinlogDump(this.opts);
-        connection2.writePacket(newPacket.toPacket(1));
+        connection3.writePacket(newPacket.toPacket(1));
         return BinlogDump.prototype.binlogData;
       }
       binlogData(packet) {
@@ -15422,24 +15422,24 @@ var require_change_user2 = __commonJS({
         this.charsetNumber = options.charsetNumber;
         this.currentConfig = options.currentConfig;
       }
-      start(packet, connection2) {
+      start(packet, connection3) {
         const newPacket = new Packets.ChangeUser({
-          flags: connection2.config.clientFlags,
+          flags: connection3.config.clientFlags,
           user: this.user,
           database: this.database,
           charsetNumber: this.charsetNumber,
           password: this.password,
           passwordSha1: this.passwordSha1,
-          authPluginData1: connection2._handshakePacket.authPluginData1,
-          authPluginData2: connection2._handshakePacket.authPluginData2
+          authPluginData1: connection3._handshakePacket.authPluginData1,
+          authPluginData2: connection3._handshakePacket.authPluginData2
         });
         this.currentConfig.user = this.user;
         this.currentConfig.password = this.password;
         this.currentConfig.database = this.database;
         this.currentConfig.charsetNumber = this.charsetNumber;
-        connection2.clientEncoding = CharsetToEncoding[this.charsetNumber];
-        connection2._statements.reset();
-        connection2.writePacket(newPacket.toPacket());
+        connection3.clientEncoding = CharsetToEncoding[this.charsetNumber];
+        connection3._statements.reset();
+        connection3.writePacket(newPacket.toPacket());
         return ChangeUser.prototype.handshakeResult;
       }
     };
@@ -15461,13 +15461,13 @@ var require_quit = __commonJS({
         super();
         this.done = callback;
       }
-      start(packet, connection2) {
-        connection2._closing = true;
+      start(packet, connection3) {
+        connection3._closing = true;
         const quit = new Packet(0, Buffer.from([1, 0, 0, 0, CommandCode.QUIT]), 0, 5);
         if (this.done) {
           this.done();
         }
-        connection2.writePacket(quit);
+        connection3.writePacket(quit);
         return null;
       }
     };
@@ -15843,11 +15843,11 @@ var require_promise = __commonJS({
       }
     };
     var PromiseConnection = class extends EventEmitter {
-      constructor(connection2, promiseImpl) {
+      constructor(connection3, promiseImpl) {
         super();
-        this.connection = connection2;
+        this.connection = connection3;
         this.Promise = promiseImpl || Promise;
-        inheritEvents(connection2, this, [
+        inheritEvents(connection3, this, [
           "error",
           "drain",
           "connect",
@@ -16032,8 +16032,8 @@ var require_promise = __commonJS({
       "unprepare"
     ]);
     var PromisePoolConnection = class extends PromiseConnection {
-      constructor(connection2, promiseImpl) {
-        super(connection2, promiseImpl);
+      constructor(connection3, promiseImpl) {
+        super(connection3, promiseImpl);
       }
       destroy() {
         return core.PoolConnection.prototype.destroy.apply(this.connection, arguments);
@@ -17990,10 +17990,10 @@ var require_pool = __commonJS({
     var PoolConnection = require_pool_connection();
     var Queue = require_denque();
     var Connection2 = require_connection();
-    function spliceConnection(queue, connection2) {
+    function spliceConnection(queue, connection3) {
       const len = queue.length;
       for (let i = 0; i < len; i++) {
-        if (queue.get(i) === connection2) {
+        if (queue.get(i) === connection3) {
           queue.removeOne(i);
           break;
         }
@@ -18017,27 +18017,27 @@ var require_pool = __commonJS({
         if (this._closed) {
           return process2.nextTick(() => cb(new Error("Pool is closed.")));
         }
-        let connection2;
+        let connection3;
         if (this._freeConnections.length > 0) {
-          connection2 = this._freeConnections.shift();
-          this.emit("acquire", connection2);
-          return process2.nextTick(() => cb(null, connection2));
+          connection3 = this._freeConnections.shift();
+          this.emit("acquire", connection3);
+          return process2.nextTick(() => cb(null, connection3));
         }
         if (this.config.connectionLimit === 0 || this._allConnections.length < this.config.connectionLimit) {
-          connection2 = new PoolConnection(this, {
+          connection3 = new PoolConnection(this, {
             config: this.config.connectionConfig
           });
-          this._allConnections.push(connection2);
-          return connection2.connect((err) => {
+          this._allConnections.push(connection3);
+          return connection3.connect((err) => {
             if (this._closed) {
               return cb(new Error("Pool is closed."));
             }
             if (err) {
               return cb(err);
             }
-            this.emit("connection", connection2);
-            this.emit("acquire", connection2);
-            return cb(null, connection2);
+            this.emit("connection", connection3);
+            this.emit("acquire", connection3);
+            return cb(null, connection3);
           });
         }
         if (!this.config.waitForConnections) {
@@ -18049,19 +18049,19 @@ var require_pool = __commonJS({
         this.emit("enqueue");
         return this._connectionQueue.push(cb);
       }
-      releaseConnection(connection2) {
+      releaseConnection(connection3) {
         let cb;
-        if (!connection2._pool) {
+        if (!connection3._pool) {
           if (this._connectionQueue.length) {
             cb = this._connectionQueue.shift();
             process2.nextTick(this.getConnection.bind(this, cb));
           }
         } else if (this._connectionQueue.length) {
           cb = this._connectionQueue.shift();
-          process2.nextTick(cb.bind(null, null, connection2));
+          process2.nextTick(cb.bind(null, null, connection3));
         } else {
-          this._freeConnections.push(connection2);
-          this.emit("release", connection2);
+          this._freeConnections.push(connection3);
+          this.emit("release", connection3);
         }
       }
       end(cb) {
@@ -18075,7 +18075,7 @@ var require_pool = __commonJS({
         }
         let calledBack = false;
         let closedConnections = 0;
-        let connection2;
+        let connection3;
         const endCB = function(err) {
           if (calledBack) {
             return;
@@ -18091,8 +18091,8 @@ var require_pool = __commonJS({
           return;
         }
         for (let i = 0; i < this._allConnections.length; i++) {
-          connection2 = this._allConnections.get(i);
-          connection2._realEnd(endCB);
+          connection3 = this._allConnections.get(i);
+          connection3._realEnd(endCB);
         }
       }
       query(sql, values, cb) {
@@ -18139,10 +18139,10 @@ var require_pool = __commonJS({
           }
         });
       }
-      _removeConnection(connection2) {
-        spliceConnection(this._allConnections, connection2);
-        spliceConnection(this._freeConnections, connection2);
-        this.releaseConnection(connection2);
+      _removeConnection(connection3) {
+        spliceConnection(this._allConnections, connection3);
+        spliceConnection(this._freeConnections, connection3);
+        this.releaseConnection(connection3);
       }
       format(sql, values) {
         return mysql.format(sql, values, this.config.connectionConfig.stringifyObjects, this.config.connectionConfig.timezone);
@@ -18210,14 +18210,14 @@ var require_pool_cluster = __commonJS({
         if (clusterNode === null) {
           return cb(new Error("Pool does Not exists."));
         }
-        return this._cluster._getConnection(clusterNode, (err, connection2) => {
+        return this._cluster._getConnection(clusterNode, (err, connection3) => {
           if (err) {
             return cb(err);
           }
-          if (connection2 === "retry") {
+          if (connection3 === "retry") {
             return this.getConnection(cb);
           }
-          return cb(null, connection2);
+          return cb(null, connection3);
         });
       }
       query(sql, values, cb) {
@@ -18390,7 +18390,7 @@ var require_pool_cluster = __commonJS({
         }
       }
       _getConnection(node, cb) {
-        node.pool.getConnection((err, connection2) => {
+        node.pool.getConnection((err, connection3) => {
           if (err) {
             this._increaseErrorCount(node);
             if (this._canRetry) {
@@ -18401,8 +18401,8 @@ var require_pool_cluster = __commonJS({
             return cb(err);
           }
           this._decreaseErrorCount(node);
-          connection2._clusterId = node.id;
-          return cb(null, connection2);
+          connection3._clusterId = node.id;
+          return cb(null, connection3);
         });
       }
       _clearFindCaches() {
@@ -18432,8 +18432,8 @@ var require_server = __commonJS({
           stream: socket,
           isServer: true
         });
-        const connection2 = new Connection2({ config: connectionConfig });
-        this.emit("connection", connection2);
+        const connection3 = new Connection2({ config: connectionConfig });
+        this.emit("connection", connection3);
       }
       listen(port) {
         this._port = port;
@@ -18671,78 +18671,44 @@ var CREATE_HAND_HISTORY_TABLE = `CREATE TABLE IF NOT EXISTS ${HAND_HISTORIES_TAB
 var getHandHistoryQuery = (filename) => {
   return `SELECT * FROM ${HAND_HISTORIES_TABLE} WHERE filename="${filename}"`;
 };
-var createHandHistoryQuery = `INSERT INTO ${HAND_HISTORIES_TABLE} (filename, last_updated, last_hand_id_added) VALUES(?, now(), ?) ON DUPLICATE KEY UPDATE last_updated = VALUES(last_updated),last_hand_id_added = VALUES(last_hand_id_added)`;
-var createPlayerStatsQuery = `INSERT INTO ${PLAYERS_TABLE}(player_id, data) VALUES(?,?)ON DUPLICATE KEY UPDATE data = VALUES(data)`;
+var createHandHistoryQuery = `UPDATE INTO ${HAND_HISTORIES_TABLE} (filename, last_updated, last_hand_id_added) VALUES(?, now(), ?) ON DUPLICATE KEY UPDATE last_updated = VALUES(last_updated),last_hand_id_added = VALUES(last_hand_id_added)`;
+var createPlayerStatsQuery = `UPDATE INTO ${PLAYERS_TABLE}(player_id, data) VALUES(?,?)ON DUPLICATE KEY UPDATE data = VALUES(data)`;
 var playerStatsQuery = `SELECT * FROM ${HAND_HISTORIES_TABLE} WHERE player_id IN (?)`;
+var allHandHistoriesQuery = `SELECT * FROM ${HAND_HISTORIES_TABLE}`;
 
 // src/database/init.ts
 require_main().config();
-var dbConnection;
+var connection;
 var con = () => {
-  if (!dbConnection) {
+  if (!connection) {
     throw new Error("dbConnection not initiated");
   }
-  return dbConnection;
+  return connection;
 };
 var initDb = () => {
   console.log("startDB");
-  dbConnection = (0, import_mysql2.createConnection)({
+  connection = (0, import_mysql2.createConnection)({
     host: "localhost",
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: DB_NAME
   });
-  dbConnection.connect(function(err) {
+  connection.connect(function(err) {
     if (err)
       throw err;
-    dbConnection.query(CREATE_DB_SQL, (error) => {
+    connection.query(CREATE_DB_SQL, (error) => {
       if (error)
         throw error;
     });
-    dbConnection.query(CREATE_PLAYERS_TABLE, function(error) {
+    connection.query(CREATE_PLAYERS_TABLE, function(error) {
       if (error)
         throw error;
     });
-    dbConnection.query(CREATE_HAND_HISTORY_TABLE, function(error) {
+    connection.query(CREATE_HAND_HISTORY_TABLE, function(error) {
       if (error)
         throw error;
     });
   });
-};
-
-// src/handHistory.ts
-var import_fs = __toESM(require("fs"));
-var import_path = __toESM(require("path"));
-
-// src/constants.ts
-var ROUNDS = ["FLOP", "PRE_FLOP", "RIVER", "TURN"];
-var ACTIONS = [
-  "FOLD",
-  "CALL",
-  "RAISE",
-  "CHECK",
-  "BET",
-  "RE_RAISE"
-];
-var HOLE_CARDS_DIVIDER = "*** H\xC5LKORT ***";
-var FLOP_DIVIDER = "*** FLOPP ***";
-var TURN_DIVIDER = "*** TURN ***";
-var RIVER_DIVIDER = "*** RIVER ***";
-var SHOW_DIVIDER = "*** VISNING ***";
-var SUMMARY = "*** SAMMANFATTNING ***";
-var PLACE = "Plats";
-var TOURNAMENT = "Turnering";
-var HOLDEM_NO_LIMIT = "Holdem No limit";
-var OMAHA_POT_LIMIT = "Omaha Pot limit";
-var RAISE = "raise";
-var BET = "bet";
-var CALL = "call";
-var FOLD = "fold";
-var CHECK = "check";
-var SHOWS = "visar";
-var config = {
-  pathToHandHistoryLogs: "/Users/kasperbartholdigustavii/Library/Application Support/PokerStarsSE/HandHistory/den_kkeffe",
-  pathToTournamentLogs: "/Users/kasperbartholdigustavii/Library/Application Support/PokerStarsSE/TournSummary/den_kkeffe"
 };
 
 // src/database/integration.ts
@@ -18780,6 +18746,20 @@ var updatePlayerStats = ({ players, handHistory }) => {
     });
   });
 };
+var getAllPlayerStats = () => {
+  return new Promise((resolve, reject) => {
+    const sql = allHandHistoriesQuery;
+    con().query(sql, (error, result) => {
+      if (error) {
+        console.log({ error });
+        reject(error);
+      } else {
+        console.log({ result });
+        resolve(result);
+      }
+    });
+  });
+};
 var getHandHistories = async (filename) => {
   const sql = getHandHistoryQuery(filename);
   return new Promise((resolve, reject) => {
@@ -18791,6 +18771,41 @@ var getHandHistories = async (filename) => {
       }
     });
   });
+};
+
+// src/handHistory.ts
+var import_fs = __toESM(require("fs"));
+var import_path = __toESM(require("path"));
+
+// src/constants.ts
+var ROUNDS = ["FLOP", "PRE_FLOP", "RIVER", "TURN"];
+var ACTIONS = [
+  "FOLD",
+  "CALL",
+  "RAISE",
+  "CHECK",
+  "BET",
+  "RE_RAISE"
+];
+var HOLE_CARDS_DIVIDER = "*** H\xC5LKORT ***";
+var FLOP_DIVIDER = "*** FLOPP ***";
+var TURN_DIVIDER = "*** TURN ***";
+var RIVER_DIVIDER = "*** RIVER ***";
+var SHOW_DIVIDER = "*** VISNING ***";
+var SUMMARY = "*** SAMMANFATTNING ***";
+var PLACE = "Plats";
+var TOURNAMENT = "Turnering";
+var HOLDEM_NO_LIMIT = "Holdem No limit";
+var OMAHA_POT_LIMIT = "Omaha Pot limit";
+var RAISE = "raise";
+var BET = "bet";
+var CALL = "call";
+var FOLD = "fold";
+var CHECK = "check";
+var SHOWS = "visar";
+var config = {
+  pathToHandHistoryLogs: "/Users/kasperbartholdigustavii/Library/Application Support/PokerStarsSE/HandHistory/den_kkeffe",
+  pathToTournamentLogs: "/Users/kasperbartholdigustavii/Library/Application Support/PokerStarsSE/TournSummary/den_kkeffe"
 };
 
 // src/hand.ts
@@ -18967,13 +18982,14 @@ var actionsConfig = {
 
 // src/handHistory.ts
 var poll;
-var setPollingOnce = () => {
+var setPolling = () => {
   poll = setTimeout(() => {
     pollNewFiles();
-  }, 10);
+    setPolling();
+  }, 5e3);
 };
 var initHandHistoryPoll = () => {
-  setPollingOnce();
+  setPolling();
 };
 var getActionTypesCount = ({
   playerRoundActions,
@@ -19086,12 +19102,22 @@ var initGameStats = ROUNDS.reduce((previousValue, round) => {
 // src/index.ts
 var wss = new import_websocket_server.default({ port: 8080 });
 initDb();
-initHandHistoryPoll();
-wss.on("connection", function connection(ws) {
+wss.on("connection", function connection2(ws) {
+  console.log("ON CONNECTION");
   initHandHistoryPoll();
-  ws.on("message", function message(data) {
+  ws.on("message", async (data) => {
     console.log("received: %s", data);
+    let test;
+    try {
+      test = JSON.parse(data.toString());
+    } catch (e) {
+      console.error(e);
+    }
+    console.log({ test });
+    if (test.type === "WEB_SOCKET_CONNECTED") {
+      const playerStats = await getAllPlayerStats();
+      ws.send(JSON.stringify({ type: "ALL_PLAYER_STATS", data: playerStats }));
+    }
   });
-  ws.send("something");
 });
 //# sourceMappingURL=index.js.map

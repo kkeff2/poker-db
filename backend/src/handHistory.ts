@@ -34,8 +34,8 @@ const setPollingOnce = () => {
 };
 
 export const initHandHistoryPoll = () => {
-  // setPolling();
-  setPollingOnce();
+  setPolling();
+  // setPollingOnce();
 };
 
 const handHistoryLogFinished = () => {

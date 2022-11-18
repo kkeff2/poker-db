@@ -13,7 +13,7 @@ export const getHandHistoryQuery = (filename: string): string => {
 };
 
 export const createHandHistoryQuery =
-  `INSERT INTO ${HAND_HISTORIES_TABLE} ` +
+  `UPDATE INTO ${HAND_HISTORIES_TABLE} ` +
   "(filename, last_updated, last_hand_id_added) " +
   "VALUES(?, now(), ?) " +
   "ON DUPLICATE KEY UPDATE " +
@@ -21,32 +21,11 @@ export const createHandHistoryQuery =
   "last_hand_id_added = VALUES(last_hand_id_added)";
 
 export const createPlayerStatsQuery =
-  `INSERT INTO ${PLAYERS_TABLE}` +
+  `UPDATE INTO ${PLAYERS_TABLE}` +
   `(player_id, data) VALUES(?,?)` +
   "ON DUPLICATE KEY UPDATE " +
   "data = VALUES(data)";
 
 export const playerStatsQuery = `SELECT * FROM ${HAND_HISTORIES_TABLE} WHERE player_id IN (?)`;
 
-/**
- * 
-DECLARE @BookCount int
- 
-BEGIN TRANSACTION AddBook
- 
-  INSERT INTO Books
-  VALUES (20, 'Book15', 'Cat5', 2000)
- 
-  SELECT @BookCount = COUNT(*) FROM Books WHERE name = 'Book15'
- 
-  IF @BookCount > 1
-    BEGIN 
-      ROLLBACK TRANSACTION AddBook
-      PRINT 'A book with the same name already exists'
-    END
-  ELSE
-    BEGIN
-      COMMIT TRANSACTION AddStudent
-      PRINT 'New book added successfully'
-    END
- */
+export const allHandHistoriesQuery = `SELECT * FROM ${HAND_HISTORIES_TABLE}`;

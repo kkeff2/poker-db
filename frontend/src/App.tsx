@@ -1,31 +1,50 @@
-import "./App.css";
+import { useEffect, useState } from "react";
 
 type Props = {
   ws: WebSocket;
 };
 
 export function App({ ws }: Props) {
-  ws.onmessage = (event) => {
-    console.log("in the web", event);
-    // const json = JSON.parse(event.data);
-    // console.log(json);
-  };
+  const [allPlayerStats, setAllPlayerStats] = useState<any>();
+
+  useEffect(() => {
+    ws.onopen = () => {
+      ws.send(JSON.stringify({ type: "WEB_SOCKET_CONNECTED" }));
+    };
+    ws.onmessage = (event) => {
+      console.log("ON MESSAGE", event.data);
+      let test;
+      try {
+        test = JSON.parse(event.data.toString());
+      } catch (e) {
+        console.error(e);
+      }
+
+      if (test.type === "ALL_PLAYER_STATS") {
+        setAllPlayerStats(test.data);
+      }
+
+      // if (event === "hej") {
+      //   console.log("JAJAJA");
+      // }
+      // const json = JSON.parse(event.data);
+      // console.log(json);
+    };
+    // console.log("IN USEEFFECT");
+    // ws.send(JSON.stringify({ type: "ALL_PLAYERS" }));
+  }, [ws]);
+
+  console.log(allPlayerStats);
 
   return (
     <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <header className="App-header">HEJ</header>
+      <div>
+        {allPlayerStats &&
+          allPlayerStats.map((stats: any) => (
+            <div key={stats.filename}>{stats.filename}</div>
+          ))}
+      </div>
     </div>
   );
 }
