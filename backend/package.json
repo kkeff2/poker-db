@@ -13,6 +13,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "poker-db-shared": "1.0.0",
     "dotenv": "^16.0.3",
     "esbuild": "0.14.25",
     "mysql2": "2.3.3",

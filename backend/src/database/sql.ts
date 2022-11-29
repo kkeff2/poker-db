@@ -1,5 +1,3 @@
-import { Hand } from "../types";
-
 export const DB_NAME = "poker_db";
 const PLAYERS_TABLE = "players";
 const HAND_HISTORIES_TABLE = "hand_histories";
@@ -13,7 +11,7 @@ export const getHandHistoryQuery = (filename: string): string => {
 };
 
 export const createHandHistoryQuery =
-  `UPDATE INTO ${HAND_HISTORIES_TABLE} ` +
+  `INSERT INTO ${HAND_HISTORIES_TABLE} ` +
   "(filename, last_updated, last_hand_id_added) " +
   "VALUES(?, now(), ?) " +
   "ON DUPLICATE KEY UPDATE " +
@@ -21,11 +19,14 @@ export const createHandHistoryQuery =
   "last_hand_id_added = VALUES(last_hand_id_added)";
 
 export const createPlayerStatsQuery =
-  `UPDATE INTO ${PLAYERS_TABLE}` +
-  `(player_id, data) VALUES(?,?)` +
+  `INSERT INTO ${PLAYERS_TABLE} ` +
+  "(player_id, data) " +
+  "VALUES ? " +
   "ON DUPLICATE KEY UPDATE " +
   "data = VALUES(data)";
 
-export const playerStatsQuery = `SELECT * FROM ${HAND_HISTORIES_TABLE} WHERE player_id IN (?)`;
+export const playerStatsQuery = `SELECT * FROM ${PLAYERS_TABLE} WHERE player_id IN (?)`;
+
+export const allPlayerStatsQuery = `SELECT * FROM ${PLAYERS_TABLE}`;
 
 export const allHandHistoriesQuery = `SELECT * FROM ${HAND_HISTORIES_TABLE}`;

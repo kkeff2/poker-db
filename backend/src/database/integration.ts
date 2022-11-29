@@ -1,20 +1,20 @@
 import { RowDataPacket } from "mysql2";
-import Query from "mysql2/typings/mysql/lib/protocol/sequences/Query";
-import { Hand, PlayerId, PlayerStats } from "../types";
+import {
+  Hand,
+  HandHistory,
+  PlayerId,
+  PlayerStats,
+} from "poker-db-shared/types";
 import { con } from "./init";
 import {
-  allHandHistoriesQuery,
+  allPlayerStatsQuery,
   createHandHistoryQuery,
   createPlayerStatsQuery,
   getHandHistoryQuery,
   playerStatsQuery,
 } from "./sql";
 
-export interface IHandHistory extends RowDataPacket {
-  filename: string;
-  last_updated: string;
-  last_hand_id_added?: string;
-}
+export interface IHandHistory extends RowDataPacket, HandHistory {}
 export interface IPlayerStats extends RowDataPacket {
   player_id: string;
   data: string;
@@ -30,24 +30,22 @@ type UpdateOpts = {
 
 export const updatePlayerStats = ({ players, handHistory }: UpdateOpts) => {
   return new Promise((_resolve, reject) => {
-    console.log("before", players);
-    const [playerId, playerStats] = Object.entries(players);
     con().beginTransaction((transactionError) => {
       if (transactionError) {
         throw transactionError;
       }
-      con().query(
-        createPlayerStatsQuery,
-        [playerId, JSON.stringify(playerStats)],
-        (error, results) => {
-          if (error) {
-            return con().rollback(() => {
-              reject(error);
-            });
-          }
-          console.log("update players results", results);
+
+      const values = Object.entries(players).map(([playerId, stats]) => {
+        return [playerId, JSON.stringify(stats)];
+      });
+
+      con().query(createPlayerStatsQuery, [values], (error) => {
+        if (error) {
+          return con().rollback(() => {
+            reject(error);
+          });
         }
-      );
+      });
       con().query(
         createHandHistoryQuery,
         [handHistory.filename, handHistory.lastHand.handId],
@@ -65,34 +63,33 @@ export const updatePlayerStats = ({ players, handHistory }: UpdateOpts) => {
             throw err;
           });
         }
-        console.log("success!");
       });
     });
   });
 };
 
-export const getPlayerStats = (playerIds: string[]): Promise<IPlayerStats> => {
+export const getPlayerStats = (
+  playerIds: string[]
+): Promise<PlayerStats[]> => {
   return new Promise((resolve, reject) => {
     const sql = playerStatsQuery;
-    con().query<IPlayerStats[]>(sql, playerIds, (error, result) => {
+    con().query<IPlayerStats[]>(sql, [playerIds], (error, result) => {
       if (error) {
         reject(error);
       } else {
-        resolve(result?.[0]);
+        resolve(result);
       }
     });
   });
 };
 
-export const getAllPlayerStats = (): Promise<IHandHistory[]> => {
+export const getAllPlayerStats = (): Promise<IPlayerStats[]> => {
   return new Promise((resolve, reject) => {
-    const sql = allHandHistoriesQuery;
-    con().query<IHandHistory[]>(sql, (error, result) => {
+    const sql = allPlayerStatsQuery;
+    con().query<IPlayerStats[]>(sql, (error, result) => {
       if (error) {
-        console.log({ error });
         reject(error);
       } else {
-        console.log({ result });
         resolve(result);
       }
     });

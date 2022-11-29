@@ -1,0 +1,11 @@
+{
+  "name": "poker-db-shared",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "typecheck": "tsc",
+    "lint:fix": "eslint --fix"
+  },
+  "author": "",
+  "license": "ISC"
+}

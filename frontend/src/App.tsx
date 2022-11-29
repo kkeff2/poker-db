@@ -1,50 +1,57 @@
-import { useEffect, useState } from "react";
+import { CssBaseline } from "@mui/material";
+import { ReactNode } from "react";
+import { Outlet } from "react-router-dom";
+import { TopBar } from "./components/TopBar";
 
 type Props = {
-  ws: WebSocket;
+  children?: ReactNode;
 };
 
-export function App({ ws }: Props) {
-  const [allPlayerStats, setAllPlayerStats] = useState<any>();
+export function App({ children }: Props) {
+  // const [allPlayerStats, setAllPlayerStats] = useState<any>();
+  // const [handHistories, setHandHistories] = useState<any>();
 
-  useEffect(() => {
-    ws.onopen = () => {
-      ws.send(JSON.stringify({ type: "WEB_SOCKET_CONNECTED" }));
-    };
-    ws.onmessage = (event) => {
-      console.log("ON MESSAGE", event.data);
-      let test;
-      try {
-        test = JSON.parse(event.data.toString());
-      } catch (e) {
-        console.error(e);
-      }
-
-      if (test.type === "ALL_PLAYER_STATS") {
-        setAllPlayerStats(test.data);
-      }
-
-      // if (event === "hej") {
-      //   console.log("JAJAJA");
-      // }
-      // const json = JSON.parse(event.data);
-      // console.log(json);
-    };
-    // console.log("IN USEEFFECT");
-    // ws.send(JSON.stringify({ type: "ALL_PLAYERS" }));
-  }, [ws]);
-
-  console.log(allPlayerStats);
+  // useEffect(() => {
+  // sendMessage({ type: "GET_ALL_PLAYER_STATS" });
+  // sendMessage({ type: "GET_ALL_HAND_HISTORIES" });
+  // ws.onmessage = (event: MessageEvent<Messages>) => {
+  //   const message = getMessage(event);
+  // switch (message.type) {
+  //   case "ALL_HAND_HISTORIES":
+  //     return setHandHistories(test.data);
+  //   case "ALL_PLAYER_STATS":
+  //     return setAllPlayerStats(test.data);
+  // }
+  // if (event === "hej") {
+  //   console.log("JAJAJA");
+  // }
+  // const json = JSON.parse(event.data);
+  // console.log(json);
+  // };
+  // console.log("IN USEEFFECT");
+  // ws.send(JSON.stringify({ type: "ALL_PLAYERS" }));
+  // }, []);
 
   return (
-    <div className="App">
-      <header className="App-header">HEJ</header>
-      <div>
-        {allPlayerStats &&
-          allPlayerStats.map((stats: any) => (
-            <div key={stats.filename}>{stats.filename}</div>
-          ))}
-      </div>
-    </div>
+    <>
+      <CssBaseline />
+      <TopBar />
+      <Outlet />
+      {/* 
+      <Router>
+        <div>
+          {handHistories &&
+            handHistories.map((handHistory: any) => (
+              <div key={handHistory.filename}>{handHistory.filename}</div>
+            ))}
+        </div>
+        <div>
+          {allPlayerStats &&
+            allPlayerStats.map((handHistory: any) => (
+              <div key={handHistory.filename}>{handHistory.filename}</div>
+            ))}
+        </div>
+      </Router> */}
+    </>
   );
 }

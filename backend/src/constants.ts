@@ -1,4 +1,4 @@
-import { Action, Round } from "./types";
+import { Action, Round } from "poker-db-shared/types";
 
 export const ROUNDS: Round[] = ["FLOP", "PRE_FLOP", "RIVER", "TURN"];
 export const ACTIONS: Action[] = [
@@ -38,4 +38,5 @@ export const config = {
     "/Users/kasperbartholdigustavii/Library/Application Support/PokerStarsSE/HandHistory/den_kkeffe",
   pathToTournamentLogs:
     "/Users/kasperbartholdigustavii/Library/Application Support/PokerStarsSE/TournSummary/den_kkeffe",
+  playerId: "den_kkeffe",
 };

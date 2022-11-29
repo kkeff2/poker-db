@@ -26,7 +26,7 @@ import {
   PlayerId,
   PokerType,
   Round,
-} from "./types";
+} from "poker-db-shared/types";
 
 const getPlayerRows = (handRows: string[]) => {
   // Places start at

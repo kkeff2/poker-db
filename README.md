@@ -2,6 +2,11 @@
 
 A Poker DB with info about who you are currently playing using local saved logs
 
+## Wipe DB
+
+mysql -h localhost -u root -p poker_db
+DELETE FROM table_name;
+
 ## Next
 
 ### Next 22-10-26
@@ -17,6 +22,12 @@ Use last_hand_id_added - to limit the amount of new hands counted
 - F:R JOBBIGT MED { NLH: { TOURNAMENT: { ... STATS ... }}}
   Kor export type GameId = "NLHE_TOURNAMENT" | "PLO_CASH";
   Istallet. Borde gora det lite enklare?
+
+### Next 2022-11-24
+
+- Show a table "currently playing"
+  - Send last hand played from a hand history file
+  -
 
 ### Next 22-10-20
 

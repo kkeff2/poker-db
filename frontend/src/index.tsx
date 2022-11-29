@@ -1,8 +1,12 @@
 import ReactDOM from "react-dom/client";
-import { App } from "./App";
+import { RouterProvider } from "react-router-dom";
+import { routes } from "./routes";
 import { ws } from "./webSocket";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
-root.render(<App ws={ws} />);
+ws.onopen = () => {
+  console.log("WS Open. Rendering App");
+  root.render(<RouterProvider router={routes} />);
+};

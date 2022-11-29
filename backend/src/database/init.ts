@@ -7,32 +7,31 @@ import {
 } from "./sql";
 require("dotenv").config();
 
-let connection: Connection;
+let dbConnection: Connection;
 
 export const con = () => {
-  if (!connection) {
+  if (!dbConnection) {
     throw new Error("dbConnection not initiated");
   }
-  return connection;
+  return dbConnection;
 };
 
 export const initDb = () => {
-  console.log("startDB");
-  connection = createConnection({
+  dbConnection = createConnection({
     host: "localhost",
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: DB_NAME,
   });
-  connection.connect(function (err) {
+  dbConnection.connect(function (err) {
     if (err) throw err;
-    connection.query(CREATE_DB_SQL, (error) => {
+    dbConnection.query(CREATE_DB_SQL, (error) => {
       if (error) throw error;
     });
-    connection.query(CREATE_PLAYERS_TABLE, function (error) {
+    dbConnection.query(CREATE_PLAYERS_TABLE, function (error) {
       if (error) throw error;
     });
-    connection.query(CREATE_HAND_HISTORY_TABLE, function (error) {
+    dbConnection.query(CREATE_HAND_HISTORY_TABLE, function (error) {
       if (error) throw error;
     });
   });

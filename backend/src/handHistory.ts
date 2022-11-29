@@ -1,41 +1,41 @@
 import fs from "fs";
 import path from "path";
-import { ACTIONS, ROUNDS, config } from "./constants";
-import {
-  getHandHistories,
-  getPlayerStats,
-  updateHandHistory,
-  updatePlayerStats,
-} from "./database/integration";
-import { getHandInfo } from "./hand";
 import {
   Action,
+  GameStats,
   Hand,
+  Messages,
   PlayerHand,
   PlayerId,
   PlayerStats,
   Round,
   RoundStats,
-  GameStats,
-} from "./types";
+} from "poker-db-shared/types";
+import { ACTIONS, config, ROUNDS } from "./constants";
+import { Context } from "./context";
+import {
+  getAllPlayerStats,
+  getHandHistories,
+  getPlayerStats,
+  updatePlayerStats,
+} from "./database/integration";
+import { getHandInfo } from "./hand";
+import { sendMessage } from "./webSocket.ts/ws";
 
-let poll: NodeJS.Timeout;
+const setPolling = (context: Context) => {
+  // console.log("sendCurrentTables", context.sendCurrentTables);
 
-const setPolling = () => {
-  poll = setTimeout(() => {
-    pollNewFiles();
-    setPolling();
+  setTimeout(() => {
+    // if (context.sendCurrentTables) {
+    //   sendMessage({type: 'CURRENT_TABLE_UPDATED', })
+    // }
+    pollNewFiles(context);
+    setPolling(context);
   }, 5000);
 };
-const setPollingOnce = () => {
-  poll = setTimeout(() => {
-    pollNewFiles();
-  }, 10);
-};
 
-export const initHandHistoryPoll = () => {
-  setPolling();
-  // setPollingOnce();
+export const initHandHistoryPoll = (context: Context) => {
+  setPolling(context);
 };
 
 const handHistoryLogFinished = () => {
@@ -112,46 +112,84 @@ const getUpdatedGameStats = ({
   }, {} as GameStats);
 };
 
-const pollNewFiles = () => {
-  const files = fs.readdirSync(config.pathToHandHistoryLogs);
-  for (var i = 0; i < files.length; i++) {
-    const fullPath = path.join(config.pathToHandHistoryLogs, files[i]);
-    const filename = files[i];
-    // console.log("files[i];v", files[i]);
-    // TODO: IS FILE MARKED AS DONE?
+const handleFile = ({
+  fullPath,
+  filename,
+  context,
+}: {
+  fullPath: string;
+  filename: string;
+  context: Context;
+}) => {
+  return new Promise<void>((resolve, reject) => {
     fs.readFile(fullPath, "utf8", async (err, data) => {
-      if (err) throw err;
-      // TODO: IS FILE UPDATED AT RELEVANT?
-      const handHistory = await getHandHistories(filename);
+      if (err) {
+        reject(err);
+      }
 
-      // console.log("handHistory", handHistory);
+      // TODO: IS FILE UPDATED AT RELEVANT?
+
       const rawHands = data.split("\n\n\n\n");
       const rawCompleteHands = rawHands.filter(
         (hand) => hand.split("\n").length != 1
       );
       const hands = rawCompleteHands.map((hand) => getHandInfo(hand));
       const lastHand = hands.reverse()[0];
-      // console.log(handHistory?.last_hand_id_added);
-      // console.log(lastHand.handId);
-      if (handHistory?.last_hand_id_added === lastHand.handId) {
-        return;
+
+      const skipDbUpdate = await isDatabaseAlreadyUpdated(filename, lastHand);
+
+      if (!skipDbUpdate) {
+        const players: Record<PlayerId, PlayerStats> =
+          getStatsAggregatedOnPlayers(hands);
+
+        await updatePlayerStats({
+          players,
+          handHistory: { filename, lastHand },
+        });
       }
 
-      // console.log("WHERE", filename);
-      const players: Record<PlayerId, PlayerStats> =
-        getStatsAggregatedOnPlayers(hands);
-      const playerIds = Object.keys(players);
-      // const currentPlayers = await getPlayerStats(playerIds);
-      console.log(
-        Object.entries(players).forEach(([id, stats]) => console.log(id, stats))
-      );
-      console.log("|||||||||||||||||||||||||||||||||||||");
-      await updatePlayerStats({ players, handHistory: { filename, lastHand } });
-      // await updateHandHistory(filename, lastHand);
+      if (
+        context.sendCurrentTables &&
+        context.activeTables.includes(filename)
+      ) {
+        const tablePlayerIds = lastHand.players.map((p) => p.id);
+        const playerStats = await getPlayerStats(tablePlayerIds);
+        console.log({ playerStats });
+        const message: Messages = {
+          type: "CURRENT_TABLE_UPDATED",
+          response: {
+            hand: lastHand,
+            playerStats: playerStats.map((ps) => {
+              return {
+                playerId: ps.player_id,
+                stats: JSON.parse(ps.data),
+              };
+            }),
+          },
+        };
+        // sendMessage();
+      }
+
+      resolve();
 
       // TODO Update BD HERE with players
     });
+  });
+};
+
+const pollNewFiles = async (context: Context) => {
+  const files = fs.readdirSync(config.pathToHandHistoryLogs);
+  for (var i = 0; i < files.length; i++) {
+    const fullPath = path.join(config.pathToHandHistoryLogs, files[i]);
+    const filename = files[i];
+    await handleFile({ fullPath, filename, context });
+    // TODO: IS FILE MARKED AS DONE?
   }
+};
+
+const isDatabaseAlreadyUpdated = async (filename: string, lastHand: Hand) => {
+  const handHistory = await getHandHistories(filename);
+  return handHistory?.last_hand_id_added === lastHand.handId;
 };
 
 export const getStatsAggregatedOnPlayers = (
@@ -170,10 +208,6 @@ export const getStatsAggregatedOnPlayers = (
       });
     });
   });
-  // console.log({ players });
-  // console.log(s
-  //   Object.values(players).forEach((a) => console.log(a.NLHE_TOURNAMENT))
-  // );
   return players;
 };
 
