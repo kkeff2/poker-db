@@ -160,14 +160,19 @@ const handleFile = ({
           response: {
             hand: lastHand,
             playerStats: playerStats.map((ps) => {
+              console.log("PS", ps);
+              const stats = ps.data[lastHand.gameId];
+              if (!stats) {
+                throw Error("Stats could not be found on user");
+              }
               return {
                 playerId: ps.player_id,
-                stats: JSON.parse(ps.data),
+                stats,
               };
             }),
           },
         };
-        // sendMessage();
+        sendMessage(message);
       }
 
       resolve();

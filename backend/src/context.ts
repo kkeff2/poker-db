@@ -1,3 +1,7 @@
+type Table = {
+  id: string;
+  lastHandId: string;
+};
 export class Context {
   public sendCurrentTables: boolean = false;
   public activeTables: string[] = [

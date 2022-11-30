@@ -50,4 +50,6 @@ export const startListeningToMessages = async (context: Context) => {
   });
 };
 
-export const sendMessage = (message: Messages) => {};
+export const sendMessage = (message: Messages) => {
+  con().send(JSON.stringify(message));
+};

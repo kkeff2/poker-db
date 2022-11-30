@@ -1,6 +1,6 @@
-import { AppBar, MenuItem, Toolbar, Typography } from "@mui/material";
 import { AttachMoneyOutlined } from "@mui/icons-material";
-import { Link } from "react-router-dom";
+import { AppBar, MenuItem, Toolbar, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const pages = [
   { route: "/", label: "Current Tables" },
@@ -9,6 +9,8 @@ const pages = [
 ];
 
 export const TopBar = () => {
+  const navigate = useNavigate();
+
   return (
     <AppBar position="static">
       <Toolbar>
@@ -17,10 +19,8 @@ export const TopBar = () => {
           PokerDB
         </Typography>
         {pages.map((page) => (
-          <MenuItem key={page.route}>
-            <Link style={{ textDecoration: "none" }} to={page.route}>
-              <Typography textAlign="center">{page.label}</Typography>
-            </Link>
+          <MenuItem key={page.route} onClick={() => navigate(page.route)}>
+            <Typography textAlign="center">{page.label}</Typography>
           </MenuItem>
         ))}
       </Toolbar>

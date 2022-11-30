@@ -7,7 +7,15 @@ A Poker DB with info about who you are currently playing using local saved logs
 mysql -h localhost -u root -p poker_db
 DELETE FROM table_name;
 
-## Next
+## Next 22-11-30
+
+Sending everything to FE!
+- Handle which table to listen to via Context
+- Do that during the first poll
+- Always check all files???
+- Add completed bool to hand_histories table to quickly discard file
+- Check last updated time vs HandHistory file object last updated time
+
 
 ### Next 22-10-26
 

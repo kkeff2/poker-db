@@ -17,7 +17,7 @@ import {
 export interface IHandHistory extends RowDataPacket, HandHistory {}
 export interface IPlayerStats extends RowDataPacket {
   player_id: string;
-  data: string;
+  data: PlayerStats;
 }
 
 type UpdateOpts = {
@@ -70,7 +70,7 @@ export const updatePlayerStats = ({ players, handHistory }: UpdateOpts) => {
 
 export const getPlayerStats = (
   playerIds: string[]
-): Promise<PlayerStats[]> => {
+): Promise<IPlayerStats[]> => {
   return new Promise((resolve, reject) => {
     const sql = playerStatsQuery;
     con().query<IPlayerStats[]>(sql, [playerIds], (error, result) => {

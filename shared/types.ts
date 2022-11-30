@@ -16,8 +16,8 @@ export type Messages =
         hand: Hand;
         playerStats: {
           playerId: string;
-          stats: Partial<Record<GameId, GameStats>>;
-        };
+          stats: GameStats;
+        }[];
       };
     };
 

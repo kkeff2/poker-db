@@ -9,6 +9,7 @@ export const CurrentTables = () => {
       const message = getMessage(event);
       if (message.type === "CURRENT_TABLE_UPDATED") {
         // Do shit with state
+        console.log("HOUSTON", message);
       }
     };
   }, []);

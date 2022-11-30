@@ -18984,6 +18984,57 @@ var actionsConfig = {
   RIVER: { startString: RIVER_DIVIDER, endString: SHOW_DIVIDER, key: "river" }
 };
 
+// ../node_modules/ws/wrapper.mjs
+var import_stream = __toESM(require_stream(), 1);
+var import_receiver = __toESM(require_receiver(), 1);
+var import_sender = __toESM(require_sender(), 1);
+var import_websocket = __toESM(require_websocket(), 1);
+var import_websocket_server = __toESM(require_websocket_server(), 1);
+
+// src/webSocket.ts/ws.ts
+var wss = new import_websocket_server.default({ port: 8080 });
+var connection;
+var con2 = () => {
+  if (!connection) {
+    throw Error("No websocket connection");
+  }
+  return connection;
+};
+var initWebSocket = () => {
+  return new Promise((resolve) => {
+    wss.on("connection", (ws) => {
+      connection = ws;
+      resolve();
+    });
+  });
+};
+var getMessage = (data) => {
+  let parsedData;
+  try {
+    parsedData = JSON.parse(data.toString());
+  } catch (e) {
+    console.error(e);
+  }
+  return parsedData;
+};
+var startListeningToMessages = async (context2) => {
+  con2().on("message", (data) => {
+    if (!data) {
+      throw Error("No message");
+    }
+    const message = getMessage(data);
+    console.log({ message });
+    switch (message.type) {
+      case "CURRENT_TABLE_UPDATED": {
+        context2.setSendCurrentTables(true);
+      }
+    }
+  });
+};
+var sendMessage = (message) => {
+  con2().send(JSON.stringify(message));
+};
+
 // src/handHistory.ts
 var setPolling = (context2) => {
   setTimeout(() => {
@@ -19075,13 +19126,19 @@ var handleFile = ({
           response: {
             hand: lastHand,
             playerStats: playerStats.map((ps) => {
+              console.log("PS", ps);
+              const stats = ps.data[lastHand.gameId];
+              if (!stats) {
+                throw Error("Stats could not be found on user");
+              }
               return {
                 playerId: ps.player_id,
-                stats: JSON.parse(ps.data)
+                stats
               };
             })
           }
         };
+        sendMessage(message);
       }
       resolve();
     });
@@ -19132,54 +19189,6 @@ var initGameStats = ROUNDS.reduce((previousValue, round) => {
     }
   };
 }, {});
-
-// ../node_modules/ws/wrapper.mjs
-var import_stream = __toESM(require_stream(), 1);
-var import_receiver = __toESM(require_receiver(), 1);
-var import_sender = __toESM(require_sender(), 1);
-var import_websocket = __toESM(require_websocket(), 1);
-var import_websocket_server = __toESM(require_websocket_server(), 1);
-
-// src/webSocket.ts/ws.ts
-var wss = new import_websocket_server.default({ port: 8080 });
-var connection;
-var con2 = () => {
-  if (!connection) {
-    throw Error("No websocket connection");
-  }
-  return connection;
-};
-var initWebSocket = () => {
-  return new Promise((resolve) => {
-    wss.on("connection", (ws) => {
-      connection = ws;
-      resolve();
-    });
-  });
-};
-var getMessage = (data) => {
-  let parsedData;
-  try {
-    parsedData = JSON.parse(data.toString());
-  } catch (e) {
-    console.error(e);
-  }
-  return parsedData;
-};
-var startListeningToMessages = async (context2) => {
-  con2().on("message", (data) => {
-    if (!data) {
-      throw Error("No message");
-    }
-    const message = getMessage(data);
-    console.log({ message });
-    switch (message.type) {
-      case "CURRENT_TABLE_UPDATED": {
-        context2.setSendCurrentTables(true);
-      }
-    }
-  });
-};
 
 // src/index.ts
 var context = new Context();
