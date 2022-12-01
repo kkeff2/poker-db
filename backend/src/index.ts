@@ -1,6 +1,6 @@
 import { Context } from "./context";
 import { initDb } from "./database/init";
-import { initHandHistoryPoll } from "./handHistory";
+import { initHandHistoryPoll } from "./pollHandHistories/polling";
 import { initWebSocket, startListeningToMessages } from "./webSocket.ts/ws";
 
 const context = new Context();

@@ -1,8 +1,16 @@
 export interface HandHistory {
   filename: string;
-  last_updated: string;
+  last_updated: Date;
   last_hand_id_added?: string;
 }
+
+type CurrentTableResponse = {
+  hand: Hand;
+  playerStats: {
+    playerId: string;
+    stats: GameStats;
+  }[];
+}[];
 
 export type Messages =
   | {
@@ -12,13 +20,7 @@ export type Messages =
   | { type: "GET_ALL_HAND_HISTORIES"; response: HandHistory }
   | {
       type: "CURRENT_TABLE_UPDATED";
-      response: {
-        hand: Hand;
-        playerStats: {
-          playerId: string;
-          stats: GameStats;
-        }[];
-      };
+      response: CurrentTableResponse;
     };
 
 export type MessagesWithoutResponse = Omit<Messages, "response">;

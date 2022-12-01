@@ -15,6 +15,7 @@
   "dependencies": {
     "poker-db-shared": "1.0.0",
     "dotenv": "^16.0.3",
+    "date-fns": "2.29.3",
     "esbuild": "0.14.25",
     "mysql2": "2.3.3",
     "nodemon": "2.0.20",

@@ -23,7 +23,7 @@ export interface IPlayerStats extends RowDataPacket {
 type UpdateOpts = {
   players: Record<PlayerId, PlayerStats>;
   handHistory: {
-    filename: string;
+    fileName: string;
     lastHand: Hand;
   };
 };
@@ -34,7 +34,7 @@ export const updatePlayerStats = ({ players, handHistory }: UpdateOpts) => {
       if (transactionError) {
         throw transactionError;
       }
-
+      // TODO: Get stats first! Then add new stats to that stats
       const values = Object.entries(players).map(([playerId, stats]) => {
         return [playerId, JSON.stringify(stats)];
       });
@@ -48,7 +48,7 @@ export const updatePlayerStats = ({ players, handHistory }: UpdateOpts) => {
       });
       con().query(
         createHandHistoryQuery,
-        [handHistory.filename, handHistory.lastHand.handId],
+        [handHistory.fileName, handHistory.lastHand.handId],
         (error) => {
           if (error) {
             return con().rollback(() => {

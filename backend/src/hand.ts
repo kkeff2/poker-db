@@ -53,7 +53,7 @@ const handParts = (handRows: string[]) => {
   };
 };
 
-export const getHandInfo = (hand: string): Hand => {
+export const parseHand = (hand: string): Hand => {
   const handRows = hand.split("\n");
   const { gameRow, tableRow, playerRows, roundsRows } = handParts(handRows);
 
