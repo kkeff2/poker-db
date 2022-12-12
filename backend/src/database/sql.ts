@@ -4,19 +4,17 @@ const HAND_HISTORIES_TABLE = "hand_histories";
 
 export const CREATE_DB_SQL = `CREATE DATABASE IF NOT EXISTS ${DB_NAME};`;
 export const CREATE_PLAYERS_TABLE = `CREATE TABLE IF NOT EXISTS ${PLAYERS_TABLE} ( player_id VARCHAR(255) NOT NULL PRIMARY KEY, data JSON NOT NULL )`;
-export const CREATE_HAND_HISTORY_TABLE = `CREATE TABLE IF NOT EXISTS ${HAND_HISTORIES_TABLE} ( filename VARCHAR(255) NOT NULL PRIMARY KEY, last_updated TIMESTAMP NOT NULL, last_hand_id_added VARCHAR(255) )`;
+export const CREATE_HAND_HISTORY_TABLE = `CREATE TABLE IF NOT EXISTS ${HAND_HISTORIES_TABLE} ( hand_history_id VARCHAR(255) NOT NULL PRIMARY KEY, last_updated VARCHAR(255) NOT NULL, last_hand JSON NOT NULL )`;
 
-export const getHandHistoryQuery = (filename: string): string => {
-  return `SELECT * FROM ${HAND_HISTORIES_TABLE} WHERE filename="${filename}"`;
-};
+export const getHandHistoryQuery = `SELECT * FROM ${HAND_HISTORIES_TABLE} WHERE hand_history_id IN (?)"`;
 
 export const createHandHistoryQuery =
   `INSERT INTO ${HAND_HISTORIES_TABLE} ` +
-  "(filename, last_updated, last_hand_id_added) " +
-  "VALUES(?, now(), ?) " +
+  "(hand_history_id, last_updated, last_hand) " +
+  "VALUES(?, ?, ?) " +
   "ON DUPLICATE KEY UPDATE " +
   "last_updated = VALUES(last_updated)," +
-  "last_hand_id_added = VALUES(last_hand_id_added)";
+  "last_hand = VALUES(last_hand)";
 
 export const createPlayerStatsQuery =
   `INSERT INTO ${PLAYERS_TABLE} ` +

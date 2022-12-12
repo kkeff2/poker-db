@@ -7,6 +7,23 @@ A Poker DB with info about who you are currently playing using local saved logs
 mysql -h localhost -u root -p poker_db
 DELETE FROM table_name;
 
+## Next 22-12-11
+
+Before analyzing hands we want to know if there is a need for
+
+## Next 22-12-07
+
+**\*\*** DO ACTIVE TABLE CHECK WHEN FRONTEND WANTS ACTIVE TABLES **\*\***
+
+In what order to check things
+Need to know Active tables from when they were updated
+But Not sure if they are added to DB
+NEED FIRST CHECK TO BE JUST ADDING THINGS TO DB
+
+Once THAT IS DONE -> A CHECK CAN BE DONE
+
+ADD TO CONTEXT WHEN THE LAST CHECK WAS DONE?
+
 ## Next 22-12-01
 
 All done from previous next

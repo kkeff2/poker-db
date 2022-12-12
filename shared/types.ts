@@ -1,16 +1,15 @@
 export interface HandHistory {
-  filename: string;
-  last_updated: Date;
-  last_hand_id_added?: string;
+  hand_history_id: string;
+  last_updated: string;
+  last_hand: Hand;
 }
 
-type CurrentTableResponse = {
-  hand: Hand;
-  playerStats: {
-    playerId: string;
-    stats: GameStats;
-  }[];
-}[];
+export type Table = {
+  id: string;
+  lastHand: Hand;
+  playerStats: Record<PlayerId, GameStats>[];
+  hasBeenSent: boolean;
+};
 
 export type Messages =
   | {
@@ -20,7 +19,7 @@ export type Messages =
   | { type: "GET_ALL_HAND_HISTORIES"; response: HandHistory }
   | {
       type: "CURRENT_TABLE_UPDATED";
-      response: CurrentTableResponse;
+      response: Table[];
     };
 
 export type MessagesWithoutResponse = Omit<Messages, "response">;
@@ -52,10 +51,12 @@ export type PlayerHand = {
   actions: Record<Round, Action[]>;
 };
 
+export type PerAction = Record<Action, number>;
+
 export type RoundStats = {
   seen: number;
   aggression: number;
-  perAction: Record<Action, number>;
+  perAction: PerAction;
 };
 
 export type GameStats = Record<Round, RoundStats>;

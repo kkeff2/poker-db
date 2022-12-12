@@ -16,23 +16,36 @@ export const con = () => {
   return dbConnection;
 };
 
-export const initDb = () => {
+const createDb = (): Promise<void> =>
+  new Promise((resolve, reject) => {
+    dbConnection.connect(function (err) {
+      if (err) {
+        reject(err);
+      }
+      resolve();
+    });
+  });
+
+const runQuery = (query: string): Promise<void> =>
+  new Promise((resolve, reject) => {
+    dbConnection.query(query, (error) => {
+      if (error) {
+        reject(error);
+      }
+      resolve();
+    });
+  });
+
+export const initDb = async () => {
   dbConnection = createConnection({
     host: "localhost",
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: DB_NAME,
   });
-  dbConnection.connect(function (err) {
-    if (err) throw err;
-    dbConnection.query(CREATE_DB_SQL, (error) => {
-      if (error) throw error;
-    });
-    dbConnection.query(CREATE_PLAYERS_TABLE, function (error) {
-      if (error) throw error;
-    });
-    dbConnection.query(CREATE_HAND_HISTORY_TABLE, function (error) {
-      if (error) throw error;
-    });
-  });
+
+  await createDb();
+  await runQuery(CREATE_DB_SQL);
+  await runQuery(CREATE_PLAYERS_TABLE);
+  await runQuery(CREATE_HAND_HISTORY_TABLE);
 };
