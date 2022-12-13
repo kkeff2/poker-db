@@ -1,13 +1,14 @@
 import { Close } from "@mui/icons-material";
 import {
   Card,
-  Typography,
+  IconButton,
+  styled,
   Table as MuiTable,
-  TableRow,
+  TableBody,
   TableCell,
   TableHead,
-  TableBody,
-  IconButton,
+  TableRow,
+  Typography,
 } from "@mui/material";
 import type { Round, Table as TableType } from "poker-db-shared/types";
 
@@ -21,6 +22,8 @@ export const ROUNDS: Round[] = ["PRE_FLOP", "FLOP", "TURN", "RIVER"];
 const getPercentage = (preFlopSeen: number, postFlopSeen: number) => {
   return Math.round((postFlopSeen / preFlopSeen) * 100);
 };
+
+const isBestPlayer = (playerId: string) => playerId === "den_kkeffe";
 
 export const Table = ({ table, onClose }: Props) => {
   return (
@@ -54,7 +57,14 @@ export const Table = ({ table, onClose }: Props) => {
 
               return playerStatsList.map(([playerId, stats]) => {
                 return (
-                  <TableRow key={`${table.id}${playerId}`}>
+                  <TableRow
+                    key={`${table.id}${playerId}`}
+                    style={{
+                      backgroundColor: isBestPlayer(playerId)
+                        ? "#e0e0e0"
+                        : "inherit",
+                    }}
+                  >
                     <TableCell>{playerId}</TableCell>
                     {ROUNDS.map((round) => {
                       const percentage =
@@ -78,3 +88,7 @@ export const Table = ({ table, onClose }: Props) => {
     </div>
   );
 };
+
+const StyledTableCell = styled(TableCell)({
+  backgroundColor: "#e0e0e0",
+});
