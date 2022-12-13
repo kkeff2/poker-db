@@ -1,6 +1,5 @@
 import { Action, Round } from "poker-db-shared/types";
 
-export const ROUNDS: Round[] = ["FLOP", "PRE_FLOP", "RIVER", "TURN"];
 export const ACTIONS: Action[] = [
   "FOLD",
   "CALL",
@@ -9,6 +8,8 @@ export const ACTIONS: Action[] = [
   "BET",
   "RE_RAISE",
 ];
+
+export const ROUNDS: Round[] = ["PRE_FLOP", "FLOP", "TURN", "RIVER"];
 
 // ROUNDS
 export const HOLE_CARDS_DIVIDER = "*** HÅLKORT ***";

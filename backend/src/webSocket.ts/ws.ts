@@ -16,7 +16,7 @@ const con = () => {
 export const initWebSocket = (context: Context): Promise<void> => {
   return new Promise((resolve) => {
     wss.on("connection", (ws) => {
-      console.log("ON CONNECTION RESET");
+      console.log("ON WS CONNECTION");
       context.handleWebSocketConnection();
       connection = ws;
       resolve();

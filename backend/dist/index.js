@@ -35696,7 +35696,6 @@ var import_date_fns = __toESM(require_date_fns());
 var import_fs2 = __toESM(require("fs"));
 
 // src/constants.ts
-var ROUNDS = ["FLOP", "PRE_FLOP", "RIVER", "TURN"];
 var ACTIONS = [
   "FOLD",
   "CALL",
@@ -35705,6 +35704,7 @@ var ACTIONS = [
   "BET",
   "RE_RAISE"
 ];
+var ROUNDS = ["PRE_FLOP", "FLOP", "TURN", "RIVER"];
 var HOLE_CARDS_DIVIDER = "*** H\xC5LKORT ***";
 var FLOP_DIVIDER = "*** FLOPP ***";
 var TURN_DIVIDER = "*** TURN ***";
@@ -36308,7 +36308,7 @@ var getPlayerStatsForGame = async (lastHand) => {
     };
   });
 };
-var minutesUntilInactiveTable = 30;
+var minutesUntilInactiveTable = 15;
 var isActiveTable = (fileLastModified) => {
   const minutesDifference = (0, import_date_fns.differenceInMinutes)(new Date(), new Date(fileLastModified));
   return minutesUntilInactiveTable > minutesDifference;
@@ -36344,7 +36344,7 @@ var con2 = () => {
 var initWebSocket = (context2) => {
   return new Promise((resolve) => {
     wss.on("connection", (ws) => {
-      console.log("ON CONNECTION RESET");
+      console.log("ON WS CONNECTION");
       context2.handleWebSocketConnection();
       connection = ws;
       resolve();

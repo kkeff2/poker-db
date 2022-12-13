@@ -1,10 +1,11 @@
 import { Typography } from "@mui/material";
-import type { Messages, Table } from "poker-db-shared/types";
+import type { Messages, Table as TableType } from "poker-db-shared/types";
 import { useEffect, useState } from "react";
 import { getMessage, sendMessage, ws } from "../webSocket";
+import { Table } from "./Table";
 
 export const CurrentTables = () => {
-  const [tableStats, setTableStats] = useState<Table[]>();
+  const [tableStats, setTableStats] = useState<TableType[]>();
   useEffect(() => {
     sendMessage({ type: "CURRENT_TABLE_UPDATED" });
     ws.onmessage = (event: MessageEvent<Messages>) => {
@@ -17,12 +18,18 @@ export const CurrentTables = () => {
     };
   }, []);
 
+  const onCloseTable = (tableId: string) => {
+    setTableStats((prevTables) => prevTables?.filter((t) => t.id !== tableId));
+  };
+
   return (
     <>
       <Typography variant="h4">CurrentTables</Typography>
-      {tableStats?.map((t) => {
-        return <div key={t.id}>{t.id}</div>;
-      })}
+      <div style={{ display: "flex", flexWrap: "wrap", width: "100%" }}>
+        {tableStats?.map((t) => {
+          return <Table key={t.id} table={t} onClose={onCloseTable} />;
+        })}
+      </div>
     </>
   );
 };
