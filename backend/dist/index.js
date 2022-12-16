@@ -35721,6 +35721,7 @@ var CALL = "call";
 var FOLD = "fold";
 var CHECK = "check";
 var SHOWS = "visar";
+var FINISHED_TOURNAMENT = "slutade turneringen p\xE5";
 var config = {
   pathToHandHistoryLogs: "/Users/kasperbartholdigustavii/Library/Application Support/PokerStarsSE/HandHistory/den_kkeffe",
   pathToTournamentLogs: "/Users/kasperbartholdigustavii/Library/Application Support/PokerStarsSE/TournSummary/den_kkeffe",
@@ -35978,6 +35979,9 @@ var getRoundRows = (round, handRows) => {
     return !row.split(":")[1].trim().startsWith(SHOWS);
   });
 };
+var isActionRow = (row, playerId) => {
+  return row.startsWith(playerId) && !row.includes(FINISHED_TOURNAMENT);
+};
 var getPlayerRoundActions = ({
   roundRows,
   playerId
@@ -35987,7 +35991,7 @@ var getPlayerRoundActions = ({
     return action == "BET" || action == "RAISE";
   });
   const actions = roundRows.map((row, i) => {
-    if (row.startsWith(playerId)) {
+    if (isActionRow(row, playerId)) {
       return getAction(row.split(":")[1].split(" ")[1], firstAggressionIndex < i);
     } else {
       return void 0;
@@ -36308,7 +36312,7 @@ var getPlayerStatsForGame = async (lastHand) => {
     };
   });
 };
-var minutesUntilInactiveTable = 15;
+var minutesUntilInactiveTable = 6;
 var isActiveTable = (fileLastModified) => {
   const minutesDifference = (0, import_date_fns.differenceInMinutes)(new Date(), new Date(fileLastModified));
   return minutesUntilInactiveTable > minutesDifference;

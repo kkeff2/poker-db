@@ -16,6 +16,7 @@ import {
   TOURNAMENT,
   HOLDEM_NO_LIMIT,
   OMAHA_POT_LIMIT,
+  FINISHED_TOURNAMENT,
 } from "./constants";
 import {
   Action,
@@ -27,6 +28,7 @@ import {
   PokerType,
   Round,
 } from "poker-db-shared/types";
+import { roundToNearestMinutesWithOptions } from "date-fns/fp";
 
 const getPlayerRows = (handRows: string[]) => {
   // Places start at
@@ -167,6 +169,10 @@ const getRoundRows = (round: Round, handRows: string[]) => {
   });
 };
 
+const isActionRow = (row: string, playerId: string) => {
+  return row.startsWith(playerId) && !row.includes(FINISHED_TOURNAMENT);
+};
+
 const getPlayerRoundActions = ({
   roundRows,
   playerId,
@@ -180,7 +186,7 @@ const getPlayerRoundActions = ({
   });
 
   const actions = roundRows.map((row, i) => {
-    if (row.startsWith(playerId)) {
+    if (isActionRow(row, playerId)) {
       return getAction(
         row.split(":")[1].split(" ")[1],
         firstAggressionIndex < i

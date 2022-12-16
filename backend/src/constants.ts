@@ -33,6 +33,7 @@ export const FOLD = "fold";
 // export const WON = "vann";
 export const CHECK = "check";
 export const SHOWS = "visar";
+export const FINISHED_TOURNAMENT = "slutade turneringen på";
 
 export const config = {
   pathToHandHistoryLogs:

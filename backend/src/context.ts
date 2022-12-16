@@ -131,7 +131,7 @@ const getPlayerStatsForGame = async (
   });
 };
 
-const minutesUntilInactiveTable = 15;
+const minutesUntilInactiveTable = 6;
 
 const isActiveTable = (fileLastModified: string) => {
   const minutesDifference = differenceInMinutes(

@@ -66,13 +66,6 @@ const getFileData = (fullPath: string): Promise<string> => {
   });
 };
 
-const getIndexOfLastAddedHand = (
-  { lastHand }: HandHistoryContext,
-  hands: Hand[]
-) => {
-  return hands.findIndex((h) => h.handId === lastHand?.handId);
-};
-
 export const handleHandHistoryUpdate = async (history: HandHistoryContext) => {
   const fullPath = getFullPath(history.id);
   const fileData = await getFileData(fullPath);
