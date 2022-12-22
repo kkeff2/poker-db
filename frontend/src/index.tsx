@@ -1,13 +1,8 @@
-import {
-  createTheme,
-  CssBaseline,
-  ThemeProvider,
-  useMediaQuery,
-} from "@mui/material";
-import { useMemo } from "react";
+import { CssBaseline } from "@mui/material";
 import ReactDOM from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 import { routes } from "./routes";
+import { PokerTheme } from "./Theme";
 import { ws } from "./webSocket";
 
 const root = ReactDOM.createRoot(
@@ -19,22 +14,10 @@ ws.onopen = () => {
 };
 
 function Root() {
-  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
-
-  const theme = useMemo(
-    () =>
-      createTheme({
-        palette: {
-          mode: prefersDarkMode ? "dark" : "light",
-        },
-      }),
-    [prefersDarkMode]
-  );
-
   return (
-    <ThemeProvider theme={theme}>
+    <PokerTheme>
       <CssBaseline />
       <RouterProvider router={routes} />
-    </ThemeProvider>
+    </PokerTheme>
   );
 }

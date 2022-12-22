@@ -1,29 +1,34 @@
-import { Close } from "@mui/icons-material";
 import {
   Card,
-  IconButton,
-  styled,
   Table as MuiTable,
   TableBody,
   TableCell,
   TableHead,
-  TableRow,
-  Typography,
+  TableRow as MuiTableRow,
 } from "@mui/material";
 import type { Round, Table as TableType } from "poker-db-shared/types";
+import { TableHeader } from "./TableHeader";
+import { TableRow } from "./TableRow";
 
 type Props = {
   table: TableType;
   onClose: (tableId: string) => void;
 };
 
-export const ROUNDS: Round[] = ["PRE_FLOP", "FLOP", "TURN", "RIVER"];
-
-const getPercentage = (preFlopSeen: number, postFlopSeen: number) => {
-  return Math.round((postFlopSeen / preFlopSeen) * 100);
-};
-
-const isBestPlayer = (playerId: string) => playerId === "den_kkeffe";
+export const COLUMNS: {
+  label: string;
+  round: Round;
+  type: "aggression" | "percentage" | "seen";
+}[] = [
+  { label: "TOTAL", round: "PRE_FLOP", type: "seen" },
+  { label: "PF AGG", round: "PRE_FLOP", type: "aggression" },
+  // { label: "Flop", round: "FLOP", type: "seen" },
+  { label: "FLOP", round: "FLOP", type: "percentage" },
+  // { label: "Turn", round: "TURN", type: "seen" },
+  { label: "TURN", round: "TURN", type: "percentage" },
+  // { label: "River", round: "RIVER", type: "seen" },
+  { label: "RIVER", round: "RIVER", type: "percentage" },
+];
 
 export const Table = ({ table, onClose }: Props) => {
   return (
@@ -35,50 +40,30 @@ export const Table = ({ table, onClose }: Props) => {
           position: "relative",
         }}
       >
-        <div style={{ position: "absolute", top: "4px", right: "4px" }}>
-          <IconButton onClick={() => onClose(table.id)}>
-            <Close />
-          </IconButton>
-        </div>
-        <Typography variant="caption">{table.id}</Typography>
+        <TableHeader table={table} onClose={onClose} />
 
         <MuiTable size="small">
           <TableHead>
-            <TableRow>
+            <MuiTableRow>
               <TableCell>PLAYER</TableCell>
-              {ROUNDS.map((round) => (
-                <TableCell>{round}</TableCell>
+              {COLUMNS.map((column) => (
+                <TableCell key={`${table.id}${column.round}${column.label}`}>
+                  {column.label}
+                </TableCell>
               ))}
-            </TableRow>
+            </MuiTableRow>
           </TableHead>
           <TableBody>
             {table.playerStats.map((p) => {
               const playerStatsList = Object.entries(p);
-
               return playerStatsList.map(([playerId, stats]) => {
                 return (
                   <TableRow
                     key={`${table.id}${playerId}`}
-                    style={{
-                      backgroundColor: isBestPlayer(playerId)
-                        ? "#e0e0e0"
-                        : "inherit",
-                    }}
-                  >
-                    <TableCell>{playerId}</TableCell>
-                    {ROUNDS.map((round) => {
-                      const percentage =
-                        round !== "PRE_FLOP"
-                          ? ` (${getPercentage(
-                              stats.PRE_FLOP.seen,
-                              stats[round].seen
-                            )}%)`
-                          : "";
-                      return (
-                        <TableCell>{`${stats[round].seen}${percentage}`}</TableCell>
-                      );
-                    })}
-                  </TableRow>
+                    tableId={table.id}
+                    playerId={playerId}
+                    stats={stats}
+                  />
                 );
               });
             })}
@@ -88,7 +73,3 @@ export const Table = ({ table, onClose }: Props) => {
     </div>
   );
 };
-
-const StyledTableCell = styled(TableCell)({
-  backgroundColor: "#e0e0e0",
-});

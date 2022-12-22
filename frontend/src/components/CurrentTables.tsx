@@ -5,7 +5,8 @@ import { getMessage, sendMessage, ws } from "../webSocket";
 import { Table } from "./Table";
 
 export const CurrentTables = () => {
-  const [tableStats, setTableStats] = useState<TableType[]>();
+  const [tableStats, setTableStats] = useState<TableType[]>([]);
+  const [closedTables, setClosedTabled] = useState<string[]>([]);
   useEffect(() => {
     sendMessage({ type: "CURRENT_TABLE_UPDATED" });
     ws.onmessage = (event: MessageEvent<Messages>) => {
@@ -18,16 +19,25 @@ export const CurrentTables = () => {
     };
   }, []);
 
-  const onCloseTable = (tableId: string) => {
-    setTableStats((prevTables) => prevTables?.filter((t) => t.id !== tableId));
-  };
+  const openTables = tableStats.filter((t) => !closedTables.includes(t.id));
 
   return (
     <>
       <Typography variant="h4">CurrentTables</Typography>
       <div style={{ display: "flex", flexWrap: "wrap", width: "100%" }}>
-        {tableStats?.map((t) => {
-          return <Table key={t.id} table={t} onClose={onCloseTable} />;
+        {openTables.map((t) => {
+          return (
+            <Table
+              key={t.id}
+              table={t}
+              onClose={(tableId) =>
+                setClosedTabled((prevClosedTables) => [
+                  ...prevClosedTables,
+                  tableId,
+                ])
+              }
+            />
+          );
         })}
       </div>
     </>

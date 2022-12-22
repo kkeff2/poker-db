@@ -11,7 +11,7 @@ import {
   Hand,
   PlayerHand,
 } from "poker-db-shared/types";
-import { ACTIONS, ROUNDS } from "../constants";
+import { ACTIONS, config, ROUNDS } from "../constants";
 import { getPlayerStats } from "../database/integration";
 
 const getUpdateActions = (
@@ -180,4 +180,25 @@ export const getStatsAggregatedOnPlayers = (
     });
   });
   return players;
+};
+
+export const getStatsOnBestPlayer = (hands: Hand[]): PlayerStats => {
+  const gameId = hands[0].gameId;
+  const gameStats = hands.reduce((prev, currentHand) => {
+    const bestPlayer = currentHand.players.find(
+      (p) => p.id === config.playerId
+    );
+    if (!bestPlayer) {
+      throw Error(`Best player >>> ${config.playerId} <<< not found in hand`);
+    }
+
+    const newStats = getUpdatedGameStats({
+      currentStats: prev,
+      playerHandActions: bestPlayer.actions,
+      hand: currentHand,
+    });
+    return newStats;
+  }, {} as GameStats);
+
+  return { [gameId]: gameStats };
 };

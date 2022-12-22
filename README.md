@@ -6,6 +6,29 @@ A Poker DB with info about who you are currently playing using local saved logs
 
 mysql -h localhost -u root -p poker_db
 DELETE FROM table_name;
+DROP TABLE table_name;
+
+## Next 22-12-20
+
+Add message to get all den_kkeffe stats!
+Should be fetched on root FE.
+
+I think there is a bug with aggression pre flop - To low percentage.
+
+Add den_kkeffe as a (id + hand_history_id) so that stats are per "table"/tourn...
+How to save all the stats then? Well we save both!
+So per player hands we save den_kkeffe and we also save den_kkeffe_HH12219.txt
+
+Possible new things to look at.
+VPIP - Voluntarily Put Money In Pot % - A good measure of how loose an opponent is
+
+PFR - Pre Flop Raise % - Useful to see opponents aggression pre flop
+
+Cbet - Continuation Bet % - How often does your opponent Cbet (you can go into more detail by making this CbetFlop for just the flop cbet stats
+
+FoldCbet - % of the time your opponent folds to a cbet.
+
+AF - Aggression Factor - The higher the number, the more aggressive post flop your opponent is.
 
 ## Next 22-12-11
 

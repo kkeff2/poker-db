@@ -30,6 +30,7 @@ export type Hand = {
   gameForm: GameForm;
   gameId: GameId;
   tournamentId?: string;
+  tournamentBuyIn?: number;
   gameName: string;
   tableId: string;
   tableSize: number;
@@ -49,6 +50,7 @@ export type PlayerHand = {
   id: PlayerId;
   position: number;
   actions: Record<Round, Action[]>;
+  isBestPlayer: boolean;
 };
 
 export type PerAction = Record<Action, number>;

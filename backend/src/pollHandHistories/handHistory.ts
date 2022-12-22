@@ -11,10 +11,10 @@ import {
 import { parseHand } from "../hand";
 import { getStatsAggregatedOnPlayers, playerStatsUpdated } from "./playerStats";
 
-const getHands = (fileData: string) => {
+const getHands = (fileData: string, fileName: string) => {
   const rawHands = fileData.split("\n\n\n\n");
   const rawHandsList = rawHands.filter((hand) => hand.split("\n").length != 1);
-  return rawHandsList.map((rawHand) => parseHand(rawHand));
+  return rawHandsList.map((rawHand) => parseHand(rawHand, fileName));
 };
 
 const getLastHand = (hands: Hand[], { lastHand }: HandHistoryContext) => {
@@ -69,7 +69,7 @@ const getFileData = (fullPath: string): Promise<string> => {
 export const handleHandHistoryUpdate = async (history: HandHistoryContext) => {
   const fullPath = getFullPath(history.id);
   const fileData = await getFileData(fullPath);
-  const hands = getHands(fileData);
+  const hands = getHands(fileData, history.id);
 
   if (!hands.length) {
     return;

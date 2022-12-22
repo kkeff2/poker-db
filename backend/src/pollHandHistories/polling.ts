@@ -16,23 +16,13 @@ const setPolling = async (context: Context) => {
     }
 
     // Create new list in Context / Active tables
-    // IF Last hand id sent !== lastHandId
+    // If Last hand id sent !== lastHandId
     // After sending to FE set lastHandIdSent to is that has been sent
     if (!context.lastSentTables || handHistoriesToBeUpdated.length) {
       await context.setActiveTables();
       sendTableMessage(context);
     }
 
-    // if (context.lastSentTables || !handHistoriesToBeUpdated.length) {
-    //   await context.setActiveTables();
-    // }
-
-    // if (
-    //   context.sendCurrentTables &&
-    //   context.activeTables.filter((t) => !t.hasBeenSent).length
-    // ) {
-    //   sendTableMessage(context);
-    // }
     setPolling(context);
   }, 1000);
 };

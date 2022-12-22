@@ -42,3 +42,5 @@ export const config = {
     "/Users/kasperbartholdigustavii/Library/Application Support/PokerStarsSE/TournSummary/den_kkeffe",
   playerId: "den_kkeffe",
 };
+
+export const minutesUntilInactiveTable = 5000;

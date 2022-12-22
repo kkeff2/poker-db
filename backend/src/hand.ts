@@ -1,24 +1,4 @@
 import {
-  FOLD,
-  CALL,
-  RAISE,
-  CHECK,
-  BET,
-  SUMMARY,
-  SHOWS,
-  HOLE_CARDS_DIVIDER,
-  FLOP_DIVIDER,
-  TURN_DIVIDER,
-  RIVER_DIVIDER,
-  SHOW_DIVIDER,
-  ROUNDS,
-  PLACE,
-  TOURNAMENT,
-  HOLDEM_NO_LIMIT,
-  OMAHA_POT_LIMIT,
-  FINISHED_TOURNAMENT,
-} from "./constants";
-import {
   Action,
   GameForm,
   GameId,
@@ -28,7 +8,28 @@ import {
   PokerType,
   Round,
 } from "poker-db-shared/types";
-import { roundToNearestMinutesWithOptions } from "date-fns/fp";
+import {
+  BET,
+  CALL,
+  CHECK,
+  config,
+  FINISHED_TOURNAMENT,
+  FLOP_DIVIDER,
+  FOLD,
+  HOLDEM_NO_LIMIT,
+  HOLE_CARDS_DIVIDER,
+  OMAHA_POT_LIMIT,
+  PLACE,
+  RAISE,
+  RIVER_DIVIDER,
+  ROUNDS,
+  SHOWS,
+  SHOW_DIVIDER,
+  SUMMARY,
+  TOURNAMENT,
+  TURN_DIVIDER,
+} from "./constants";
+import { removeFileName } from "./utils";
 
 const getPlayerRows = (handRows: string[]) => {
   // Places start at
@@ -55,12 +56,12 @@ const handParts = (handRows: string[]) => {
   };
 };
 
-export const parseHand = (hand: string): Hand => {
+export const parseHand = (hand: string, fileName: string): Hand => {
   const handRows = hand.split("\n");
   const { gameRow, tableRow, playerRows, roundsRows } = handParts(handRows);
 
   const tableSize = getTableSize(tableRow);
-  const players = getHandAction(playerRows, roundsRows);
+  const players = getHandAction(playerRows, roundsRows, fileName);
   const gameForm = getGameForm(gameRow);
   const pokerType = getPokerType(gameRow);
   return {
@@ -73,6 +74,8 @@ export const parseHand = (hand: string): Hand => {
     handId: getHandId(handRows),
     tournamentId:
       gameForm == "TOURNAMENT" ? getTournamentId(handRows) : undefined,
+    tournamentBuyIn:
+      gameForm == "TOURNAMENT" ? getTournamentBuyIn(handRows) : undefined,
     gameName: getGameName(handRows),
     tableId: getTableId(handRows),
   };
@@ -127,6 +130,13 @@ export const getTableSize = (tableRow: string) => {
 
 export const getPositionOnButton = (handRows: string[]) => {
   return parseInt(handRows[tableIndex].split("#")[1].charAt(0));
+};
+
+export const getTournamentBuyIn = (handRows: string[]) => {
+  const splitOnDollar = handRows[0].split("$");
+  const prizePool = parseFloat(splitOnDollar[1].replace("+", ""));
+  const house = parseFloat(splitOnDollar[2].split(" ")[0]);
+  return prizePool + house;
 };
 
 const getAction = (
@@ -204,23 +214,26 @@ const getPlayerRoundActions = ({
 };
 
 const getPlayersInHand = (
-  playerRows: string[]
+  playerRows: string[],
+  fileName: string
 ): Omit<PlayerHand, "actions">[] => {
   return playerRows.map((row) => {
     const playerName = row.split(":")[1].split("-")[0].split("(")[0].trim();
+    const isBestPlayer = playerName === config.playerId;
     return {
       position: parseInt(row.split(" ")[1]),
-      id: playerName,
+      id: isBestPlayer ? playerName + encodeURI(fileName) : playerName,
+      isBestPlayer,
     };
   });
 };
 
 export const getHandAction = (
   playerRows: string[],
-  roundRows: Record<Round, string[]>
+  roundRows: Record<Round, string[]>,
+  fileName: string
 ): PlayerHand[] => {
-  const playersInHand = getPlayersInHand(playerRows);
-
+  const playersInHand = getPlayersInHand(playerRows, fileName);
   const players: PlayerHand[] = playersInHand.map((player) => {
     return {
       ...player,
@@ -230,7 +243,9 @@ export const getHandAction = (
             ...previousValue,
             [round]: getPlayerRoundActions({
               roundRows: roundRows[round],
-              playerId: player.id,
+              playerId: player.isBestPlayer
+                ? removeFileName(player.id, fileName)
+                : player.id,
             }),
           };
         },

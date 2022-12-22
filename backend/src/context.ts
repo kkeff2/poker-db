@@ -1,12 +1,13 @@
 import { differenceInMinutes } from "date-fns";
 import fs from "fs";
 import { GameStats, Hand, PlayerId, Table } from "poker-db-shared/types";
-import { config } from "./constants";
+import { config, minutesUntilInactiveTable } from "./constants";
 import { getAllHandHistories, getPlayerStats } from "./database/integration";
 import {
   getFileLastModified,
   getFullPath,
 } from "./pollHandHistories/handHistory";
+import { isBestPlayer, removeFileName } from "./utils";
 
 export type HandHistoryContext = {
   id: string;
@@ -53,22 +54,9 @@ export class Context {
     });
   }
 
-  // public async updateHandHistory() {
-  //   const dbHandHistories = await getAllHandHistories();
-  //   this.handHistories = dbHandHistories.map((h) => {
-  //     return {
-  //       id: h.filename,
-  //       lastHand: h.last_hand,
-  //       lastUpdated: h.last_updated,
-  //       shouldUpdateDb: false,
-  //     };
-  //   });
-  // }
-
   public getHandHistoryLastHand(id: string) {
     const handHistory = this.handHistories.find((h) => h.id === id);
     if (!handHistory || !handHistory.lastHand) {
-      // TODO: THORWN ON NEW TABLE
       throw Error("Hand history not found");
     }
     return handHistory.lastHand;
@@ -79,10 +67,6 @@ export class Context {
   }
 
   public async setActiveTables() {
-    // WHEN changedHistories I know there has been an update. If empty return
-    // if (changedHistories && !changedHistories.length) {
-    //   return;
-    // }
     const files = await getHandHistoryFiles();
     const activeFiles = files
       .filter((f) => isActiveTable(f.lastUpdated))
@@ -92,7 +76,7 @@ export class Context {
       activeFiles.map(async (f) => {
         const currentActiveTable = this.activeTables.find((t) => t.id === f);
         const lastHand = this.getHandHistoryLastHand(f);
-        const playerStats = await getPlayerStatsForGame(lastHand);
+        const playerStats = await getPlayerStatsForGame(lastHand, f);
         return {
           id: f,
           lastHand: lastHand,
@@ -117,21 +101,25 @@ export class Context {
 }
 
 const getPlayerStatsForGame = async (
-  lastHand: Hand
+  lastHand: Hand,
+  fileName: string
 ): Promise<Record<PlayerId, GameStats>[]> => {
   const playerStats = await getPlayerStats(lastHand.players.map((p) => p.id));
-  return playerStats.map((ps) => {
-    const stats = ps.data[lastHand.gameId];
+  return playerStats.map(({ data, player_id }) => {
+    const stats = data[lastHand.gameId];
     if (!stats) {
       throw Error("Stats could not be found on user");
     }
+
+    const playerId = isBestPlayer(player_id, fileName)
+      ? removeFileName(player_id, fileName)
+      : player_id;
+
     return {
-      [ps.player_id]: stats,
+      [playerId]: stats,
     };
   });
 };
-
-const minutesUntilInactiveTable = 6;
 
 const isActiveTable = (fileLastModified: string) => {
   const minutesDifference = differenceInMinutes(

@@ -47,8 +47,6 @@ export const startListeningToMessages = async (context: Context) => {
         context.setSendCurrentTables(true);
       }
     }
-    // const playerStats = await getAllPlayerStats();
-    // ws.send(JSON.stringify({ type: "ALL_PLAYER_STATS", data: playerStats }));
   });
 };
 

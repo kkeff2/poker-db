@@ -35727,6 +35727,7 @@ var config = {
   pathToTournamentLogs: "/Users/kasperbartholdigustavii/Library/Application Support/PokerStarsSE/TournSummary/den_kkeffe",
   playerId: "den_kkeffe"
 };
+var minutesUntilInactiveTable = 5e3;
 
 // src/database/init.ts
 var import_mysql2 = __toESM(require_mysql2());
@@ -35865,6 +35866,14 @@ var getAllHandHistories = async () => {
 var import_fs = __toESM(require("fs"));
 var import_path = __toESM(require("path"));
 
+// src/utils.ts
+var isBestPlayer = (playerId, fileName) => {
+  return fileName ? removeFileName(playerId, fileName) === config.playerId : playerId === config.playerId;
+};
+var removeFileName = (playerId, fileName) => {
+  return playerId.replace(encodeURI(fileName), "");
+};
+
 // src/hand.ts
 var getPlayerRows = (handRows) => {
   let index = 2;
@@ -35888,11 +35897,11 @@ var handParts = (handRows) => {
     }
   };
 };
-var parseHand = (hand) => {
+var parseHand = (hand, fileName) => {
   const handRows = hand.split("\n");
   const { gameRow, tableRow, playerRows, roundsRows } = handParts(handRows);
   const tableSize = getTableSize(tableRow);
-  const players = getHandAction(playerRows, roundsRows);
+  const players = getHandAction(playerRows, roundsRows, fileName);
   const gameForm = getGameForm(gameRow);
   const pokerType = getPokerType(gameRow);
   return {
@@ -35904,6 +35913,7 @@ var parseHand = (hand) => {
     button: getPositionOnButton(handRows),
     handId: getHandId(handRows),
     tournamentId: gameForm == "TOURNAMENT" ? getTournamentId(handRows) : void 0,
+    tournamentBuyIn: gameForm == "TOURNAMENT" ? getTournamentBuyIn(handRows) : void 0,
     gameName: getGameName(handRows),
     tableId: getTableId(handRows)
   };
@@ -35945,6 +35955,12 @@ var getTableSize = (tableRow) => {
 };
 var getPositionOnButton = (handRows) => {
   return parseInt(handRows[tableIndex].split("#")[1].charAt(0));
+};
+var getTournamentBuyIn = (handRows) => {
+  const splitOnDollar = handRows[0].split("$");
+  const prizePool = parseFloat(splitOnDollar[1].replace("+", ""));
+  const house = parseFloat(splitOnDollar[2].split(" ")[0]);
+  return prizePool + house;
 };
 var getAction = (possibleAction, hasPreviousAggression = false) => {
   switch (possibleAction) {
@@ -36002,17 +36018,19 @@ var getPlayerRoundActions = ({
   };
   return actions.filter(isAction);
 };
-var getPlayersInHand = (playerRows) => {
+var getPlayersInHand = (playerRows, fileName) => {
   return playerRows.map((row) => {
     const playerName = row.split(":")[1].split("-")[0].split("(")[0].trim();
+    const isBestPlayer2 = playerName === config.playerId;
     return {
       position: parseInt(row.split(" ")[1]),
-      id: playerName
+      id: isBestPlayer2 ? playerName + encodeURI(fileName) : playerName,
+      isBestPlayer: isBestPlayer2
     };
   });
 };
-var getHandAction = (playerRows, roundRows) => {
-  const playersInHand = getPlayersInHand(playerRows);
+var getHandAction = (playerRows, roundRows, fileName) => {
+  const playersInHand = getPlayersInHand(playerRows, fileName);
   const players = playersInHand.map((player) => {
     return {
       ...player,
@@ -36021,7 +36039,7 @@ var getHandAction = (playerRows, roundRows) => {
           ...previousValue,
           [round]: getPlayerRoundActions({
             roundRows: roundRows[round],
-            playerId: player.id
+            playerId: player.isBestPlayer ? removeFileName(player.id, fileName) : player.id
           })
         };
       }, {})
@@ -36165,10 +36183,10 @@ var getStatsAggregatedOnPlayers = (hands) => {
 };
 
 // src/pollHandHistories/handHistory.ts
-var getHands = (fileData) => {
+var getHands = (fileData, fileName) => {
   const rawHands = fileData.split("\n\n\n\n");
   const rawHandsList = rawHands.filter((hand) => hand.split("\n").length != 1);
-  return rawHandsList.map((rawHand) => parseHand(rawHand));
+  return rawHandsList.map((rawHand) => parseHand(rawHand, fileName));
 };
 var getLastHand = (hands, { lastHand }) => {
   if (hands.length) {
@@ -36212,7 +36230,7 @@ var getFileData = (fullPath) => {
 var handleHandHistoryUpdate = async (history) => {
   const fullPath = getFullPath(history.id);
   const fileData = await getFileData(fullPath);
-  const hands = getHands(fileData);
+  const hands = getHands(fileData, history.id);
   if (!hands.length) {
     return;
   }
@@ -36282,7 +36300,7 @@ var Context = class {
     this.activeTables = await Promise.all(activeFiles.map(async (f) => {
       const currentActiveTable = this.activeTables.find((t) => t.id === f);
       const lastHand = this.getHandHistoryLastHand(f);
-      const playerStats = await getPlayerStatsForGame(lastHand);
+      const playerStats = await getPlayerStatsForGame(lastHand, f);
       return {
         id: f,
         lastHand,
@@ -36300,19 +36318,19 @@ var Context = class {
     this.sendCurrentTables = false;
   }
 };
-var getPlayerStatsForGame = async (lastHand) => {
+var getPlayerStatsForGame = async (lastHand, fileName) => {
   const playerStats = await getPlayerStats(lastHand.players.map((p) => p.id));
-  return playerStats.map((ps) => {
-    const stats = ps.data[lastHand.gameId];
+  return playerStats.map(({ data, player_id }) => {
+    const stats = data[lastHand.gameId];
     if (!stats) {
       throw Error("Stats could not be found on user");
     }
+    const playerId = isBestPlayer(player_id, fileName) ? removeFileName(player_id, fileName) : player_id;
     return {
-      [ps.player_id]: stats
+      [playerId]: stats
     };
   });
 };
-var minutesUntilInactiveTable = 6;
 var isActiveTable = (fileLastModified) => {
   const minutesDifference = (0, import_date_fns.differenceInMinutes)(new Date(), new Date(fileLastModified));
   return minutesUntilInactiveTable > minutesDifference;
