@@ -80,7 +80,7 @@ export class Context {
         return {
           id: f,
           lastHand: lastHand,
-          playerStats,
+          playerStats: { ...playerStats, aggressionFactor: 0 },
           hasBeenSent: currentActiveTable
             ? currentActiveTable.lastHand === lastHand
             : false,

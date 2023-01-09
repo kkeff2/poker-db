@@ -43,4 +43,4 @@ export const config = {
   playerId: "den_kkeffe",
 };
 
-export const minutesUntilInactiveTable = 5000;
+export const minutesUntilInactiveTable = 40000;

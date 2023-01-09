@@ -3,7 +3,7 @@ import {
   Action,
   GameStats,
   Round,
-  RoundStats,
+  RoundAction,
   PokerStats,
   GameId,
   PlayerId,
@@ -12,7 +12,7 @@ import {
   PlayerHand,
 } from "poker-db-shared/types";
 import { ACTIONS, config, ROUNDS } from "../constants";
-import { getPlayerStats } from "../database/integration";
+import { getPlayerStats as getPlayerStatsDb } from "../database/integration";
 
 const getUpdateActions = (
   currentActions: PerAction,
@@ -31,9 +31,14 @@ const getUpdateActions = (
 
 const updateGameStats = (currentStats: GameStats, newStats: GameStats) => {
   return ROUNDS.reduce((previousValue: GameStats, round: Round) => {
-    const roundStats: RoundStats = {
+    const roundStats: RoundAction = {
       seen: currentStats[round].seen + newStats[round].seen,
       aggression: currentStats[round].aggression + newStats[round].aggression,
+      raiseInRound:
+        currentStats[round].raiseInRound + newStats[round].raiseInRound,
+      voluntarilyPutMoneyInPot:
+        currentStats[round].voluntarilyPutMoneyInPot +
+        newStats[round].voluntarilyPutMoneyInPot,
       perAction: getUpdateActions(
         currentStats[round].perAction,
         newStats[round].perAction
@@ -66,7 +71,7 @@ export const playerStatsUpdated = async (
 ) => {
   return await Promise.all(
     Object.entries(newPlayerStats).map(async ([playerId, stats]) => {
-      let currentStats = await getPlayerStats([playerId]);
+      let currentStats = await getPlayerStatsDb([playerId]);
       const statsToSave = currentStats.length
         ? addStats(currentStats[0].data, stats)
         : stats;
@@ -76,20 +81,23 @@ export const playerStatsUpdated = async (
 };
 const initGameStats: GameStats = ROUNDS.reduce(
   (previousValue: GameStats, round: Round) => {
+    const newRoundAction: RoundAction = {
+      seen: 0,
+      aggression: 0,
+      raiseInRound: 0,
+      voluntarilyPutMoneyInPot: 0,
+      perAction: {
+        FOLD: 0,
+        CALL: 0,
+        RAISE: 0,
+        CHECK: 0,
+        BET: 0,
+        RE_RAISE: 0,
+      },
+    };
     return {
       ...previousValue,
-      [round]: {
-        seen: 0,
-        aggression: 0,
-        perAction: {
-          FOLD: 0,
-          CALL: 0,
-          RAISE: 0,
-          CHECK: 0,
-          BET: 0,
-          RE_RAISE: 0,
-        },
-      },
+      [round]: newRoundAction,
     };
   },
   {} as GameStats
@@ -110,11 +118,11 @@ export const getUpdatedActions = ({
   currentRoundStats,
 }: {
   playerRoundActions: Action[];
-  currentRoundStats: RoundStats;
+  currentRoundStats: RoundAction;
   hand?: Hand;
-}): RoundStats["perAction"] => {
-  return ACTIONS.reduce<RoundStats["perAction"]>(
-    (previousValue: RoundStats["perAction"], action: Action) => {
+}): RoundAction["perAction"] => {
+  return ACTIONS.reduce<RoundAction["perAction"]>(
+    (previousValue: RoundAction["perAction"], action: Action) => {
       return {
         ...previousValue,
         [action]:
@@ -124,7 +132,7 @@ export const getUpdatedActions = ({
           }) + currentRoundStats.perAction[action],
       };
     },
-    {} as RoundStats["perAction"]
+    {} as RoundAction["perAction"]
   );
 };
 
@@ -144,11 +152,31 @@ const getUpdatedStatsForPlayer = ({
         actionsToCount: ["RAISE", "BET", "RE_RAISE"],
       });
 
-      return {
+      const raiseInRoundCountUp =
+        getActionTypesCount({
+          playerRoundActions: playerHandActions[round],
+          actionsToCount: ["RAISE", "RE_RAISE"],
+        }) > 0
+          ? 1
+          : 0;
+
+      const voluntarilyPutMoneyInPotCountUp =
+        getActionTypesCount({
+          playerRoundActions: playerHandActions[round],
+          actionsToCount: ["RAISE", "BET", "RE_RAISE", "CALL"],
+        }) > 0
+          ? 1
+          : 0;
+
+      const newValue: GameStats = {
         ...previousValue,
         [round]: {
           seen: currentStats[round].seen + 1,
+          raiseInRound: currentStats[round].raiseInRound + raiseInRoundCountUp,
           aggression: currentStats[round].aggression + roundAggression,
+          voluntarilyPutMoneyInPot:
+            currentStats[round].voluntarilyPutMoneyInPot +
+            voluntarilyPutMoneyInPotCountUp,
           perAction: getUpdatedActions({
             playerRoundActions: playerHandActions[round],
             currentRoundStats: currentStats[round],
@@ -156,6 +184,8 @@ const getUpdatedStatsForPlayer = ({
           }),
         },
       };
+
+      return newValue;
     } else {
       return {
         ...previousValue,

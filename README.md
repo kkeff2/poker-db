@@ -8,6 +8,10 @@ mysql -h localhost -u root -p poker_db
 DELETE FROM table_name;
 DROP TABLE table_name;
 
+## Next 23-01-09
+
+Return the new ReturnGameStats object to frontend
+
 ## Next 23-01-03
 
 Need to handle ON CLOSE on FRONTEND! Maybe handle more on BE?

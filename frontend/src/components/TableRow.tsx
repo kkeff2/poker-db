@@ -14,7 +14,6 @@ export const TableRow = ({ tableId, playerId, stats }: Props) => {
       key={`${tableId}${playerId}`}
       style={{
         backgroundColor: isBestPlayer(playerId) ? "#e0e0e0" : "inherit",
-        // cursor: "pointer",
       }}
     >
       <TableCell>{playerId}</TableCell>

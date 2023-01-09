@@ -36075,6 +36075,8 @@ var updateGameStats = (currentStats, newStats) => {
     const roundStats = {
       seen: currentStats[round].seen + newStats[round].seen,
       aggression: currentStats[round].aggression + newStats[round].aggression,
+      raiseInRound: currentStats[round].raiseInRound + newStats[round].raiseInRound,
+      voluntarilyPutMoneyInPot: currentStats[round].voluntarilyPutMoneyInPot + newStats[round].voluntarilyPutMoneyInPot,
       perAction: getUpdateActions(currentStats[round].perAction, newStats[round].perAction)
     };
     return {
@@ -36099,20 +36101,23 @@ var playerStatsUpdated = async (newPlayerStats) => {
   }));
 };
 var initGameStats = ROUNDS.reduce((previousValue, round) => {
+  const newRoundAction = {
+    seen: 0,
+    aggression: 0,
+    raiseInRound: 0,
+    voluntarilyPutMoneyInPot: 0,
+    perAction: {
+      FOLD: 0,
+      CALL: 0,
+      RAISE: 0,
+      CHECK: 0,
+      BET: 0,
+      RE_RAISE: 0
+    }
+  };
   return {
     ...previousValue,
-    [round]: {
-      seen: 0,
-      aggression: 0,
-      perAction: {
-        FOLD: 0,
-        CALL: 0,
-        RAISE: 0,
-        CHECK: 0,
-        BET: 0,
-        RE_RAISE: 0
-      }
-    }
+    [round]: newRoundAction
   };
 }, {});
 var getActionTypesCount = ({
@@ -36146,11 +36151,21 @@ var getUpdatedStatsForPlayer = ({
         playerRoundActions: playerHandActions[round],
         actionsToCount: ["RAISE", "BET", "RE_RAISE"]
       });
-      return {
+      const raiseInRoundCountUp = getActionTypesCount({
+        playerRoundActions: playerHandActions[round],
+        actionsToCount: ["RAISE", "RE_RAISE"]
+      }) > 0 ? 1 : 0;
+      const voluntarilyPutMoneyInPotCountUp = getActionTypesCount({
+        playerRoundActions: playerHandActions[round],
+        actionsToCount: ["RAISE", "BET", "RE_RAISE", "CALL"]
+      }) > 0 ? 1 : 0;
+      const newValue = {
         ...previousValue,
         [round]: {
           seen: currentStats[round].seen + 1,
+          raiseInRound: currentStats[round].raiseInRound + raiseInRoundCountUp,
           aggression: currentStats[round].aggression + roundAggression,
+          voluntarilyPutMoneyInPot: currentStats[round].voluntarilyPutMoneyInPot + voluntarilyPutMoneyInPotCountUp,
           perAction: getUpdatedActions({
             playerRoundActions: playerHandActions[round],
             currentRoundStats: currentStats[round],
@@ -36158,6 +36173,7 @@ var getUpdatedStatsForPlayer = ({
           })
         }
       };
+      return newValue;
     } else {
       return {
         ...previousValue,
@@ -36168,11 +36184,10 @@ var getUpdatedStatsForPlayer = ({
 };
 var getStatsAggregatedOnPlayers = (hands) => {
   const players = {};
-  hands.forEach((hand, index) => {
+  hands.forEach((hand) => {
     hand.players.forEach((player) => {
       if (!players[player.id]) {
         players[player.id] = {};
-        console.log(`index: ${index} | ${player.id}`);
       }
       players[player.id][hand.gameId] = getUpdatedStatsForPlayer({
         currentStats: players[player.id][hand.gameId],
@@ -36235,9 +36250,6 @@ var handleHandHistoryUpdate = async (history) => {
   const hands = getHands(fileData, history.id);
   if (!hands.length) {
     return;
-  }
-  if (fullPath === `/Users/kasperbartholdigustavii/Library/Application Support/PokerStarsSE/HandHistory/den_kkeffe/HH20221214 T3515526486 No Limit Hold'em $1,82 + $0,18.txt`) {
-    console.log(getStatsAggregatedOnPlayers(hands)["juhh.alves"]["NLHE_TOURNAMENT"]);
   }
   const indexOfLastAddedHand = hands.findIndex((h) => {
     var _a;
@@ -36309,7 +36321,7 @@ var Context = class {
       return {
         id: f,
         lastHand,
-        playerStats,
+        playerStats: { ...playerStats, aggressionFactor: 0 },
         hasBeenSent: currentActiveTable ? currentActiveTable.lastHand === lastHand : false
       };
     }));

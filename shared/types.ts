@@ -7,7 +7,7 @@ export interface HandHistory {
 export type Table = {
   id: string;
   lastHand: Hand;
-  playerStats: Record<PlayerId, GameStats>[];
+  playerStats: Record<PlayerId, GameStats & { aggressionFactor: number }>[];
   hasBeenSent: boolean;
 };
 
@@ -55,14 +55,27 @@ export type PlayerHand = {
 
 export type PerAction = Record<Action, number>;
 
-export type RoundStats = {
+export type RoundAction = {
   seen: number;
+  voluntarilyPutMoneyInPot: number;
   aggression: number;
+  // If any raise at all was performed that round
+  raiseInRound: number;
   perAction: PerAction;
 };
 
-export type GameStats = Record<Round, RoundStats>;
+export type GameStats = Record<Round, RoundAction>;
 
 export type PlayerStats = Partial<PokerStats>;
 
 export type PokerStats = Record<GameId, GameStats>;
+
+export type ReturnGameStats = {
+  totalHands: number;
+  flopsSeen: number;
+  turnsSeen: number;
+  riversSeen: number;
+  voluntarilyPutMoneyInPot: number;
+  preFlopRaise: number;
+  aggressionFactor: number;
+};
