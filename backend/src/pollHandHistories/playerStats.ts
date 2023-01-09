@@ -128,7 +128,7 @@ export const getUpdatedActions = ({
   );
 };
 
-const getUpdatedGameStats = ({
+const getUpdatedStatsForPlayer = ({
   currentStats = initGameStats,
   playerHandActions,
   hand,
@@ -139,14 +139,16 @@ const getUpdatedGameStats = ({
 }): GameStats => {
   return ROUNDS.reduce((previousValue: GameStats, round: Round) => {
     if (playerHandActions[round].length > 0) {
+      const roundAggression = getActionTypesCount({
+        playerRoundActions: playerHandActions[round],
+        actionsToCount: ["RAISE", "BET", "RE_RAISE"],
+      });
+
       return {
         ...previousValue,
         [round]: {
           seen: currentStats[round].seen + 1,
-          aggression: getActionTypesCount({
-            playerRoundActions: playerHandActions[round],
-            actionsToCount: ["RAISE", "BET", "RE_RAISE"],
-          }),
+          aggression: currentStats[round].aggression + roundAggression,
           perAction: getUpdatedActions({
             playerRoundActions: playerHandActions[round],
             currentRoundStats: currentStats[round],
@@ -172,7 +174,7 @@ export const getStatsAggregatedOnPlayers = (
       if (!players[player.id]) {
         players[player.id] = {};
       }
-      players[player.id][hand.gameId] = getUpdatedGameStats({
+      players[player.id][hand.gameId] = getUpdatedStatsForPlayer({
         currentStats: players[player.id][hand.gameId],
         playerHandActions: player.actions,
         hand: hand,
@@ -192,7 +194,7 @@ export const getStatsOnBestPlayer = (hands: Hand[]): PlayerStats => {
       throw Error(`Best player >>> ${config.playerId} <<< not found in hand`);
     }
 
-    const newStats = getUpdatedGameStats({
+    const newStats = getUpdatedStatsForPlayer({
       currentStats: prev,
       playerHandActions: bestPlayer.actions,
       hand: currentHand,

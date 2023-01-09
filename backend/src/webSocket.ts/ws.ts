@@ -14,12 +14,19 @@ const con = () => {
 };
 
 export const initWebSocket = (context: Context): Promise<void> => {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     wss.on("connection", (ws) => {
-      console.log("ON WS CONNECTION");
-      context.handleWebSocketConnection();
+      console.log("ON WSS CONNECTION");
+      context.initCurrentTableSetup();
       connection = ws;
       resolve();
+    });
+    wss.on("error", (error) => {
+      console.log("ON WSS ERROR");
+      reject(error);
+    });
+    wss.on("close", () => {
+      console.log("ON WSS CLOSE");
     });
   });
 };
@@ -35,6 +42,15 @@ export const getMessage = (data: RawData): MessagesWithoutResponse => {
 };
 
 export const startListeningToMessages = async (context: Context) => {
+  con().on("close", () => {
+    console.log("Connection: CLOSE");
+  });
+  con().on("error", (error) => {
+    console.log("Connection: ERROR", error);
+  });
+  con().on("open", () => {
+    console.log("Connection: OPEN");
+  });
   con().on("message", (data) => {
     if (!data) {
       throw Error("No message");
@@ -44,7 +60,7 @@ export const startListeningToMessages = async (context: Context) => {
 
     switch (message.type) {
       case "CURRENT_TABLE_UPDATED": {
-        context.setSendCurrentTables(true);
+        context.initCurrentTableSetup();
       }
     }
   });

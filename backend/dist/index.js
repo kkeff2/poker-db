@@ -35727,7 +35727,7 @@ var config = {
   pathToTournamentLogs: "/Users/kasperbartholdigustavii/Library/Application Support/PokerStarsSE/TournSummary/den_kkeffe",
   playerId: "den_kkeffe"
 };
-var minutesUntilInactiveTable = 5e3;
+var minutesUntilInactiveTable = 4e4;
 
 // src/database/init.ts
 var import_mysql2 = __toESM(require_mysql2());
@@ -36135,21 +36135,22 @@ var getUpdatedActions = ({
     };
   }, {});
 };
-var getUpdatedGameStats = ({
+var getUpdatedStatsForPlayer = ({
   currentStats = initGameStats,
   playerHandActions,
   hand
 }) => {
   return ROUNDS.reduce((previousValue, round) => {
     if (playerHandActions[round].length > 0) {
+      const roundAggression = getActionTypesCount({
+        playerRoundActions: playerHandActions[round],
+        actionsToCount: ["RAISE", "BET", "RE_RAISE"]
+      });
       return {
         ...previousValue,
         [round]: {
           seen: currentStats[round].seen + 1,
-          aggression: getActionTypesCount({
-            playerRoundActions: playerHandActions[round],
-            actionsToCount: ["RAISE", "BET", "RE_RAISE"]
-          }),
+          aggression: currentStats[round].aggression + roundAggression,
           perAction: getUpdatedActions({
             playerRoundActions: playerHandActions[round],
             currentRoundStats: currentStats[round],
@@ -36167,12 +36168,13 @@ var getUpdatedGameStats = ({
 };
 var getStatsAggregatedOnPlayers = (hands) => {
   const players = {};
-  hands.forEach((hand) => {
+  hands.forEach((hand, index) => {
     hand.players.forEach((player) => {
       if (!players[player.id]) {
         players[player.id] = {};
+        console.log(`index: ${index} | ${player.id}`);
       }
-      players[player.id][hand.gameId] = getUpdatedGameStats({
+      players[player.id][hand.gameId] = getUpdatedStatsForPlayer({
         currentStats: players[player.id][hand.gameId],
         playerHandActions: player.actions,
         hand
@@ -36233,6 +36235,9 @@ var handleHandHistoryUpdate = async (history) => {
   const hands = getHands(fileData, history.id);
   if (!hands.length) {
     return;
+  }
+  if (fullPath === `/Users/kasperbartholdigustavii/Library/Application Support/PokerStarsSE/HandHistory/den_kkeffe/HH20221214 T3515526486 No Limit Hold'em $1,82 + $0,18.txt`) {
+    console.log(getStatsAggregatedOnPlayers(hands)["juhh.alves"]["NLHE_TOURNAMENT"]);
   }
   const indexOfLastAddedHand = hands.findIndex((h) => {
     var _a;
@@ -36312,7 +36317,7 @@ var Context = class {
   async onActiveTablesSent() {
     this.lastSentTables = this.activeTables;
   }
-  async handleWebSocketConnection() {
+  async initCurrentTableSetup() {
     this.lastSentTables = void 0;
     this.activeTables = [];
     this.sendCurrentTables = false;
@@ -36364,12 +36369,19 @@ var con2 = () => {
   return connection;
 };
 var initWebSocket = (context2) => {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     wss.on("connection", (ws) => {
-      console.log("ON WS CONNECTION");
-      context2.handleWebSocketConnection();
+      console.log("ON WSS CONNECTION");
+      context2.initCurrentTableSetup();
       connection = ws;
       resolve();
+    });
+    wss.on("error", (error) => {
+      console.log("ON WSS ERROR");
+      reject(error);
+    });
+    wss.on("close", () => {
+      console.log("ON WSS CLOSE");
     });
   });
 };
@@ -36383,6 +36395,15 @@ var getMessage = (data) => {
   return parsedData;
 };
 var startListeningToMessages = async (context2) => {
+  con2().on("close", () => {
+    console.log("Connection: CLOSE");
+  });
+  con2().on("error", (error) => {
+    console.log("Connection: ERROR", error);
+  });
+  con2().on("open", () => {
+    console.log("Connection: OPEN");
+  });
   con2().on("message", (data) => {
     if (!data) {
       throw Error("No message");
@@ -36391,7 +36412,7 @@ var startListeningToMessages = async (context2) => {
     console.log({ message });
     switch (message.type) {
       case "CURRENT_TABLE_UPDATED": {
-        context2.setSendCurrentTables(true);
+        context2.initCurrentTableSetup();
       }
     }
   });

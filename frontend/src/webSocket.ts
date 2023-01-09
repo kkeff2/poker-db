@@ -2,6 +2,10 @@ import { Messages } from "poker-db-shared/types";
 
 export const ws = new WebSocket("ws://localhost:8080");
 
+ws.onclose = () => {
+  // TODO: Handle something here?
+};
+
 export const sendMessage = (eventMessage: Pick<Messages, "type">) => {
   ws.send(JSON.stringify(eventMessage));
 };

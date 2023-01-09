@@ -93,7 +93,7 @@ export class Context {
     this.lastSentTables = this.activeTables;
   }
 
-  public async handleWebSocketConnection() {
+  public async initCurrentTableSetup() {
     this.lastSentTables = undefined;
     this.activeTables = [];
     this.sendCurrentTables = false;
