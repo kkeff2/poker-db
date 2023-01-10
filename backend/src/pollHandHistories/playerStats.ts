@@ -79,6 +79,16 @@ export const playerStatsUpdated = async (
     })
   );
 };
+
+export const initPerAction: PerAction = {
+  FOLD: 0,
+  CALL: 0,
+  RAISE: 0,
+  CHECK: 0,
+  BET: 0,
+  RE_RAISE: 0,
+};
+
 const initGameStats: GameStats = ROUNDS.reduce(
   (previousValue: GameStats, round: Round) => {
     const newRoundAction: RoundAction = {
@@ -86,14 +96,7 @@ const initGameStats: GameStats = ROUNDS.reduce(
       aggression: 0,
       raiseInRound: 0,
       voluntarilyPutMoneyInPot: 0,
-      perAction: {
-        FOLD: 0,
-        CALL: 0,
-        RAISE: 0,
-        CHECK: 0,
-        BET: 0,
-        RE_RAISE: 0,
-      },
+      perAction: initPerAction,
     };
     return {
       ...previousValue,

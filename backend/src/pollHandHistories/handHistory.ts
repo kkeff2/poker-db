@@ -3,7 +3,7 @@ import path from "path";
 
 import { Hand, PlayerId, PlayerStats } from "poker-db-shared/types";
 import { config } from "../constants";
-import { HandHistoryContext } from "../context";
+import { HandHistoryContext } from "../context/context";
 import {
   updateHandHistoryDb,
   updatePlayerStats,

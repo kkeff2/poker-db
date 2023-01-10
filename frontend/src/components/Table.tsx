@@ -6,7 +6,7 @@ import {
   TableHead,
   TableRow as MuiTableRow,
 } from "@mui/material";
-import type { Round, Table as TableType } from "poker-db-shared/types";
+import type { PlayerMetrics, Table as TableType } from "poker-db-shared/types";
 import { TableHeader } from "./TableHeader";
 import { TableRow } from "./TableRow";
 
@@ -17,17 +17,15 @@ type Props = {
 
 export const COLUMNS: {
   label: string;
-  round: Round;
-  type: "aggression" | "percentage" | "seen";
+  key: keyof Omit<PlayerMetrics, "aggressionFactor" | "isBestPlayer">;
+  isPercentage: boolean;
 }[] = [
-  { label: "TOTAL", round: "PRE_FLOP", type: "seen" },
-  { label: "PF AGG", round: "PRE_FLOP", type: "aggression" },
-  // { label: "Flop", round: "FLOP", type: "seen" },
-  { label: "FLOP", round: "FLOP", type: "percentage" },
-  // { label: "Turn", round: "TURN", type: "seen" },
-  { label: "TURN", round: "TURN", type: "percentage" },
-  // { label: "River", round: "RIVER", type: "seen" },
-  { label: "RIVER", round: "RIVER", type: "percentage" },
+  { label: "VPIP", key: "voluntarilyPutMoneyInPot", isPercentage: true },
+  { label: "PFR", key: "preFlopRaise", isPercentage: true },
+  { label: "HANDS", key: "totalHands", isPercentage: false },
+  { label: "FLOP", key: "flopsSeen", isPercentage: true },
+  { label: "TURN", key: "turnsSeen", isPercentage: true },
+  { label: "RIVER", key: "riversSeen", isPercentage: true },
 ];
 
 export const Table = ({ table, onClose }: Props) => {
@@ -47,25 +45,22 @@ export const Table = ({ table, onClose }: Props) => {
             <MuiTableRow>
               <TableCell>PLAYER</TableCell>
               {COLUMNS.map((column) => (
-                <TableCell key={`${table.id}${column.round}${column.label}`}>
+                <TableCell key={`${table.id}${column.label}`}>
                   {column.label}
                 </TableCell>
               ))}
             </MuiTableRow>
           </TableHead>
           <TableBody>
-            {table.playerStats.map((p) => {
-              const playerStatsList = Object.entries(p);
-              return playerStatsList.map(([playerId, stats]) => {
-                return (
-                  <TableRow
-                    key={`${table.id}${playerId}`}
-                    tableId={table.id}
-                    playerId={playerId}
-                    stats={stats}
-                  />
-                );
-              });
+            {table.playerMetrics.map((p) => {
+              return (
+                <TableRow
+                  key={`${table.id}${p.playerId}`}
+                  tableId={table.id}
+                  playerId={p.playerId}
+                  metrics={p.metrics}
+                />
+              );
             })}
           </TableBody>
         </MuiTable>

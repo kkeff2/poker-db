@@ -1,13 +1,13 @@
 import { differenceInMinutes } from "date-fns";
 import fs from "fs";
-import { GameStats, Hand, PlayerId, Table } from "poker-db-shared/types";
-import { config, minutesUntilInactiveTable } from "./constants";
-import { getAllHandHistories, getPlayerStats } from "./database/integration";
+import { Hand, Table } from "poker-db-shared/types";
+import { config, minutesUntilInactiveTable } from "../constants";
+import { getAllHandHistories } from "../database/integration";
 import {
   getFileLastModified,
   getFullPath,
-} from "./pollHandHistories/handHistory";
-import { isBestPlayer, removeFileName } from "./utils";
+} from "../pollHandHistories/handHistory";
+import { getPlayerMetrics } from "./metrics";
 
 export type HandHistoryContext = {
   id: string;
@@ -76,11 +76,11 @@ export class Context {
       activeFiles.map(async (f) => {
         const currentActiveTable = this.activeTables.find((t) => t.id === f);
         const lastHand = this.getHandHistoryLastHand(f);
-        const playerStats = await getPlayerStatsForGame(lastHand, f);
+        const playerMetrics = await getPlayerMetrics(lastHand, f);
         return {
           id: f,
           lastHand: lastHand,
-          playerStats: { ...playerStats, aggressionFactor: 0 },
+          playerMetrics,
           hasBeenSent: currentActiveTable
             ? currentActiveTable.lastHand === lastHand
             : false,
@@ -99,27 +99,6 @@ export class Context {
     this.sendCurrentTables = false;
   }
 }
-
-const getPlayerStatsForGame = async (
-  lastHand: Hand,
-  fileName: string
-): Promise<Record<PlayerId, GameStats>[]> => {
-  const playerStats = await getPlayerStats(lastHand.players.map((p) => p.id));
-  return playerStats.map(({ data, player_id }) => {
-    const stats = data[lastHand.gameId];
-    if (!stats) {
-      throw Error("Stats could not be found on user");
-    }
-
-    const playerId = isBestPlayer(player_id, fileName)
-      ? removeFileName(player_id, fileName)
-      : player_id;
-
-    return {
-      [playerId]: stats,
-    };
-  });
-};
 
 const isActiveTable = (fileLastModified: string) => {
   const minutesDifference = differenceInMinutes(

@@ -1,53 +1,41 @@
-import { TableCell, TableRow as MuiTableRow } from "@mui/material";
-import type { GameStats } from "poker-db-shared/types";
+import { TableCell, TableRow as MuiTableRow, Typography } from "@mui/material";
+import type { PlayerMetrics } from "poker-db-shared/types";
 import { COLUMNS } from "./Table";
+import { StyledTableInfo } from "./TableHeader";
 
 type Props = {
   tableId: string;
   playerId: string;
-  stats: GameStats;
+  metrics: PlayerMetrics;
 };
 
-export const TableRow = ({ tableId, playerId, stats }: Props) => {
+export const TableRow = ({ tableId, playerId, metrics }: Props) => {
   return (
     <MuiTableRow
       key={`${tableId}${playerId}`}
       style={{
-        backgroundColor: isBestPlayer(playerId) ? "#e0e0e0" : "inherit",
+        backgroundColor: metrics.isBestPlayer ? "#e0e0e0" : "inherit",
       }}
     >
-      <TableCell>{playerId}</TableCell>
+      <TableCell>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <div>{playerId}</div>
+          <div>
+            <Typography variant="caption">
+              <StyledTableInfo backgroundColor="black">
+                {metrics.aggressionFactor || "-"}
+              </StyledTableInfo>
+            </Typography>
+          </div>
+        </div>
+      </TableCell>
       {COLUMNS.map((c) => {
-        return (
-          <TableCell key={`${playerId}${c.label}${c.round}`}>
-            {getCellValue(c, stats)}
-          </TableCell>
-        );
+        const cellNumber = metrics[c.key];
+        const text = c.isPercentage
+          ? `${Math.round(cellNumber * 100)}%`
+          : cellNumber;
+        return <TableCell key={`${playerId}${c.label}`}>{text}</TableCell>;
       })}
     </MuiTableRow>
   );
 };
-
-const getCellValue = (
-  { type, round }: typeof COLUMNS[number],
-  stats: GameStats
-) => {
-  switch (type) {
-    case "aggression":
-      return stats[round].seen
-        ? `${getPercentage(stats[round].seen, stats[round].aggression)}%`
-        : "-";
-    case "percentage":
-      return stats[round].seen
-        ? `${getPercentage(stats.PRE_FLOP.seen, stats[round].seen)}%`
-        : "-";
-    case "seen":
-      return stats[round].seen ? stats[round].seen : "-";
-  }
-};
-
-const getPercentage = (preFlopSeen: number, postFlopSeen: number) => {
-  return Math.round((postFlopSeen / preFlopSeen) * 100);
-};
-
-const isBestPlayer = (playerId: string) => playerId === "den_kkeffe";

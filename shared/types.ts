@@ -7,7 +7,7 @@ export interface HandHistory {
 export type Table = {
   id: string;
   lastHand: Hand;
-  playerStats: Record<PlayerId, GameStats & { aggressionFactor: number }>[];
+  playerMetrics: { playerId: string; metrics: PlayerMetrics }[];
   hasBeenSent: boolean;
 };
 
@@ -70,12 +70,13 @@ export type PlayerStats = Partial<PokerStats>;
 
 export type PokerStats = Record<GameId, GameStats>;
 
-export type ReturnGameStats = {
-  totalHands: number;
+export type PlayerMetrics = {
+  aggressionFactor: number | null;
   flopsSeen: number;
-  turnsSeen: number;
-  riversSeen: number;
-  voluntarilyPutMoneyInPot: number;
+  isBestPlayer: boolean;
   preFlopRaise: number;
-  aggressionFactor: number;
+  riversSeen: number;
+  totalHands: number;
+  turnsSeen: number;
+  voluntarilyPutMoneyInPot: number;
 };

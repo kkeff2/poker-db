@@ -1,4 +1,4 @@
-import { Context, HandHistoryContext } from "../context";
+import { Context, HandHistoryContext } from "../context/context";
 import { sendMessage } from "../webSocket.ts/ws";
 import { handleHandHistoryUpdate } from "./handHistory";
 

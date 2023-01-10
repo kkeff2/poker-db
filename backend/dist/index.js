@@ -35691,7 +35691,7 @@ var require_websocket_server = __commonJS({
   }
 });
 
-// src/context.ts
+// src/context/context.ts
 var import_date_fns = __toESM(require_date_fns());
 var import_fs2 = __toESM(require("fs"));
 
@@ -36100,20 +36100,21 @@ var playerStatsUpdated = async (newPlayerStats) => {
     return [playerId, JSON.stringify(statsToSave)];
   }));
 };
+var initPerAction = {
+  FOLD: 0,
+  CALL: 0,
+  RAISE: 0,
+  CHECK: 0,
+  BET: 0,
+  RE_RAISE: 0
+};
 var initGameStats = ROUNDS.reduce((previousValue, round) => {
   const newRoundAction = {
     seen: 0,
     aggression: 0,
     raiseInRound: 0,
     voluntarilyPutMoneyInPot: 0,
-    perAction: {
-      FOLD: 0,
-      CALL: 0,
-      RAISE: 0,
-      CHECK: 0,
-      BET: 0,
-      RE_RAISE: 0
-    }
+    perAction: initPerAction
   };
   return {
     ...previousValue,
@@ -36270,7 +36271,57 @@ var getFileLastModified = (fullPath) => {
 };
 var getFullPath = (fileName) => import_path.default.join(config.pathToHandHistoryLogs, fileName);
 
-// src/context.ts
+// src/context/metrics.ts
+var getPlayerMetrics = async (lastHand, fileName) => {
+  const playerStats = await getPlayerStats(lastHand.players.map((p) => p.id));
+  return playerStats.map(({ data, player_id }) => {
+    const gameStats = data[lastHand.gameId];
+    if (!gameStats) {
+      throw Error("Stats could not be found on user");
+    }
+    const playerId = isBestPlayer(player_id, fileName) ? removeFileName(player_id, fileName) : player_id;
+    return {
+      playerId,
+      metrics: getMetrics(gameStats, isBestPlayer(player_id, fileName))
+    };
+  });
+};
+function getMetrics(gameStats, isBestPlayer2) {
+  const totalHands = gameStats.PRE_FLOP.seen;
+  return {
+    aggressionFactor: getAggressionFactor(gameStats),
+    flopsSeen: getPercentage(gameStats.FLOP.seen / totalHands),
+    turnsSeen: getPercentage(gameStats.TURN.seen / totalHands),
+    riversSeen: getPercentage(gameStats.RIVER.seen / totalHands),
+    isBestPlayer: isBestPlayer2,
+    preFlopRaise: getPercentage(gameStats.PRE_FLOP.raiseInRound / totalHands),
+    voluntarilyPutMoneyInPot: getPercentage(gameStats.PRE_FLOP.voluntarilyPutMoneyInPot / totalHands),
+    totalHands
+  };
+}
+var getPercentage = (decimal) => Math.round(decimal * 100) / 100;
+function getAggressionFactor(gameStats) {
+  const { CALL: CALL2, BET: BET2, RAISE: RAISE2, RE_RAISE } = getTotalActions(gameStats);
+  const aggressionFactor = (BET2 + RAISE2 + RE_RAISE) / CALL2;
+  if (!isFinite(aggressionFactor)) {
+    return null;
+  }
+  return Math.round(aggressionFactor * 10) / 10;
+}
+var getTotalActions = (gameStats) => {
+  return Object.values(gameStats).reduce((previousValue, currentValue) => {
+    return {
+      FOLD: previousValue.FOLD + currentValue.perAction.FOLD,
+      CALL: previousValue.CALL + currentValue.perAction.CALL,
+      RAISE: previousValue.RAISE + currentValue.perAction.RAISE,
+      CHECK: previousValue.CHECK + currentValue.perAction.CHECK,
+      BET: previousValue.BET + currentValue.perAction.BET,
+      RE_RAISE: previousValue.RE_RAISE + currentValue.perAction.RE_RAISE
+    };
+  }, initPerAction);
+};
+
+// src/context/context.ts
 var Context = class {
   constructor() {
     this.sendCurrentTables = false;
@@ -36317,11 +36368,11 @@ var Context = class {
     this.activeTables = await Promise.all(activeFiles.map(async (f) => {
       const currentActiveTable = this.activeTables.find((t) => t.id === f);
       const lastHand = this.getHandHistoryLastHand(f);
-      const playerStats = await getPlayerStatsForGame(lastHand, f);
+      const playerMetrics = await getPlayerMetrics(lastHand, f);
       return {
         id: f,
         lastHand,
-        playerStats: { ...playerStats, aggressionFactor: 0 },
+        playerMetrics,
         hasBeenSent: currentActiveTable ? currentActiveTable.lastHand === lastHand : false
       };
     }));
@@ -36334,19 +36385,6 @@ var Context = class {
     this.activeTables = [];
     this.sendCurrentTables = false;
   }
-};
-var getPlayerStatsForGame = async (lastHand, fileName) => {
-  const playerStats = await getPlayerStats(lastHand.players.map((p) => p.id));
-  return playerStats.map(({ data, player_id }) => {
-    const stats = data[lastHand.gameId];
-    if (!stats) {
-      throw Error("Stats could not be found on user");
-    }
-    const playerId = isBestPlayer(player_id, fileName) ? removeFileName(player_id, fileName) : player_id;
-    return {
-      [playerId]: stats
-    };
-  });
 };
 var isActiveTable = (fileLastModified) => {
   const minutesDifference = (0, import_date_fns.differenceInMinutes)(new Date(), new Date(fileLastModified));

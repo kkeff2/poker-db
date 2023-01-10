@@ -1,7 +1,7 @@
 import { Messages, MessagesWithoutResponse } from "poker-db-shared/types";
 import type { RawData, WebSocket } from "ws";
 import { WebSocketServer } from "ws";
-import { Context } from "../context";
+import { Context } from "../context/context";
 
 const wss = new WebSocketServer({ port: 8080 });
 let connection: WebSocket;

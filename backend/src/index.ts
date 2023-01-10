@@ -1,4 +1,4 @@
-import { Context } from "./context";
+import { Context } from "./context/context";
 import { initDb } from "./database/init";
 import {
   initHandHistoryPoll,

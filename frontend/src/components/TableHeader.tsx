@@ -43,7 +43,7 @@ export const TableHeader = ({ table, onClose }: Props) => {
   );
 };
 
-const StyledTableInfo = styled.span<{
+export const StyledTableInfo = styled.span<{
   backgroundColor: string;
   color?: string;
 }>(({ backgroundColor, color = "white" }) => ({
