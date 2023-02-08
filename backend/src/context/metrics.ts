@@ -62,7 +62,7 @@ function getAggressionFactor(gameStats: GameStats): number | null {
   return Math.round(aggressionFactor * 10) / 10;
 }
 
-t getTotalActions = (gameStats: GameStats): PerAction => {
+const getTotalActions = (gameStats: GameStats): PerAction => {
   return Object.values(gameStats).reduce((previousValue, currentValue) => {
     return {
       FOLD: previousValue.FOLD + currentValue.perAction.FOLD,
